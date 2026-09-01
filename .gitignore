@@ -1,0 +1,9 @@
+old_project/
+cold_project/
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
