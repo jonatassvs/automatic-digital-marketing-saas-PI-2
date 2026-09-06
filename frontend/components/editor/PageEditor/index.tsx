@@ -8,7 +8,7 @@ import { EditorTopbar } from "./EditorTopbar";
 import { PropertiesPanel } from "./PropertiesPanel";
 import type { AddMode } from "./types";
 import { usePageEditorState } from "./usePageEditorState";
-import "../editor.css";
+import "../editor.scss";
 
 // Owns the page editor state and coordinates the editor subcomponents.
 export function PageEditor() {
