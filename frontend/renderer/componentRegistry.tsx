@@ -1,4 +1,4 @@
-import type { ComponentType, PropsWithChildren } from "react";
+import type { ComponentType, MouseEventHandler, PropsWithChildren } from "react";
 import type { ComponentProps, PageComponent } from "@/types/page";
 import { ButtonBlock } from "@/components/base/ButtonBlock";
 import { ContainerBlock } from "@/components/base/ContainerBlock";
@@ -12,7 +12,13 @@ import { SectionBlock } from "@/components/base/SectionBlock";
 import { SpacerBlock } from "@/components/base/SpacerBlock";
 
 export type RendererComponentProps = PropsWithChildren<{
+  componentLabel?: string;
+  editorPreviewDepth?: number;
   id: string;
+  isEditorPreview?: boolean;
+  isSelected?: boolean;
+  onSelect?: (id: string) => void;
+  onSelectClick?: MouseEventHandler<HTMLElement>;
   props: ComponentProps;
 }>;
 

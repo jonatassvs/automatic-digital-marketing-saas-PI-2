@@ -1,8 +1,21 @@
 import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { numberProp } from "@/components/base/utils";
+import { editorPreviewAttributes, numberProp } from "@/components/base/utils";
 
-export function SpacerBlock({ props }: RendererComponentProps) {
+export function SpacerBlock({
+  componentLabel,
+  editorPreviewDepth,
+  isEditorPreview,
+  isSelected,
+  onSelectClick,
+  props
+}: RendererComponentProps) {
   const height = numberProp(props, "height", 24);
 
-  return <div aria-hidden="true" style={{ height }} />;
+  return (
+    <div
+      aria-hidden="true"
+      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, isEditorPreview, isSelected, onSelectClick })}
+      style={{ height }}
+    />
+  );
 }

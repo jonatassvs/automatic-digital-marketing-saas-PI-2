@@ -1,12 +1,21 @@
 import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { numberProp, optionProp } from "@/components/base/utils";
+import { editorPreviewAttributes, numberProp, optionProp } from "@/components/base/utils";
 
-export function ContainerBlock({ props, children }: RendererComponentProps) {
+export function ContainerBlock({
+  componentLabel,
+  editorPreviewDepth,
+  isEditorPreview,
+  isSelected,
+  onSelectClick,
+  props,
+  children
+}: RendererComponentProps) {
   const maxWidth = numberProp(props, "maxWidth", 1120);
   const align = optionProp(props, "align", ["left", "center"] as const, "left");
 
   return (
     <div
+      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, isEditorPreview, isSelected, onSelectClick })}
       style={{
         maxWidth,
         marginInline: "auto",

@@ -1,12 +1,23 @@
 import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { numberProp, stringProp } from "@/components/base/utils";
+import { editorPreviewAttributes, numberProp, stringProp } from "@/components/base/utils";
 
-export function SectionBlock({ props, children }: RendererComponentProps) {
+export function SectionBlock({
+  componentLabel,
+  editorPreviewDepth,
+  isEditorPreview,
+  isSelected,
+  onSelectClick,
+  props,
+  children
+}: RendererComponentProps) {
   const background = stringProp(props, "background", "#ffffff");
   const paddingY = numberProp(props, "paddingY", 72);
 
   return (
-    <section style={{ background, paddingBlock: paddingY }}>
+    <section
+      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, isEditorPreview, isSelected, onSelectClick })}
+      style={{ background, paddingBlock: paddingY }}
+    >
       {children}
     </section>
   );

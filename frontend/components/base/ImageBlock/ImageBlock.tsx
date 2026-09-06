@@ -1,9 +1,16 @@
 import Image from "next/image";
 import type { RendererComponentProps } from "@/renderer/componentRegistry";
 import { isSafeUrl } from "@/renderer/validation";
-import { stringProp } from "@/components/base/utils";
+import { editorPreviewAttributes, stringProp } from "@/components/base/utils";
 
-export function ImageBlock({ props }: RendererComponentProps) {
+export function ImageBlock({
+  componentLabel,
+  editorPreviewDepth,
+  isEditorPreview,
+  isSelected,
+  onSelectClick,
+  props
+}: RendererComponentProps) {
   const src = stringProp(props, "src", "");
   const alt = stringProp(props, "alt", "");
 
@@ -12,7 +19,16 @@ export function ImageBlock({ props }: RendererComponentProps) {
   }
 
   return (
-    <span className="base-image-wrap">
+    <span
+      {...editorPreviewAttributes({
+        className: "base-image-wrap",
+        componentLabel,
+        editorPreviewDepth,
+        isEditorPreview,
+        isSelected,
+        onSelectClick
+      })}
+    >
       <Image
         className="base-image"
         src={src}

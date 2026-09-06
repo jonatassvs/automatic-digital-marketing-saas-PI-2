@@ -94,7 +94,11 @@ export function EditorCanvas({
 
       <div className="builder-surface">
         <section className="preview-frame" aria-label="Preview da landing page">
-          <PageRenderer components={page.components} />
+          <PageRenderer
+            components={page.components}
+            onSelectComponent={onSelectComponent}
+            selectedId={selectedId}
+          />
         </section>
       </div>
     </section>

@@ -261,6 +261,81 @@
   overflow: hidden;
 }
 
+.preview-frame .editor-preview-component {
+  margin-top: 34px;
+  outline: 1px dashed rgba(37, 99, 235, 0.28);
+  outline-offset: 2px;
+  position: relative;
+}
+
+.preview-frame .editor-preview-component:not(.base-flex):not(.base-grid):not(.base-image-wrap):not(.base-button):not(.base-link) {
+  display: flow-root;
+}
+
+.preview-frame .editor-preview-component.base-link {
+  display: inline-block;
+}
+
+.preview-frame .editor-preview-component::before {
+  background: #2563eb;
+  border-radius: 4px;
+  color: #ffffff;
+  content: attr(data-editor-component-label);
+  font-size: 0.65rem;
+  font-weight: 800;
+  left: 0;
+  letter-spacing: 0;
+  line-height: 1;
+  max-width: min(140px, 100%);
+  overflow: hidden;
+  padding: 4px 6px;
+  pointer-events: none;
+  position: absolute;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  top: 0;
+  transform: translateY(-100%);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.preview-frame .editor-preview-component[data-editor-depth="0"]::before {
+  background: #2563eb;
+}
+
+.preview-frame .editor-preview-component[data-editor-depth="1"]::before {
+  background: #dc2626;
+}
+
+.preview-frame .editor-preview-component[data-editor-depth="2"]::before {
+  background: #16a34a;
+}
+
+.preview-frame .editor-preview-component[data-editor-depth="3"]::before {
+  background: #9333ea;
+}
+
+.preview-frame .editor-preview-component[data-editor-depth="4"]::before {
+  background: #ea580c;
+}
+
+.preview-frame .editor-preview-component[data-editor-depth="5"]::before,
+.preview-frame .editor-preview-component[data-editor-depth="6"]::before,
+.preview-frame .editor-preview-component[data-editor-depth="7"]::before,
+.preview-frame .editor-preview-component[data-editor-depth="8"]::before {
+  background: #0891b2;
+}
+
+.preview-frame .editor-selected-component {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+  z-index: 1;
+}
+
+.preview-frame main * {
+  cursor: pointer;
+}
+
 .properties-panel {
   background: #ffffff;
   border-left: 1px solid #e5e7eb;
