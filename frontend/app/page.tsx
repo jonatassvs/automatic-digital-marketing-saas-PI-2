@@ -1,5 +1,5 @@
-import { LocalPageEditor } from "@/components/editor/LocalPageEditor";
+import { PageEditor } from "@/components/editor/PageEditor";
 
 export default function HomePage() {
-  return <LocalPageEditor />;
+  return <PageEditor />;
 }
