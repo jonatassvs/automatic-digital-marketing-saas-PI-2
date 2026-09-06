@@ -4,6 +4,7 @@ import { editorPreviewAttributes, stringProp } from "@/components/base/utils";
 export function ParagraphBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -14,7 +15,7 @@ export function ParagraphBlock({
 
   return (
     <p
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, isEditorPreview, isSelected, onSelectClick })}
+      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
       style={{ color }}
     >
       {text}

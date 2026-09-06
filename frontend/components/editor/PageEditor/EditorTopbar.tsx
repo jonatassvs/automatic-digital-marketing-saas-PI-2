@@ -1,4 +1,4 @@
-import { Eye, Layers, Plus, Save } from "lucide-react";
+import { Eye, Layers, Save } from "lucide-react";
 import type { LandingPageDocument } from "@/types/page";
 import { AppButton } from "@/components/ui/AppButton";
 import { IconBadge } from "@/components/ui/IconBadge";
@@ -8,15 +8,13 @@ type EditorTopbarProps = {
   page: LandingPageDocument;
   validationErrorCount: number;
   validationIsValid: boolean;
-  onAddRoot: () => void;
 };
 
 // Renders the editor header with page status, validation, and primary actions.
 export function EditorTopbar({
   page,
   validationErrorCount,
-  validationIsValid,
-  onAddRoot
+  validationIsValid
 }: EditorTopbarProps) {
   return (
     <header className="editor-topbar">
@@ -36,11 +34,6 @@ export function EditorTopbar({
         <AppButton variant="icon" title="Preview local">
           <Eye size={16} />
           <span className="sr-only">Preview local</span>
-        </AppButton>
-
-        <AppButton variant="secondary" onClick={onAddRoot}>
-          <Plus size={16} />
-          Bloco
         </AppButton>
 
         <AppButton variant="primary">

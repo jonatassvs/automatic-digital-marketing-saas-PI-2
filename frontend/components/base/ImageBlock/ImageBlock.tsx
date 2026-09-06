@@ -6,6 +6,7 @@ import { editorPreviewAttributes, stringProp } from "@/components/base/utils";
 export function ImageBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -24,6 +25,7 @@ export function ImageBlock({
         className: "base-image-wrap",
         componentLabel,
         editorPreviewDepth,
+        id,
         isEditorPreview,
         isSelected,
         onSelectClick

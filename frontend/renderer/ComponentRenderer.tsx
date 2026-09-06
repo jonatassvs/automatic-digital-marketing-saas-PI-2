@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import type { PageComponent } from "@/types/page";
 import { componentRegistry } from "@/renderer/componentRegistry";
 
@@ -62,20 +62,29 @@ export function ComponentRenderer({
 type PageRendererProps = {
   components: PageComponent[];
   onSelectComponent?: (id: string) => void;
+  renderRootInsertControl?: (insertIndex: number) => ReactNode;
   selectedId?: string;
 };
 
-export function PageRenderer({ components, onSelectComponent, selectedId }: PageRendererProps) {
+export function PageRenderer({
+  components,
+  onSelectComponent,
+  renderRootInsertControl,
+  selectedId
+}: PageRendererProps) {
   return (
     <main>
-      {components.map((component) => (
-        <ComponentRenderer
-          key={component.id}
-          component={component}
-          depth={0}
-          onSelectComponent={onSelectComponent}
-          selectedId={selectedId}
-        />
+      {renderRootInsertControl?.(0)}
+      {components.map((component, index) => (
+        <div className="editor-root-component-slot" key={component.id}>
+          <ComponentRenderer
+            component={component}
+            depth={0}
+            onSelectComponent={onSelectComponent}
+            selectedId={selectedId}
+          />
+          {renderRootInsertControl?.(index + 1)}
+        </div>
       ))}
     </main>
   );

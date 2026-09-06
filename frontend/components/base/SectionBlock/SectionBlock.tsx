@@ -4,6 +4,7 @@ import { editorPreviewAttributes, numberProp, stringProp } from "@/components/ba
 export function SectionBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -15,7 +16,7 @@ export function SectionBlock({
 
   return (
     <section
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, isEditorPreview, isSelected, onSelectClick })}
+      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
       style={{ background, paddingBlock: paddingY }}
     >
       {children}

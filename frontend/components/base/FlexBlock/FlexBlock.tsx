@@ -4,6 +4,7 @@ import { editorPreviewAttributes, numberProp, optionProp } from "@/components/ba
 export function FlexBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -25,6 +26,7 @@ export function FlexBlock({
         className: "base-flex",
         componentLabel,
         editorPreviewDepth,
+        id,
         isEditorPreview,
         isSelected,
         onSelectClick

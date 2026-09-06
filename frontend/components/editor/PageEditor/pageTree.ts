@@ -16,6 +16,31 @@ export function flattenComponents(components: PageComponent[], depth = 0): FlatP
   ]);
 }
 
+// Finds the selected component position within its current sibling group.
+export function findComponentSiblingPosition(
+  components: PageComponent[],
+  id: string
+): { index: number; total: number } | undefined {
+  const siblingIndex = components.findIndex((component) => component.id === id);
+
+  if (siblingIndex >= 0) {
+    return {
+      index: siblingIndex,
+      total: components.length
+    };
+  }
+
+  for (const component of components) {
+    const childPosition = component.children ? findComponentSiblingPosition(component.children, id) : undefined;
+
+    if (childPosition) {
+      return childPosition;
+    }
+  }
+
+  return undefined;
+}
+
 // Updates a component anywhere in the tree while preserving the rest of the tree.
 export function updateComponent(
   components: PageComponent[],
@@ -30,6 +55,36 @@ export function updateComponent(
     return {
       ...component,
       children: component.children ? updateComponent(component.children, id, updater) : undefined
+    };
+  });
+}
+
+// Inserts a new root component at the requested position, or at the end.
+export function insertRootComponent(
+  components: PageComponent[],
+  component: PageComponent,
+  insertIndex?: number
+): PageComponent[] {
+  const nextIndex =
+    insertIndex === undefined ? components.length : Math.min(Math.max(insertIndex, 0), components.length);
+
+  return [...components.slice(0, nextIndex), component, ...components.slice(nextIndex)];
+}
+
+// Inserts a new child inside the requested parent at the requested child index.
+export function insertChildComponent(
+  components: PageComponent[],
+  parentId: string,
+  component: PageComponent,
+  childIndex?: number
+): PageComponent[] {
+  return updateComponent(components, parentId, (item) => {
+    const children = item.children ?? [];
+    const nextIndex = childIndex === undefined ? children.length : Math.min(Math.max(childIndex, 0), children.length);
+
+    return {
+      ...item,
+      children: [...children.slice(0, nextIndex), component, ...children.slice(nextIndex)]
     };
   });
 }

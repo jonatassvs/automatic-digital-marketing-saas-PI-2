@@ -25,6 +25,7 @@ type EditorPreviewAttributesParams = {
   className?: string;
   componentLabel?: string;
   editorPreviewDepth?: number;
+  id?: string;
   isEditorPreview?: boolean;
   isSelected?: boolean;
   onSelectClick?: MouseEventHandler<HTMLElement>;
@@ -34,6 +35,7 @@ export function editorPreviewAttributes({
   className,
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick
@@ -48,6 +50,7 @@ export function editorPreviewAttributes({
 
   return {
     className: classNames || undefined,
+    "data-editor-component-id": isEditorPreview ? id : undefined,
     "data-editor-depth": isEditorPreview ? editorPreviewDepth : undefined,
     "data-editor-component-label": isEditorPreview ? componentLabel : undefined,
     onClick: isEditorPreview ? onSelectClick : undefined

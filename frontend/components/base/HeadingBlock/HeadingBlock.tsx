@@ -17,7 +17,7 @@ export function HeadingBlock({
 
   return (
     <Tag
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, isEditorPreview, isSelected, onSelectClick })}
+      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
       id={id}
       style={{ color }}
     >

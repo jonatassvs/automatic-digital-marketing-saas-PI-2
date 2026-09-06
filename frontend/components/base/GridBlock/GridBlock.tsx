@@ -4,6 +4,7 @@ import { editorPreviewAttributes, numberProp } from "@/components/base/utils";
 export function GridBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -19,6 +20,7 @@ export function GridBlock({
         className: "base-grid",
         componentLabel,
         editorPreviewDepth,
+        id,
         isEditorPreview,
         isSelected,
         onSelectClick

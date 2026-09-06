@@ -4,6 +4,7 @@ import { editorPreviewAttributes, numberProp, optionProp } from "@/components/ba
 export function ContainerBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -15,7 +16,7 @@ export function ContainerBlock({
 
   return (
     <div
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, isEditorPreview, isSelected, onSelectClick })}
+      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
       style={{
         maxWidth,
         marginInline: "auto",

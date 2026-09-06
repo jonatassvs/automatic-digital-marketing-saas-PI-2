@@ -7,7 +7,10 @@ import {
   clonePage,
   createEditorComponent,
   duplicateComponent,
+  findComponentSiblingPosition,
   flattenComponents,
+  insertChildComponent,
+  insertRootComponent,
   moveComponent,
   removeComponent,
   updateComponent
@@ -19,6 +22,10 @@ export function usePageEditorState() {
   const [selectedId, setSelectedId] = useState("hero");
   const flatComponents = useMemo(() => flattenComponents(page.components), [page.components]);
   const selectedComponent = flatComponents.find((component) => component.id === selectedId);
+  const selectedSiblingPosition = useMemo(
+    () => findComponentSiblingPosition(page.components, selectedId),
+    [page.components, selectedId]
+  );
   const validation = useMemo(() => validateComponentTree(page.components), [page.components]);
   const selectedSchema = selectedComponent ? componentSchemas[selectedComponent.component] : undefined;
   const canAddChild = Boolean(selectedSchema?.acceptsChildren);
@@ -40,18 +47,20 @@ export function usePageEditorState() {
     }));
   }
 
-  function addRootComponent(componentName: ComponentName) {
+  function addRootComponent(componentName: ComponentName, insertIndex?: number) {
     const component = createEditorComponent(componentName);
 
     setPage((current) => ({
       ...current,
-      components: [...current.components, component]
+      components: insertRootComponent(current.components, component, insertIndex)
     }));
     setSelectedId(component.id);
   }
 
-  function addChildComponent(componentName: ComponentName) {
-    if (!selectedComponent || !componentSchemas[selectedComponent.component].acceptsChildren) {
+  function addChildComponent(componentName: ComponentName, parentId = selectedId, childIndex?: number) {
+    const parentComponent = flatComponents.find((component) => component.id === parentId);
+
+    if (!parentComponent || !componentSchemas[parentComponent.component].acceptsChildren) {
       return;
     }
 
@@ -59,10 +68,7 @@ export function usePageEditorState() {
 
     setPage((current) => ({
       ...current,
-      components: updateComponent(current.components, selectedComponent.id, (item) => ({
-        ...item,
-        children: [...(item.children ?? []), component]
-      }))
+      components: insertChildComponent(current.components, parentId, component, childIndex)
     }));
     setSelectedId(component.id);
   }
@@ -109,6 +115,7 @@ export function usePageEditorState() {
     page,
     selectedComponent,
     selectedId,
+    selectedSiblingPosition,
     selectedSchema,
     validation,
     addChildComponent,

@@ -4,6 +4,7 @@ import { editorPreviewAttributes, numberProp } from "@/components/base/utils";
 export function SpacerBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -14,7 +15,7 @@ export function SpacerBlock({
   return (
     <div
       aria-hidden="true"
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, isEditorPreview, isSelected, onSelectClick })}
+      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
       style={{ height }}
     />
   );

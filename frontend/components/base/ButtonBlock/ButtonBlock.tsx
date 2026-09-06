@@ -5,6 +5,7 @@ import { editorPreviewAttributes, optionProp, stringProp } from "@/components/ba
 export function ButtonBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -21,6 +22,7 @@ export function ButtonBlock({
         className: `base-button base-button-${variant}`,
         componentLabel,
         editorPreviewDepth,
+        id,
         isEditorPreview,
         isSelected,
         onSelectClick

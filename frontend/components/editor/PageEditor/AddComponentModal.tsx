@@ -2,12 +2,12 @@ import { Layers, X } from "lucide-react";
 import type { ComponentName } from "@/types/page";
 import { creatableComponents } from "@/renderer/schemas/componentSchemas";
 import { AppButton } from "@/components/ui/AppButton";
-import type { AddMode } from "./types";
+import type { AddTarget } from "./types";
 
 type AddComponentModalProps = {
   canAddChild: boolean;
   isOpen: boolean;
-  mode: AddMode;
+  target: AddTarget;
   onClose: () => void;
   onSelect: (component: ComponentName) => void;
 };
@@ -16,15 +16,14 @@ type AddComponentModalProps = {
 export function AddComponentModal({
   canAddChild,
   isOpen,
-  mode,
+  target,
   onClose,
   onSelect
 }: AddComponentModalProps) {
   if (!isOpen) {
     return null;
   }
-
-  const targetLabel = mode === "child" && canAddChild ? "como filho do selecionado" : "na raiz da pagina";
+  const isChildTarget = target.kind === "child" && canAddChild;
 
   return (
     <div className="modal-backdrop" role="presentation" onClick={onClose}>
@@ -38,7 +37,7 @@ export function AddComponentModal({
         <header className="modal-header">
           <div>
             <span className="eyebrow">Componentes base</span>
-            <h2 id="add-component-title">Adicionar bloco {targetLabel}</h2>
+            <h2 id="add-component-title">Adicionar componente</h2>
           </div>
           <AppButton variant="icon" onClick={onClose} title="Fechar">
             <X size={16} />
@@ -59,7 +58,7 @@ export function AddComponentModal({
               </span>
               <span>
                 <strong>{schema.label}</strong>
-                <small>{schema.acceptsChildren ? "Aceita filhos" : "Bloco simples"}</small>
+                <small>{isChildTarget ? "Dentro do componente selecionado" : "Na estrutura da pagina"}</small>
               </span>
             </button>
           ))}

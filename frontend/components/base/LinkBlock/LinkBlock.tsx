@@ -5,6 +5,7 @@ import { editorPreviewAttributes, stringProp } from "@/components/base/utils";
 export function LinkBlock({
   componentLabel,
   editorPreviewDepth,
+  id,
   isEditorPreview,
   isSelected,
   onSelectClick,
@@ -20,6 +21,7 @@ export function LinkBlock({
         className: "base-link",
         componentLabel,
         editorPreviewDepth,
+        id,
         isEditorPreview,
         isSelected,
         onSelectClick

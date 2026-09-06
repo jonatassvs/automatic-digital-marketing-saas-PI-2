@@ -6,27 +6,26 @@ import { AddComponentModal } from "./AddComponentModal";
 import { EditorCanvas } from "./EditorCanvas";
 import { EditorTopbar } from "./EditorTopbar";
 import { PropertiesPanel } from "./PropertiesPanel";
-import type { AddMode } from "./types";
+import type { AddTarget } from "./types";
 import { usePageEditorState } from "./usePageEditorState";
 import "../editor.scss";
 
 // Owns the page editor state and coordinates the editor subcomponents.
 export function PageEditor() {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
-  const [isSectionPanelOpen, setSectionPanelOpen] = useState(false);
-  const [addMode, setAddMode] = useState<AddMode>("root");
+  const [addTarget, setAddTarget] = useState<AddTarget>({ kind: "root" });
   const editorState = usePageEditorState();
 
-  function openAddModal(mode: AddMode) {
-    setAddMode(mode);
+  function openAddModal(target: AddTarget) {
+    setAddTarget(target);
     setAddModalOpen(true);
   }
 
   function addComponentFromModal(componentName: ComponentName) {
-    if (addMode === "child") {
-      editorState.addChildComponent(componentName);
+    if (addTarget.kind === "child") {
+      editorState.addChildComponent(componentName, addTarget.parentId, addTarget.childIndex);
     } else {
-      editorState.addRootComponent(componentName);
+      editorState.addRootComponent(componentName, addTarget.insertIndex);
     }
 
     setAddModalOpen(false);
@@ -38,24 +37,22 @@ export function PageEditor() {
         page={editorState.page}
         validationErrorCount={editorState.validation.errors.length}
         validationIsValid={editorState.validation.valid}
-        onAddRoot={() => openAddModal("root")}
       />
 
       <main className="editor-workspace">
         <EditorCanvas
-          canAddChild={editorState.canAddChild}
-          isSectionPanelOpen={isSectionPanelOpen}
           page={editorState.page}
           selectedId={editorState.selectedId}
-          onAddChild={() => openAddModal("child")}
-          onAddRoot={() => openAddModal("root")}
-          onCloseSectionPanel={() => setSectionPanelOpen(false)}
+          selectedComponent={editorState.selectedComponent}
+          selectedSchema={editorState.selectedSchema}
+          selectedSiblingPosition={editorState.selectedSiblingPosition}
+          onAddChild={(parentId, childIndex) => openAddModal({ kind: "child", parentId, childIndex })}
+          onAddRootAt={(insertIndex) => openAddModal({ insertIndex, kind: "root" })}
           onDeleteComponent={editorState.deleteComponent}
           onDuplicateComponent={editorState.duplicateSelectedComponent}
           onMoveComponentDown={(componentId) => editorState.moveSelectedComponent(componentId, "down")}
           onMoveComponentUp={(componentId) => editorState.moveSelectedComponent(componentId, "up")}
           onSelectComponent={editorState.setSelectedId}
-          onToggleSectionPanel={() => setSectionPanelOpen((isOpen) => !isOpen)}
         />
 
         <PropertiesPanel
@@ -71,7 +68,7 @@ export function PageEditor() {
 
       <AddComponentModal
         canAddChild={editorState.canAddChild}
-        mode={addMode}
+        target={addTarget}
         isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
         onSelect={addComponentFromModal}
