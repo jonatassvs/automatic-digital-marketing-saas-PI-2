@@ -1,6 +1,8 @@
-import type { MouseEvent, ReactNode } from "react";
+import type { MouseEvent, PropsWithChildren, ReactNode } from "react";
 import type { PageComponent } from "@/types/page";
 import { componentRegistry } from "@/renderer/componentRegistry";
+import { componentSchemas } from "@/renderer/schemas/componentSchemas";
+import { normalizeProps } from "@/renderer/normalizeProps";
 
 type ComponentRendererProps = {
   component: PageComponent;
@@ -9,22 +11,20 @@ type ComponentRendererProps = {
   selectedId?: string;
 };
 
-export function ComponentRenderer({
+type EditorComponentFrameProps = PropsWithChildren<{
+  component: PageComponent;
+  depth: number;
+  isSelected: boolean;
+  onSelectComponent?: (id: string) => void;
+}>;
+
+function EditorComponentFrame({
+  children,
   component,
-  depth = 0,
-  onSelectComponent,
-  selectedId
-}: ComponentRendererProps) {
-  const RegisteredComponent = componentRegistry[component.component];
-
-  if (!RegisteredComponent) {
-    return (
-      <div role="alert" className="renderer-warning">
-        Componente indisponivel.
-      </div>
-    );
-  }
-
+  depth,
+  isSelected,
+  onSelectComponent
+}: EditorComponentFrameProps) {
   function handleSelectClick(event: MouseEvent<HTMLElement>) {
     if (!onSelectComponent) {
       return;
@@ -36,26 +36,63 @@ export function ComponentRenderer({
   }
 
   return (
-    <RegisteredComponent
-      componentLabel={component.component}
-      editorPreviewDepth={depth}
-      id={component.id}
-      isEditorPreview={Boolean(onSelectComponent)}
-      isSelected={component.id === selectedId}
-      onSelect={onSelectComponent}
-      onSelectClick={handleSelectClick}
-      props={component.props}
+    <div
+      className={isSelected ? "editor-preview-component editor-selected-component" : "editor-preview-component"}
+      data-editor-component-id={component.id}
+      data-editor-component-label={component.component}
+      data-editor-depth={depth}
+      onClick={handleSelectClick}
     >
-      {component.children?.map((child) => (
-        <ComponentRenderer
-          key={child.id}
-          component={child}
-          depth={depth + 1}
-          onSelectComponent={onSelectComponent}
-          selectedId={selectedId}
-        />
-      ))}
+      {children}
+    </div>
+  );
+}
+
+export function ComponentRenderer({
+  component,
+  depth = 0,
+  onSelectComponent,
+  selectedId
+}: ComponentRendererProps) {
+  const RegisteredComponent = componentRegistry[component.component];
+  const schema = componentSchemas[component.component];
+
+  if (!RegisteredComponent || !schema) {
+    return (
+      <div role="alert" className="renderer-warning">
+        Componente indisponivel.
+      </div>
+    );
+  }
+
+  const renderedChildren = component.children?.map((child) => (
+    <ComponentRenderer
+      key={child.id}
+      component={child}
+      depth={depth + 1}
+      onSelectComponent={onSelectComponent}
+      selectedId={selectedId}
+    />
+  ));
+  const renderedComponent = (
+    <RegisteredComponent id={component.id} {...normalizeProps(schema, component.props)}>
+      {renderedChildren}
     </RegisteredComponent>
+  );
+
+  if (!onSelectComponent) {
+    return renderedComponent;
+  }
+
+  return (
+    <EditorComponentFrame
+      component={component}
+      depth={depth}
+      isSelected={component.id === selectedId}
+      onSelectComponent={onSelectComponent}
+    >
+      {renderedComponent}
+    </EditorComponentFrame>
   );
 }
 

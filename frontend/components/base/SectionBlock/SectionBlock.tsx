@@ -1,24 +1,21 @@
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { editorPreviewAttributes, numberProp, stringProp } from "@/components/base/utils";
+import type { ReactNode } from "react";
 
+type SectionBlockProps = {
+  background?: string;
+  children?: ReactNode;
+  id?: string;
+  paddingY?: number;
+};
+
+// Creates a full-width section band that can contain nested components.
 export function SectionBlock({
-  componentLabel,
-  editorPreviewDepth,
+  background = "#ffffff",
+  children,
   id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props,
-  children
-}: RendererComponentProps) {
-  const background = stringProp(props, "background", "#ffffff");
-  const paddingY = numberProp(props, "paddingY", 72);
-
+  paddingY = 72
+}: SectionBlockProps) {
   return (
-    <section
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
-      style={{ background, paddingBlock: paddingY }}
-    >
+    <section id={id} style={{ background, paddingBlock: paddingY }}>
       {children}
     </section>
   );

@@ -1,22 +1,9 @@
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { editorPreviewAttributes, numberProp } from "@/components/base/utils";
+type SpacerBlockProps = {
+  height?: number;
+  id?: string;
+};
 
-export function SpacerBlock({
-  componentLabel,
-  editorPreviewDepth,
-  id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props
-}: RendererComponentProps) {
-  const height = numberProp(props, "height", 24);
-
-  return (
-    <div
-      aria-hidden="true"
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
-      style={{ height }}
-    />
-  );
+// Adds vertical spacing without visible content.
+export function SpacerBlock({ height = 24, id }: SpacerBlockProps) {
+  return <div aria-hidden="true" id={id} style={{ height }} />;
 }

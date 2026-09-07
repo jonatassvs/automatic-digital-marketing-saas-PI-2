@@ -1,23 +1,17 @@
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { editorPreviewAttributes, stringProp } from "@/components/base/utils";
+type ParagraphBlockProps = {
+  color?: string;
+  id?: string;
+  text?: string;
+};
 
+// Renders editable body copy for landing page sections.
 export function ParagraphBlock({
-  componentLabel,
-  editorPreviewDepth,
+  color = "#475569",
   id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props
-}: RendererComponentProps) {
-  const text = stringProp(props, "text", "Escreva uma mensagem clara para seus clientes.");
-  const color = stringProp(props, "color", "#475569");
-
+  text = "Escreva uma mensagem clara para seus clientes."
+}: ParagraphBlockProps) {
   return (
-    <p
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
-      style={{ color }}
-    >
+    <p id={id} style={{ color }}>
       {text}
     </p>
   );

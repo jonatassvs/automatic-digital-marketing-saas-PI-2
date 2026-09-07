@@ -1,33 +1,13 @@
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { isSafeUrl } from "@/renderer/validation";
-import { editorPreviewAttributes, stringProp } from "@/components/base/utils";
+type LinkBlockProps = {
+  href?: string;
+  id?: string;
+  text?: string;
+};
 
-export function LinkBlock({
-  componentLabel,
-  editorPreviewDepth,
-  id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props
-}: RendererComponentProps) {
-  const text = stringProp(props, "text", "Saiba mais");
-  const href = stringProp(props, "href", "#");
-  const safeHref = isSafeUrl(href) ? href : "#";
-
+// Renders a simple text link for navigation or supporting actions.
+export function LinkBlock({ href = "#", id, text = "Saiba mais" }: LinkBlockProps) {
   return (
-    <a
-      {...editorPreviewAttributes({
-        className: "base-link",
-        componentLabel,
-        editorPreviewDepth,
-        id,
-        isEditorPreview,
-        isSelected,
-        onSelectClick
-      })}
-      href={safeHref}
-    >
+    <a className="base-link" href={href} id={id}>
       {text}
     </a>
   );

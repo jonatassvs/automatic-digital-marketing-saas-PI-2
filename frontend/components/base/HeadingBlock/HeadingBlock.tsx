@@ -1,26 +1,22 @@
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { editorPreviewAttributes, numberProp, stringProp } from "@/components/base/utils";
+type HeadingBlockProps = {
+  color?: string;
+  id?: string;
+  level?: number;
+  text?: string;
+};
 
+// Renders semantic page headings from level 1 to level 3.
 export function HeadingBlock({
-  componentLabel,
-  editorPreviewDepth,
+  color = "#17202a",
   id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props
-}: RendererComponentProps) {
-  const level = Math.min(Math.max(numberProp(props, "level", 2), 1), 3);
-  const text = stringProp(props, "text", "Novo titulo");
-  const color = stringProp(props, "color", "#17202a");
-  const Tag = `h${level}` as "h1" | "h2" | "h3";
+  level = 2,
+  text = "Novo titulo"
+}: HeadingBlockProps) {
+  const safeLevel = Math.min(Math.max(level, 1), 3);
+  const Tag = `h${safeLevel}` as "h1" | "h2" | "h3";
 
   return (
-    <Tag
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
-      id={id}
-      style={{ color }}
-    >
+    <Tag id={id} style={{ color }}>
       {text}
     </Tag>
   );

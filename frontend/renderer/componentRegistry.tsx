@@ -1,5 +1,5 @@
-import type { ComponentType, MouseEventHandler, PropsWithChildren } from "react";
-import type { ComponentProps, PageComponent } from "@/types/page";
+import type { ComponentType, PropsWithChildren } from "react";
+import type { PageComponent } from "@/types/page";
 import { ButtonBlock } from "@/components/base/ButtonBlock";
 import { ContainerBlock } from "@/components/base/ContainerBlock";
 import { FlexBlock } from "@/components/base/FlexBlock";
@@ -11,29 +11,19 @@ import { ParagraphBlock } from "@/components/base/ParagraphBlock";
 import { SectionBlock } from "@/components/base/SectionBlock";
 import { SpacerBlock } from "@/components/base/SpacerBlock";
 
-export type RendererComponentProps = PropsWithChildren<{
-  componentLabel?: string;
-  editorPreviewDepth?: number;
-  id: string;
-  isEditorPreview?: boolean;
-  isSelected?: boolean;
-  onSelect?: (id: string) => void;
-  onSelectClick?: MouseEventHandler<HTMLElement>;
-  props: ComponentProps;
-}>;
+export type BaseComponentProps = PropsWithChildren<Record<string, unknown>>;
+type BaseComponent = ComponentType<BaseComponentProps>;
 
-export const componentRegistry: Record<
-  PageComponent["component"],
-  ComponentType<RendererComponentProps>
-> = {
-  Button: ButtonBlock,
-  Container: ContainerBlock,
-  Flex: FlexBlock,
-  Grid: GridBlock,
-  Heading: HeadingBlock,
-  Image: ImageBlock,
-  Link: LinkBlock,
-  Paragraph: ParagraphBlock,
-  Section: SectionBlock,
-  Spacer: SpacerBlock
+export const componentRegistry: Record<PageComponent["component"], BaseComponent> = {
+  // The renderer normalizes props from schemas before crossing this controlled registry boundary.
+  Button: ButtonBlock as BaseComponent,
+  Container: ContainerBlock as BaseComponent,
+  Flex: FlexBlock as BaseComponent,
+  Grid: GridBlock as BaseComponent,
+  Heading: HeadingBlock as BaseComponent,
+  Image: ImageBlock as BaseComponent,
+  Link: LinkBlock as BaseComponent,
+  Paragraph: ParagraphBlock as BaseComponent,
+  Section: SectionBlock as BaseComponent,
+  Spacer: SpacerBlock as BaseComponent
 };

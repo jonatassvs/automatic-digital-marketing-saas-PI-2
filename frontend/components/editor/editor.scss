@@ -173,18 +173,11 @@
 }
 
 .preview-frame .editor-preview-component {
+  display: flow-root;
   margin-top: 34px;
   outline: 1px dashed rgba(37, 99, 235, 0.28);
   outline-offset: 2px;
   position: relative;
-}
-
-.preview-frame .editor-preview-component:not(.base-flex):not(.base-grid):not(.base-image-wrap):not(.base-button):not(.base-link) {
-  display: flow-root;
-}
-
-.preview-frame .editor-preview-component.base-link {
-  display: inline-block;
 }
 
 .preview-frame .editor-preview-component[data-editor-component-label="Section"],

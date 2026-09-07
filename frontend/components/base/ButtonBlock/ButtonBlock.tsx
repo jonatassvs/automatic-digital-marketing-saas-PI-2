@@ -1,34 +1,19 @@
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { isSafeUrl } from "@/renderer/validation";
-import { editorPreviewAttributes, optionProp, stringProp } from "@/components/base/utils";
+type ButtonBlockProps = {
+  href?: string;
+  id?: string;
+  text?: string;
+  variant?: "primary" | "secondary";
+};
 
+// Renders a link styled as a call-to-action button.
 export function ButtonBlock({
-  componentLabel,
-  editorPreviewDepth,
+  href = "#",
   id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props
-}: RendererComponentProps) {
-  const text = stringProp(props, "text", "Fale conosco");
-  const href = stringProp(props, "href", "#");
-  const safeHref = isSafeUrl(href) ? href : "#";
-  const variant = optionProp(props, "variant", ["primary", "secondary"] as const, "primary");
-
+  text = "Fale conosco",
+  variant = "primary"
+}: ButtonBlockProps) {
   return (
-    <a
-      {...editorPreviewAttributes({
-        className: `base-button base-button-${variant}`,
-        componentLabel,
-        editorPreviewDepth,
-        id,
-        isEditorPreview,
-        isSelected,
-        onSelectClick
-      })}
-      href={safeHref}
-    >
+    <a className={`base-button base-button-${variant}`} href={href} id={id}>
       {text}
     </a>
   );

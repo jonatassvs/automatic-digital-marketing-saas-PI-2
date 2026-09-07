@@ -1,22 +1,22 @@
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { editorPreviewAttributes, numberProp, optionProp } from "@/components/base/utils";
+import type { ReactNode } from "react";
 
+type ContainerBlockProps = {
+  align?: "left" | "center";
+  children?: ReactNode;
+  id?: string;
+  maxWidth?: number;
+};
+
+// Constrains page content to a readable width.
 export function ContainerBlock({
-  componentLabel,
-  editorPreviewDepth,
+  align = "left",
+  children,
   id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props,
-  children
-}: RendererComponentProps) {
-  const maxWidth = numberProp(props, "maxWidth", 1120);
-  const align = optionProp(props, "align", ["left", "center"] as const, "left");
-
+  maxWidth = 1120
+}: ContainerBlockProps) {
   return (
     <div
-      {...editorPreviewAttributes({ componentLabel, editorPreviewDepth, id, isEditorPreview, isSelected, onSelectClick })}
+      id={id}
       style={{
         maxWidth,
         marginInline: "auto",

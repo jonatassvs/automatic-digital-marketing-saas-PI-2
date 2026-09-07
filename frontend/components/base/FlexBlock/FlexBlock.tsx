@@ -1,38 +1,23 @@
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { editorPreviewAttributes, numberProp, optionProp } from "@/components/base/utils";
+import type { ReactNode } from "react";
 
+type FlexBlockProps = {
+  align?: "flex-start" | "center" | "stretch";
+  children?: ReactNode;
+  direction?: "row" | "column";
+  gap?: number;
+  id?: string;
+};
+
+// Arranges child components in a flexible row or column.
 export function FlexBlock({
-  componentLabel,
-  editorPreviewDepth,
-  id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props,
-  children
-}: RendererComponentProps) {
-  const direction = optionProp(props, "direction", ["row", "column"] as const, "row");
-  const align = optionProp(
-    props,
-    "align",
-    ["flex-start", "center", "stretch"] as const,
-    "stretch"
-  );
-  const gap = numberProp(props, "gap", 16);
-
+  align = "stretch",
+  children,
+  direction = "row",
+  gap = 16,
+  id
+}: FlexBlockProps) {
   return (
-    <div
-      {...editorPreviewAttributes({
-        className: "base-flex",
-        componentLabel,
-        editorPreviewDepth,
-        id,
-        isEditorPreview,
-        isSelected,
-        onSelectClick
-      })}
-      style={{ alignItems: align, flexDirection: direction, gap }}
-    >
+    <div className="base-flex" id={id} style={{ alignItems: align, flexDirection: direction, gap }}>
       {children}
     </div>
   );

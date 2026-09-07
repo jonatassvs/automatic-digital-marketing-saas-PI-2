@@ -1,36 +1,19 @@
 import Image from "next/image";
-import type { RendererComponentProps } from "@/renderer/componentRegistry";
-import { isSafeUrl } from "@/renderer/validation";
-import { editorPreviewAttributes, stringProp } from "@/components/base/utils";
 
-export function ImageBlock({
-  componentLabel,
-  editorPreviewDepth,
-  id,
-  isEditorPreview,
-  isSelected,
-  onSelectClick,
-  props
-}: RendererComponentProps) {
-  const src = stringProp(props, "src", "");
-  const alt = stringProp(props, "alt", "");
+type ImageBlockProps = {
+  alt?: string;
+  id?: string;
+  src?: string;
+};
 
-  if (!src || !isSafeUrl(src)) {
+// Renders an optimized image inside a stable aspect-ratio wrapper.
+export function ImageBlock({ alt = "", id, src = "" }: ImageBlockProps) {
+  if (!src) {
     return null;
   }
 
   return (
-    <span
-      {...editorPreviewAttributes({
-        className: "base-image-wrap",
-        componentLabel,
-        editorPreviewDepth,
-        id,
-        isEditorPreview,
-        isSelected,
-        onSelectClick
-      })}
-    >
+    <span className="base-image-wrap" id={id}>
       <Image
         className="base-image"
         src={src}
