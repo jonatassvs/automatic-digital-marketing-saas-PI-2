@@ -1,4 +1,4 @@
-import type { MouseEvent, PropsWithChildren, ReactNode } from "react";
+import type { FocusEvent, MouseEvent, PropsWithChildren, ReactNode } from "react";
 import type { PageComponent } from "@/types/page";
 import { componentRegistry } from "@/renderer/componentRegistry";
 import { componentSchemas } from "@/renderer/schemas/componentSchemas";
@@ -8,6 +8,7 @@ type ComponentRendererProps = {
   component: PageComponent;
   depth?: number;
   onSelectComponent?: (id: string) => void;
+  onUpdateComponentProp?: (id: string, fieldName: string, value: unknown) => void;
   selectedId?: string;
 };
 
@@ -30,7 +31,10 @@ function EditorComponentFrame({
       return;
     }
 
-    event.preventDefault();
+    if (!(event.target as HTMLElement).closest("[data-editor-inline-text]")) {
+      event.preventDefault();
+    }
+
     event.stopPropagation();
     onSelectComponent(component.id);
   }
@@ -48,10 +52,65 @@ function EditorComponentFrame({
   );
 }
 
+type RichTextSegment = {
+  bold?: boolean;
+  italic?: boolean;
+  strike?: boolean;
+  text: string;
+  underline?: boolean;
+};
+
+function mergeSegments(segments: RichTextSegment[]) {
+  return segments.reduce<RichTextSegment[]>((merged, segment) => {
+    const previous = merged.at(-1);
+
+    if (
+      previous &&
+      Boolean(previous.bold) === Boolean(segment.bold) &&
+      Boolean(previous.italic) === Boolean(segment.italic) &&
+      Boolean(previous.strike) === Boolean(segment.strike) &&
+      Boolean(previous.underline) === Boolean(segment.underline)
+    ) {
+      previous.text += segment.text;
+      return merged;
+    }
+
+    return [...merged, segment];
+  }, []);
+}
+
+function readRichTextSegments(element: HTMLElement) {
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  const segments: RichTextSegment[] = [];
+
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    const text = node.nodeValue ?? "";
+
+    if (!text) {
+      continue;
+    }
+
+    const parentElement = node.parentElement;
+    const segmentElement = parentElement?.closest<HTMLElement>("[data-rich-text-segment]");
+
+    segments.push({
+      bold: segmentElement?.dataset.richBold === "true" || undefined,
+      italic: segmentElement?.dataset.richItalic === "true" || undefined,
+      strike: segmentElement?.dataset.richStrike === "true" || undefined,
+      text,
+      underline: segmentElement?.dataset.richUnderline === "true" || undefined
+    });
+  }
+
+  return mergeSegments(segments);
+}
+
 export function ComponentRenderer({
   component,
   depth = 0,
   onSelectComponent,
+  onUpdateComponentProp,
   selectedId
 }: ComponentRendererProps) {
   const RegisteredComponent = componentRegistry[component.component];
@@ -71,11 +130,31 @@ export function ComponentRenderer({
       component={child}
       depth={depth + 1}
       onSelectComponent={onSelectComponent}
+      onUpdateComponentProp={onUpdateComponentProp}
       selectedId={selectedId}
     />
   ));
+  const isEditableTextComponent = component.component === "Text";
+  const editorTextProps =
+    onUpdateComponentProp && isEditableTextComponent
+      ? {
+          contentEditable: true,
+          "data-editor-inline-text": true,
+          suppressContentEditableWarning: true,
+          onBlur: (event: FocusEvent<HTMLElement>) => {
+            const nextText = event.currentTarget.innerText.trimEnd();
+            const nextRichText = readRichTextSegments(event.currentTarget);
+
+            if (nextText && nextText !== component.props.text) {
+              onUpdateComponentProp(component.id, "text", nextText);
+            }
+
+            onUpdateComponentProp(component.id, "richText", nextRichText);
+          }
+        }
+      : undefined;
   const renderedComponent = (
-    <RegisteredComponent id={component.id} {...normalizeProps(schema, component.props)}>
+    <RegisteredComponent id={component.id} {...normalizeProps(schema, component.props)} editorTextProps={editorTextProps}>
       {renderedChildren}
     </RegisteredComponent>
   );
@@ -99,6 +178,7 @@ export function ComponentRenderer({
 type PageRendererProps = {
   components: PageComponent[];
   onSelectComponent?: (id: string) => void;
+  onUpdateComponentProp?: (id: string, fieldName: string, value: unknown) => void;
   renderRootInsertControl?: (insertIndex: number) => ReactNode;
   selectedId?: string;
 };
@@ -106,6 +186,7 @@ type PageRendererProps = {
 export function PageRenderer({
   components,
   onSelectComponent,
+  onUpdateComponentProp,
   renderRootInsertControl,
   selectedId
 }: PageRendererProps) {
@@ -118,6 +199,7 @@ export function PageRenderer({
             component={component}
             depth={0}
             onSelectComponent={onSelectComponent}
+            onUpdateComponentProp={onUpdateComponentProp}
             selectedId={selectedId}
           />
           {renderRootInsertControl?.(index + 1)}

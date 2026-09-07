@@ -39,7 +39,7 @@ export function EditorInsertControl({
   selectedSchema,
   onAddComponent
 }: EditorInsertControlProps) {
-  if (!bounds || !selectedComponent || !selectedSchema?.acceptsChildren) {
+  if (!bounds || !selectedComponent || selectedComponent.component === "Text" || !selectedSchema?.acceptsChildren) {
     return null;
   }
 

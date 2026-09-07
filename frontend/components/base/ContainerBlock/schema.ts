@@ -5,11 +5,12 @@ export const containerSchema: ComponentSchema = {
   label: "Container",
   acceptsChildren: true,
   fields: [
-    { name: "maxWidth", label: "Largura maxima", type: "number", defaultValue: 1120 },
+    { name: "maxWidth", label: "Largura maxima", type: "number", group: "style", defaultValue: 1120 },
     {
       name: "align",
       label: "Alinhamento",
       type: "select",
+      group: "style",
       defaultValue: "left",
       options: [
         { label: "Esquerda", value: "left" },

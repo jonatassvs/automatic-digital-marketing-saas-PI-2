@@ -9,6 +9,7 @@ export const imageSchema: ComponentSchema = {
       name: "src",
       label: "URL da imagem",
       type: "url",
+      group: "content",
       required: true,
       defaultValue: "https://images.unsplash.com/photo-1556761175-b413da4baf72"
     },
@@ -16,6 +17,7 @@ export const imageSchema: ComponentSchema = {
       name: "alt",
       label: "Texto alternativo",
       type: "text",
+      group: "content",
       required: true,
       defaultValue: "Equipe atendendo cliente"
     }

@@ -5,12 +5,13 @@ export const buttonSchema: ComponentSchema = {
   label: "Botao",
   acceptsChildren: false,
   fields: [
-    { name: "text", label: "Texto", type: "text", required: true, defaultValue: "Fale conosco" },
-    { name: "href", label: "Destino", type: "url", defaultValue: "#contato" },
+    { name: "text", label: "Texto", type: "text", group: "content", required: true, defaultValue: "Fale conosco" },
+    { name: "href", label: "Destino", type: "url", group: "content", defaultValue: "#contato" },
     {
       name: "variant",
       label: "Estilo",
       type: "select",
+      group: "style",
       defaultValue: "primary",
       options: [
         { label: "Principal", value: "primary" },

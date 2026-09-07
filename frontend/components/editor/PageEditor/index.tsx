@@ -53,6 +53,7 @@ export function PageEditor() {
           onMoveComponentDown={(componentId) => editorState.moveSelectedComponent(componentId, "down")}
           onMoveComponentUp={(componentId) => editorState.moveSelectedComponent(componentId, "up")}
           onSelectComponent={editorState.setSelectedId}
+          onUpdateComponentProp={editorState.updateComponentProp}
         />
 
         <PropertiesPanel

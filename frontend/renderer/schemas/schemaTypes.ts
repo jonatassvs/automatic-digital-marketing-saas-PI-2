@@ -1,11 +1,14 @@
 import type { ComponentName } from "@/types/page";
 
 export type SchemaField = {
+  description?: string;
+  group?: "content" | "style";
   name: string;
   label: string;
-  type: "text" | "textarea" | "number" | "select" | "color" | "url";
+  responsive?: boolean;
+  type: "checkbox" | "color" | "number" | "richText" | "select" | "text" | "textarea" | "url";
   required?: boolean;
-  defaultValue?: string | number;
+  defaultValue?: boolean | string | number | unknown[];
   options?: Array<{ label: string; value: string | number }>;
 };
 

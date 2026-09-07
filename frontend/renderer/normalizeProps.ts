@@ -16,6 +16,10 @@ export function normalizeProps(schema: ComponentSchema, props: ComponentProps): 
         return [field.name, typeof value === "number" && Number.isFinite(value) ? value : field.defaultValue];
       }
 
+      if (field.type === "checkbox") {
+        return [field.name, typeof value === "boolean" ? value : field.defaultValue];
+      }
+
       if (field.type === "select") {
         const optionValues = field.options?.map((option) => option.value) ?? [];
         return [field.name, optionValues.includes(value as string | number) ? value : field.defaultValue];
@@ -23,6 +27,10 @@ export function normalizeProps(schema: ComponentSchema, props: ComponentProps): 
 
       if (field.type === "url") {
         return [field.name, typeof value === "string" && isSafeUrl(value) ? value : field.defaultValue];
+      }
+
+      if (field.type === "richText") {
+        return [field.name, Array.isArray(value) ? value : field.defaultValue];
       }
 
       return [field.name, typeof value === "string" ? value : field.defaultValue];

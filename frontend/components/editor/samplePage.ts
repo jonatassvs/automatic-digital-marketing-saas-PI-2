@@ -47,19 +47,28 @@ export const samplePage: LandingPageDocument = {
                   children: [
                     {
                       id: "hero-title",
-                      component: "Heading",
+                      component: "Text",
                       props: {
-                        level: 1,
+                        type: "heading",
+                        level: "h1",
                         text: "Mais clientes para seu negocio local",
-                        color: "#12312f"
+                        color: "#12312f",
+                        align: "left",
+                        useDesktopFontSize: true,
+                        fontSizeMobile: 36,
+                        fontSizeDesktop: 48
                       }
                     },
                     {
                       id: "hero-description",
-                      component: "Paragraph",
+                      component: "Text",
                       props: {
+                        type: "paragraph",
                         text: "Crie uma pagina clara, rapida e otimizada para transformar visitas em contatos reais.",
-                        color: "#52616b"
+                        color: "#52616b",
+                        align: "left",
+                        fontSizeMobile: 17,
+                        fontSizeDesktop: 17
                       }
                     },
                     {
@@ -105,19 +114,27 @@ export const samplePage: LandingPageDocument = {
           children: [
             {
               id: "benefits-title",
-              component: "Heading",
+              component: "Text",
               props: {
-                level: 2,
+                type: "heading",
+                level: "h2",
                 text: "Tudo que uma landing page inicial precisa",
-                color: "#17202a"
+                color: "#17202a",
+                align: "center",
+                fontSizeMobile: 32,
+                fontSizeDesktop: 32
               }
             },
             {
               id: "benefits-text",
-              component: "Paragraph",
+              component: "Text",
               props: {
+                type: "paragraph",
                 text: "Estrutura por componentes, texto editavel, imagens com alt text e botoes com destinos seguros.",
-                color: "#64748b"
+                color: "#64748b",
+                align: "center",
+                fontSizeMobile: 17,
+                fontSizeDesktop: 17
               }
             }
           ]

@@ -5,7 +5,7 @@ export const gridSchema: ComponentSchema = {
   label: "Grade",
   acceptsChildren: true,
   fields: [
-    { name: "columns", label: "Colunas", type: "number", defaultValue: 3 },
-    { name: "gap", label: "Espaco", type: "number", defaultValue: 20 }
+    { name: "columns", label: "Colunas", type: "number", group: "style", defaultValue: 3 },
+    { name: "gap", label: "Espaco", type: "number", group: "style", defaultValue: 20 }
   ]
 };

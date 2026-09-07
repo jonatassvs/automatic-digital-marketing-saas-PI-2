@@ -5,7 +5,7 @@ export const sectionSchema: ComponentSchema = {
   label: "Secao",
   acceptsChildren: true,
   fields: [
-    { name: "background", label: "Cor de fundo", type: "color", defaultValue: "#ffffff" },
-    { name: "paddingY", label: "Espacamento vertical", type: "number", defaultValue: 72 }
+    { name: "background", label: "Cor de fundo", type: "color", group: "style", defaultValue: "#ffffff" },
+    { name: "paddingY", label: "Espacamento vertical", type: "number", group: "style", defaultValue: 72 }
   ]
 };

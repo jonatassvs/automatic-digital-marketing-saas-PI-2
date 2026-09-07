@@ -12,7 +12,7 @@ type PropertiesPanelProps = {
   validation: ValidationResult;
   onDeleteSelected: () => void;
   onPageChange: (page: LandingPageDocument) => void;
-  onUpdateSelectedProp: (fieldName: string, value: string | number) => void;
+  onUpdateSelectedProp: (fieldName: string, value: unknown) => void;
 };
 
 // Groups page settings, selected component settings, and validation feedback.

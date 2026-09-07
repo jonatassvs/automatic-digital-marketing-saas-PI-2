@@ -4,5 +4,5 @@ export const spacerSchema: ComponentSchema = {
   component: "Spacer",
   label: "Espacador",
   acceptsChildren: false,
-  fields: [{ name: "height", label: "Altura", type: "number", defaultValue: 24 }]
+  fields: [{ name: "height", label: "Altura", type: "number", group: "style", defaultValue: 24 }]
 };

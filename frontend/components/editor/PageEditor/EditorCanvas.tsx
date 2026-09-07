@@ -5,6 +5,7 @@ import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
 import { PageRenderer } from "@/renderer/ComponentRenderer";
 import { EditorInsertControl } from "./EditorInsertControl";
 import { EditorSelectionActions } from "./EditorSelectionActions";
+import { EditorTextToolbar } from "./EditorTextToolbar";
 
 type EditorCanvasProps = {
   page: LandingPageDocument;
@@ -22,6 +23,7 @@ type EditorCanvasProps = {
   onMoveComponentDown: (id: string) => void;
   onMoveComponentUp: (id: string) => void;
   onSelectComponent: (id: string) => void;
+  onUpdateComponentProp: (id: string, fieldName: string, value: unknown) => void;
 };
 
 // Renders the live landing page preview and canvas-level editing controls.
@@ -37,7 +39,8 @@ export function EditorCanvas({
   onDuplicateComponent,
   onMoveComponentDown,
   onMoveComponentUp,
-  onSelectComponent
+  onSelectComponent,
+  onUpdateComponentProp
 }: EditorCanvasProps) {
   const previewRef = useRef<HTMLElement>(null);
   const [insertControlBounds, setInsertControlBounds] = useState<
@@ -103,6 +106,7 @@ export function EditorCanvas({
           <PageRenderer
             components={page.components}
             onSelectComponent={onSelectComponent}
+            onUpdateComponentProp={onUpdateComponentProp}
             renderRootInsertControl={(insertIndex) => (
               <div className="canvas-root-insert-row">
                 <button
@@ -126,6 +130,12 @@ export function EditorCanvas({
             selectedComponent={selectedComponent}
             selectedSchema={selectedSchema}
             onAddComponent={onAddChild}
+          />
+          <EditorTextToolbar
+            bounds={insertControlBounds}
+            selectedComponent={selectedComponent}
+            selectedSchema={selectedSchema}
+            onUpdateComponentProp={onUpdateComponentProp}
           />
           <EditorSelectionActions
             bounds={insertControlBounds}

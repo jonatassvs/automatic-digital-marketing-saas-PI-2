@@ -5,7 +5,7 @@ export const linkSchema: ComponentSchema = {
   label: "Link",
   acceptsChildren: false,
   fields: [
-    { name: "text", label: "Texto", type: "text", required: true, defaultValue: "Saiba mais" },
-    { name: "href", label: "Destino", type: "url", required: true, defaultValue: "#" }
+    { name: "text", label: "Texto", type: "text", group: "content", required: true, defaultValue: "Saiba mais" },
+    { name: "href", label: "Destino", type: "url", group: "content", required: true, defaultValue: "#" }
   ]
 };

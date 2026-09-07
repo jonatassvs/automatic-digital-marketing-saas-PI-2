@@ -30,14 +30,10 @@ export function usePageEditorState() {
   const selectedSchema = selectedComponent ? componentSchemas[selectedComponent.component] : undefined;
   const canAddChild = Boolean(selectedSchema?.acceptsChildren);
 
-  function updateSelectedProp(fieldName: string, value: string | number) {
-    if (!selectedComponent) {
-      return;
-    }
-
+  function updateComponentProp(componentId: string, fieldName: string, value: unknown) {
     setPage((current) => ({
       ...current,
-      components: updateComponent(current.components, selectedComponent.id, (component) => ({
+      components: updateComponent(current.components, componentId, (component) => ({
         ...component,
         props: {
           ...component.props,
@@ -45,6 +41,14 @@ export function usePageEditorState() {
         }
       }))
     }));
+  }
+
+  function updateSelectedProp(fieldName: string, value: unknown) {
+    if (!selectedComponent) {
+      return;
+    }
+
+    updateComponentProp(selectedComponent.id, fieldName, value);
   }
 
   function addRootComponent(componentName: ComponentName, insertIndex?: number) {
@@ -126,6 +130,7 @@ export function usePageEditorState() {
     moveSelectedComponent,
     setPage,
     setSelectedId,
+    updateComponentProp,
     updateSelectedProp
   };
 }
