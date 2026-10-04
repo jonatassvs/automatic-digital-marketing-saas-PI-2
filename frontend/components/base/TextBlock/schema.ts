@@ -104,11 +104,11 @@ export const textSchema: ComponentSchema = {
     },
     {
       name: "fontSizeMobile",
-      label: "Fonte",
+      label: "Fonte (px)",
       type: "number",
       group: "style",
       responsive: true,
-      defaultValue: 24
+      min: 8, max: 120, defaultValue: 24
     },
     {
       name: "useDesktopFontSize",
@@ -119,11 +119,11 @@ export const textSchema: ComponentSchema = {
     },
     {
       name: "fontSizeDesktop",
-      label: "Fonte no desktop",
+      label: "Fonte no desktop (px)",
       type: "number",
       group: "style",
       responsive: true,
-      defaultValue: 32
+      min: 8, max: 120, defaultValue: 32
     }
   ]
 };

@@ -1,6 +1,6 @@
 import type { ComponentProps } from "@/types/page";
 import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
-import { isSafeUrl } from "@/renderer/validation";
+import { isValidFieldValue, isSafeUrl } from "@/renderer/validation";
 
 // Applies schema defaults and keeps only fields allowed by the component schema.
 export function normalizeProps(schema: ComponentSchema, props: ComponentProps): ComponentProps {
@@ -11,6 +11,8 @@ export function normalizeProps(schema: ComponentSchema, props: ComponentProps): 
       if (value === undefined || value === null) {
         return [field.name, field.defaultValue];
       }
+
+      if (!isValidFieldValue(field, value)) return [field.name, field.defaultValue];
 
       if (field.type === "number") {
         return [field.name, typeof value === "number" && Number.isFinite(value) ? value : field.defaultValue];

@@ -1,6 +1,7 @@
+import { responsiveStyle, type ResponsiveProps } from "@/components/base/responsiveStyle";
 import type { ReactNode } from "react";
 
-type ContainerBlockProps = {
+type ContainerBlockProps = ResponsiveProps & {
   align?: "left" | "center";
   children?: ReactNode;
   id?: string;
@@ -12,17 +13,19 @@ export function ContainerBlock({
   align = "left",
   children,
   id,
+  responsiveProps,
   maxWidth = 1120
 }: ContainerBlockProps) {
   return (
     <div
+      className="responsive-component"
       id={id}
-      style={{
+      style={responsiveStyle({
         maxWidth,
         marginInline: "auto",
         paddingInline: 24,
         textAlign: align
-      }}
+      }, responsiveProps)}
     >
       {children}
     </div>

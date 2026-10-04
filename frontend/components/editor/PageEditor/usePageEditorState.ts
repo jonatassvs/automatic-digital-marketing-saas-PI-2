@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { ComponentName, LandingPageDocument } from "@/types/page";
 import { componentSchemas } from "@/renderer/schemas/componentSchemas";
+import { validatePageDesign } from "@/renderer/pageDesign";
 import { validateComponentTree } from "@/renderer/validation";
 import { samplePage } from "@/components/editor/samplePage";
 import {
@@ -26,7 +27,11 @@ export function usePageEditorState() {
     () => findComponentSiblingPosition(page.components, selectedId),
     [page.components, selectedId]
   );
-  const validation = useMemo(() => validateComponentTree(page.components), [page.components]);
+  const validation = useMemo(() => {
+    const tree = validateComponentTree(page.components);
+    const errors = [...tree.errors, ...validatePageDesign(page.design)];
+    return { valid: errors.length === 0, errors };
+  }, [page.components, page.design]);
   const selectedSchema = selectedComponent ? componentSchemas[selectedComponent.component] : undefined;
   const canAddChild = Boolean(selectedSchema?.acceptsChildren);
 

@@ -29,6 +29,7 @@ export function PropertiesPanel({
     <aside className="properties-panel" aria-label="Painel de controle">
       <PageSettingsPanel page={page} onChange={onPageChange} />
       <ComponentSettingsPanel
+        design={page.design}
         selectedComponent={selectedComponent}
         selectedSchema={selectedSchema}
         onDelete={onDeleteSelected}

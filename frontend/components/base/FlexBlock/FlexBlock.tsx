@@ -1,6 +1,7 @@
+import { responsiveStyle, type ResponsiveProps } from "@/components/base/responsiveStyle";
 import type { ReactNode } from "react";
 
-type FlexBlockProps = {
+type FlexBlockProps = ResponsiveProps & {
   align?: "flex-start" | "center" | "stretch";
   children?: ReactNode;
   direction?: "row" | "column";
@@ -13,11 +14,12 @@ export function FlexBlock({
   align = "stretch",
   children,
   direction = "row",
+  responsiveProps,
   gap = 16,
   id
 }: FlexBlockProps) {
   return (
-    <div className="base-flex" id={id} style={{ alignItems: align, flexDirection: direction, gap }}>
+    <div className="base-flex responsive-component" id={id} style={responsiveStyle({ alignItems: align, flexDirection: direction, gap }, responsiveProps)}>
       {children}
     </div>
   );

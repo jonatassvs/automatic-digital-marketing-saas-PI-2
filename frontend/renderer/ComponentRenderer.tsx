@@ -1,10 +1,13 @@
-import type { FocusEvent, MouseEvent, PropsWithChildren, ReactNode } from "react";
-import type { PageComponent } from "@/types/page";
+import type { FocusEvent, KeyboardEvent, MouseEvent, PropsWithChildren, ReactNode } from "react";
+import { fontStack, normalizePageDesign, resolvePageFont } from "./pageDesign";
+import { PageDesignStyles } from "./PageDesignStyles";
+import type { PageDesign, PageComponent } from "@/types/page";
 import { componentRegistry } from "@/renderer/componentRegistry";
 import { componentSchemas } from "@/renderer/schemas/componentSchemas";
 import { normalizeProps } from "@/renderer/normalizeProps";
 
 type ComponentRendererProps = {
+  design?: PageDesign;
   component: PageComponent;
   depth?: number;
   onSelectComponent?: (id: string) => void;
@@ -107,6 +110,7 @@ function readRichTextSegments(element: HTMLElement) {
 }
 
 export function ComponentRenderer({
+  design,
   component,
   depth = 0,
   onSelectComponent,
@@ -127,6 +131,7 @@ export function ComponentRenderer({
   const renderedChildren = component.children?.map((child) => (
     <ComponentRenderer
       key={child.id}
+      design={design}
       component={child}
       depth={depth + 1}
       onSelectComponent={onSelectComponent}
@@ -134,27 +139,40 @@ export function ComponentRenderer({
       selectedId={selectedId}
     />
   ));
-  const isEditableTextComponent = component.component === "Text";
+  const isEditableTextComponent = component.component === "Text" || component.component === "Button";
   const editorTextProps =
     onUpdateComponentProp && isEditableTextComponent
       ? {
-          contentEditable: true,
+          contentEditable: component.component === "Button" ? "plaintext-only" as const : true,
+          role: component.component === "Button" ? "textbox" : undefined,
+          "aria-label": component.component === "Button" ? "Texto do bot?o" : undefined,
           "data-editor-inline-text": true,
           suppressContentEditableWarning: true,
+          onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
+            if (component.component === "Button" && event.key === "Enter") {
+              event.preventDefault();
+              event.currentTarget.blur();
+            }
+          },
           onBlur: (event: FocusEvent<HTMLElement>) => {
             const nextText = event.currentTarget.innerText.trimEnd();
-            const nextRichText = readRichTextSegments(event.currentTarget);
+
 
             if (nextText && nextText !== component.props.text) {
               onUpdateComponentProp(component.id, "text", nextText);
             }
 
-            onUpdateComponentProp(component.id, "richText", nextRichText);
+            if (component.component === "Text") {
+              onUpdateComponentProp(component.id, "richText", readRichTextSegments(event.currentTarget));
+            } else if (!nextText) {
+              event.currentTarget.textContent = String(component.props.text ?? "Fale conosco");
+            }
           }
         }
       : undefined;
+  const normalizedProps = normalizeProps(schema, component.props);
   const renderedComponent = (
-    <RegisteredComponent id={component.id} {...normalizeProps(schema, component.props)} editorTextProps={editorTextProps}>
+    <RegisteredComponent id={component.id} {...normalizedProps} fontFamily={fontStack(resolvePageFont(normalizedProps.fontFamily, design))} responsiveProps={normalizedProps} editorTextProps={editorTextProps}>
       {renderedChildren}
     </RegisteredComponent>
   );
@@ -176,6 +194,7 @@ export function ComponentRenderer({
 }
 
 type PageRendererProps = {
+  design?: PageDesign;
   components: PageComponent[];
   onSelectComponent?: (id: string) => void;
   onUpdateComponentProp?: (id: string, fieldName: string, value: unknown) => void;
@@ -184,18 +203,22 @@ type PageRendererProps = {
 };
 
 export function PageRenderer({
+  design,
   components,
   onSelectComponent,
   onUpdateComponentProp,
   renderRootInsertControl,
   selectedId
 }: PageRendererProps) {
+  const normalizedDesign = normalizePageDesign(design);
   return (
-    <main>
+    <main className={`page-renderer page-breakpoint-${normalizedDesign.mobileMaxWidth}`} style={{ fontFamily: fontStack(normalizedDesign.defaultFont) }}>
+      <PageDesignStyles design={normalizedDesign} />
       {renderRootInsertControl?.(0)}
       {components.map((component, index) => (
         <div className="editor-root-component-slot" key={component.id}>
           <ComponentRenderer
+            design={normalizedDesign}
             component={component}
             depth={0}
             onSelectComponent={onSelectComponent}

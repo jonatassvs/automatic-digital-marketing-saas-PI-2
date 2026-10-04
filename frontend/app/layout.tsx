@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.scss";
+import "@/components/base/responsive.scss";
 
 export const metadata: Metadata = {
   title: "Landing Page Builder",

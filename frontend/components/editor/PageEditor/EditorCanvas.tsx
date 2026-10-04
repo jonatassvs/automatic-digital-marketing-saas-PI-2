@@ -1,3 +1,5 @@
+// @refresh reset
+// Remount canvas observers after code edits; page data stays in the parent editor.
 import { useLayoutEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import type { LandingPageDocument, PageComponent } from "@/types/page";
@@ -83,14 +85,22 @@ export function EditorCanvas({
     }
 
     updateInsertControlBounds();
+    const resizeObserver = new ResizeObserver(updateInsertControlBounds);
+    if (previewRef.current) {
+      resizeObserver.observe(previewRef.current);
+      previewRef.current.querySelectorAll<HTMLElement>("[data-editor-component-id]").forEach(element => resizeObserver.observe(element));
+    }
+    document.fonts.addEventListener("loadingdone", updateInsertControlBounds);
     window.addEventListener("resize", updateInsertControlBounds);
     window.addEventListener("scroll", updateInsertControlBounds, true);
 
     return () => {
+      resizeObserver.disconnect();
+      document.fonts.removeEventListener("loadingdone", updateInsertControlBounds);
       window.removeEventListener("resize", updateInsertControlBounds);
       window.removeEventListener("scroll", updateInsertControlBounds, true);
     };
-  }, [page.components, selectedId]);
+  }, [page.components, page.design, selectedId]);
 
   return (
     <section className="canvas-column" aria-label="Canvas de montagem">
@@ -104,6 +114,7 @@ export function EditorCanvas({
       <div className="builder-surface">
         <section className="preview-frame" aria-label="Preview da landing page" ref={previewRef}>
           <PageRenderer
+            design={page.design}
             components={page.components}
             onSelectComponent={onSelectComponent}
             onUpdateComponentProp={onUpdateComponentProp}
@@ -132,6 +143,7 @@ export function EditorCanvas({
             onAddComponent={onAddChild}
           />
           <EditorTextToolbar
+            design={page.design}
             bounds={insertControlBounds}
             selectedComponent={selectedComponent}
             selectedSchema={selectedSchema}

@@ -30,7 +30,14 @@ export type SeoConfig = {
   robotsFollow: boolean;
 };
 
+export type PageDesign = {
+  mobileMaxWidth?: number;
+  fonts?: string[];
+  defaultFont?: string;
+};
+
 export type LandingPageDocument = {
+  design?: PageDesign;
   id: string;
   name: string;
   status: "draft" | "private" | "published";

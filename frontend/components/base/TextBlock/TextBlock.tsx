@@ -1,3 +1,4 @@
+import { responsiveStyle, type ResponsiveProps } from "@/components/base/responsiveStyle";
 import type { CSSProperties, HTMLAttributes } from "react";
 
 type TextTag =
@@ -34,13 +35,14 @@ type TextTag =
   | "ul"
   | "var";
 
-type TextBlockProps = {
+type TextBlockProps = ResponsiveProps & {
   align?: "left" | "center" | "right";
   bold?: boolean;
   color?: string;
   editorTextProps?: HTMLAttributes<HTMLElement>;
   fontSizeDesktop?: number;
   fontSizeMobile?: number;
+  fontFamily?: string;
   id?: string;
   italic?: boolean;
   level?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -128,6 +130,8 @@ function renderSegments(segments: RichTextSegment[]) {
 
 // Renders all safe text-oriented HTML tags from a single editable text component.
 export function TextBlock({
+  fontFamily,
+  responsiveProps,
   align = "left",
   bold = false,
   color = "#17202a",
@@ -146,8 +150,10 @@ export function TextBlock({
   useDesktopFontSize = false
 }: TextBlockProps) {
   const style = {
-    "--text-font-size-desktop": `${useDesktopFontSize ? fontSizeDesktop : fontSizeMobile}px`,
-    "--text-font-size-mobile": `${fontSizeMobile}px`,
+    "--text-font-size-desktop": `${(useDesktopFontSize ? fontSizeDesktop : fontSizeMobile) / 16}rem`,
+    "--text-font-size-mobile": `${fontSizeMobile / 16}rem`,
+    display: type === "inline" ? "inline-block" : undefined,
+    fontFamily,
     color,
     textAlign: align
   } as CSSProperties;
@@ -158,7 +164,7 @@ export function TextBlock({
     const lines = splitSegmentsByLine(segments).filter((line) => line.length > 0);
 
     return (
-      <Tag className="base-text" id={id} style={style} {...editorTextProps}>
+      <Tag className="base-text responsive-component" id={id} style={responsiveStyle(style, responsiveProps)} {...editorTextProps}>
         {(lines.length ? lines : [[{ text: "Novo item" }]]).map((line, index) => (
           <li key={index}>{renderSegments(line)}</li>
         ))}
@@ -172,9 +178,9 @@ export function TextBlock({
 
   return (
     <Tag
-      className={blockTags.has(Tag) ? "base-text" : "base-text base-text-inline"}
+      className={blockTags.has(Tag) ? "base-text responsive-component" : "base-text base-text-inline responsive-component"}
       id={id}
-      style={style}
+      style={responsiveStyle(style, responsiveProps)}
       {...editorTextProps}
     >
       {renderSegments(segments)}

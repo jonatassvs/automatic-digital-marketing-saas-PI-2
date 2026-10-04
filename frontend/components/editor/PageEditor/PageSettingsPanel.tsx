@@ -1,4 +1,5 @@
 import { FileText } from "lucide-react";
+import { PageAppearanceSettings } from "./PageAppearanceSettings";
 import type { LandingPageDocument } from "@/types/page";
 
 type PageSettingsPanelProps = {
@@ -39,6 +40,7 @@ export function PageSettingsPanel({ page, onChange }: PageSettingsPanelProps) {
           onChange={(event) => onChange({ ...page, seo: { ...page.seo, description: event.target.value } })}
         />
       </label>
+      <PageAppearanceSettings page={page} onChange={onChange} />
     </section>
   );
 }

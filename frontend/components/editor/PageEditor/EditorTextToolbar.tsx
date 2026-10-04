@@ -1,6 +1,7 @@
 import type { CSSProperties, MouseEvent } from "react";
 import { Bold, Italic, Strikethrough, Underline } from "lucide-react";
-import type { PageComponent } from "@/types/page";
+import { FontFamilySelect } from "./FontFamilySelect";
+import type { PageDesign, PageComponent } from "@/types/page";
 import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
 
 type EditorTextToolbarBounds = {
@@ -10,6 +11,7 @@ type EditorTextToolbarBounds = {
 };
 
 type EditorTextToolbarProps = {
+  design?: PageDesign;
   bounds?: EditorTextToolbarBounds;
   selectedComponent?: PageComponent;
   selectedSchema?: ComponentSchema;
@@ -175,6 +177,7 @@ function applyMarkToRange(segments: RichTextSegment[], start: number, end: numbe
 
 // Shows text formatting controls directly on the canvas for WYSIWYG editing.
 export function EditorTextToolbar({
+  design,
   bounds,
   selectedComponent,
   selectedSchema,
@@ -205,6 +208,7 @@ export function EditorTextToolbar({
 
   return (
     <div className="editor-text-toolbar" style={style} onClick={stopToolbarClick}>
+      <FontFamilySelect design={design} value={component.props.fontFamily} onChange={font => onUpdateComponentProp(component.id, "fontFamily", font)} />
       <label>
         Tipo
         <select
@@ -310,7 +314,7 @@ export function EditorTextToolbar({
       </label>
 
       <label>
-        Fonte
+        Fonte (px)
         <input
           min={8}
           max={120}
@@ -331,7 +335,7 @@ export function EditorTextToolbar({
 
       {useDesktopFontSize ? (
         <label>
-          Desktop
+          Desktop (px)
           <input
             min={8}
             max={120}

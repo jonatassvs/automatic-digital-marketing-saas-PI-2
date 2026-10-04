@@ -1,6 +1,9 @@
 import type { ComponentName } from "@/types/page";
 
 export type SchemaField = {
+  min?: number;
+  max?: number;
+  step?: number;
   description?: string;
   group?: "content" | "style";
   name: string;
