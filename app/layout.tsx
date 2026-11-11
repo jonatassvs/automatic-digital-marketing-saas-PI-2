@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.scss";
 import "@/components/base/responsive.scss";
+import { AuthProvider } from "@/components/auth/AuthContext";
 
 export const metadata: Metadata = {
   title: "Landing Page Builder",
-  description: "Editor inicial para montar landing pages por JSON declarativo."
+  description: "Editor de landing pages de alta conversão sem código."
 };
 
 export default function RootLayout({
@@ -14,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

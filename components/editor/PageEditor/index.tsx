@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { ComponentName } from "@/types/page";
+import type { ComponentName, LandingPageDocument } from "@/types/page";
 import { AddComponentModal } from "./AddComponentModal";
 import { EditorCanvas } from "./EditorCanvas";
 import { EditorTopbar } from "./EditorTopbar";
@@ -10,11 +10,31 @@ import type { AddTarget } from "./types";
 import { usePageEditorState } from "./usePageEditorState";
 import "../editor.scss";
 
+export type PageEditorProps = {
+  initialPage?: LandingPageDocument;
+  onSave?: (page: LandingPageDocument) => Promise<void>;
+  onTogglePublish?: () => Promise<void>;
+  isSaving?: boolean;
+  saveMessage?: string | null;
+  isPublishing?: boolean;
+  backHref?: string;
+  previewHref?: string;
+};
+
 // Owns the page editor state and coordinates the editor subcomponents.
-export function PageEditor() {
+export function PageEditor({
+  initialPage,
+  onSave,
+  onTogglePublish,
+  isSaving,
+  saveMessage,
+  isPublishing,
+  backHref,
+  previewHref
+}: PageEditorProps = {}) {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [addTarget, setAddTarget] = useState<AddTarget>({ kind: "root" });
-  const editorState = usePageEditorState();
+  const editorState = usePageEditorState(initialPage);
 
   function openAddModal(target: AddTarget) {
     setAddTarget(target);
@@ -37,6 +57,13 @@ export function PageEditor() {
         page={editorState.page}
         validationErrorCount={editorState.validation.errors.length}
         validationIsValid={editorState.validation.valid}
+        onSave={() => onSave?.(editorState.page)}
+        isSaving={isSaving}
+        saveMessage={saveMessage}
+        onTogglePublish={onTogglePublish}
+        isPublishing={isPublishing}
+        backHref={backHref}
+        previewHref={previewHref}
       />
 
       <main className="editor-workspace">

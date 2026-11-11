@@ -18,9 +18,12 @@ import {
 } from "./pageTree";
 
 // Centralizes page editor state and tree mutations away from presentation components.
-export function usePageEditorState() {
-  const [page, setPage] = useState<LandingPageDocument>(() => clonePage(samplePage));
-  const [selectedId, setSelectedId] = useState("hero");
+export function usePageEditorState(initialPage?: LandingPageDocument) {
+  const [page, setPage] = useState<LandingPageDocument>(() => clonePage(initialPage ?? samplePage));
+  const [selectedId, setSelectedId] = useState(() => {
+    const list = flattenComponents((initialPage ?? samplePage).components);
+    return list[0]?.id ?? "hero";
+  });
   const flatComponents = useMemo(() => flattenComponents(page.components), [page.components]);
   const selectedComponent = flatComponents.find((component) => component.id === selectedId);
   const selectedSiblingPosition = useMemo(
