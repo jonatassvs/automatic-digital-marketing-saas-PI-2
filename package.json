@@ -1,0 +1,40 @@
+{
+  "name": "landing-page-builder",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run test:components && npm run test:server && npm run contract:check",
+    "test:components": "node tests/components.cjs",
+    "test:server": "node --conditions=react-server --import tsx --test tests/server.test.ts",
+    "check-db": "node --conditions=react-server --import tsx scripts/check-db.ts",
+    "contract:export": "node scripts/export-contract.cjs",
+    "contract:check": "node scripts/export-contract.cjs --check"
+  },
+  "dependencies": {
+    "lucide-react": "0.542.0",
+    "mongodb": "^7.7.0",
+    "next": "16.3.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.4",
+    "mongodb-memory-server": "^11.3.0",
+    "sass": "^1.104.0",
+    "tsx": "^4.23.15",
+    "typescript": "5.5.3"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
