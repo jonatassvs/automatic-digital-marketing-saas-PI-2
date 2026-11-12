@@ -1,0 +1,2659 @@
+{
+  "fonts": [
+    "Inter",
+    "Lato",
+    "Lora",
+    "Merriweather",
+    "Montserrat",
+    "Noto Sans",
+    "Nunito",
+    "Open Sans",
+    "Playfair Display",
+    "Poppins",
+    "Roboto",
+    "Source Sans 3"
+  ],
+  "schemas": {
+    "Button": {
+      "acceptsChildren": false,
+      "fields": [
+        {
+          "name": "linkTarget",
+          "type": "select",
+          "options": [
+            "_self",
+            "_blank"
+          ]
+        },
+        {
+          "name": "text",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "href",
+          "type": "url"
+        },
+        {
+          "name": "variant",
+          "type": "select",
+          "options": [
+            "primary",
+            "secondary"
+          ]
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "min": 0,
+          "max": 2400
+        },
+        {
+          "name": "widthUnit",
+          "type": "select",
+          "options": [
+            "px",
+            "%",
+            "vw",
+            "rem"
+          ]
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "min": 0,
+          "max": 2400
+        },
+        {
+          "name": "heightUnit",
+          "type": "select",
+          "options": [
+            "px",
+            "vh",
+            "rem"
+          ]
+        },
+        {
+          "name": "borderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "borderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "borderStyle",
+          "type": "select",
+          "options": [
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "borderColor",
+          "type": "color"
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "shadow",
+          "type": "select",
+          "options": [
+            "none",
+            "soft",
+            "medium",
+            "strong"
+          ]
+        },
+        {
+          "name": "marginTop",
+          "type": "number",
+          "min": 0,
+          "max": 2400
+        },
+        {
+          "name": "marginBottom",
+          "type": "number",
+          "min": 0,
+          "max": 2400
+        },
+        {
+          "name": "alignment",
+          "type": "select",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        {
+          "name": "newTab",
+          "type": "checkbox"
+        },
+        {
+          "name": "customColors",
+          "type": "checkbox"
+        },
+        {
+          "name": "backgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "color",
+          "type": "color"
+        },
+        {
+          "name": "hoverBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "hoverColor",
+          "type": "color"
+        },
+        {
+          "name": "hoverBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "fontSize",
+          "type": "number",
+          "min": 8,
+          "max": 120
+        },
+        {
+          "name": "fontWeight",
+          "type": "select",
+          "options": [
+            "400",
+            "500",
+            "600",
+            "700",
+            "800",
+            "900"
+          ]
+        },
+        {
+          "name": "textTransform",
+          "type": "select",
+          "options": [
+            "none",
+            "uppercase",
+            "lowercase",
+            "capitalize"
+          ]
+        },
+        {
+          "name": "paddingX",
+          "type": "number",
+          "min": 0,
+          "max": 200
+        },
+        {
+          "name": "paddingY",
+          "type": "number",
+          "min": 0,
+          "max": 200
+        },
+        {
+          "name": "transitionDuration",
+          "type": "number",
+          "min": 0,
+          "max": 2000
+        },
+        {
+          "name": "hoverEffect",
+          "type": "select",
+          "options": [
+            "none",
+            "lift",
+            "grow"
+          ]
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "fontFamily",
+          "type": "select",
+          "options": [
+            "inherit",
+            "system",
+            "Inter",
+            "Lato",
+            "Lora",
+            "Merriweather",
+            "Montserrat",
+            "Noto Sans",
+            "Nunito",
+            "Open Sans",
+            "Playfair Display",
+            "Poppins",
+            "Roboto",
+            "Source Sans 3"
+          ]
+        }
+      ]
+    },
+    "Container": {
+      "acceptsChildren": true,
+      "fields": [
+        {
+          "name": "maxWidth",
+          "type": "number"
+        },
+        {
+          "name": "align",
+          "type": "select",
+          "options": [
+            "left",
+            "center"
+          ]
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        }
+      ]
+    },
+    "Flex": {
+      "acceptsChildren": true,
+      "fields": [
+        {
+          "name": "direction",
+          "type": "select",
+          "options": [
+            "row",
+            "column"
+          ]
+        },
+        {
+          "name": "gap",
+          "type": "number"
+        },
+        {
+          "name": "align",
+          "type": "select",
+          "options": [
+            "flex-start",
+            "center",
+            "stretch"
+          ]
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        }
+      ]
+    },
+    "Grid": {
+      "acceptsChildren": true,
+      "fields": [
+        {
+          "name": "columns",
+          "type": "number"
+        },
+        {
+          "name": "gap",
+          "type": "number"
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        }
+      ]
+    },
+    "Image": {
+      "acceptsChildren": false,
+      "fields": [
+        {
+          "name": "src",
+          "type": "url",
+          "required": true
+        },
+        {
+          "name": "alt",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "min": 0,
+          "max": 2400
+        },
+        {
+          "name": "widthUnit",
+          "type": "select",
+          "options": [
+            "px",
+            "%",
+            "vw",
+            "rem"
+          ]
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "min": 0,
+          "max": 2400
+        },
+        {
+          "name": "heightUnit",
+          "type": "select",
+          "options": [
+            "px",
+            "vh",
+            "rem"
+          ]
+        },
+        {
+          "name": "borderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "borderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "borderStyle",
+          "type": "select",
+          "options": [
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "borderColor",
+          "type": "color"
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "shadow",
+          "type": "select",
+          "options": [
+            "none",
+            "soft",
+            "medium",
+            "strong"
+          ]
+        },
+        {
+          "name": "marginTop",
+          "type": "number",
+          "min": 0,
+          "max": 2400
+        },
+        {
+          "name": "marginBottom",
+          "type": "number",
+          "min": 0,
+          "max": 2400
+        },
+        {
+          "name": "alignment",
+          "type": "select",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        {
+          "name": "aspectRatio",
+          "type": "select",
+          "options": [
+            "auto",
+            "1 / 1",
+            "4 / 3",
+            "3 / 2",
+            "16 / 9",
+            "9 / 16"
+          ]
+        },
+        {
+          "name": "objectFit",
+          "type": "select",
+          "options": [
+            "cover",
+            "contain",
+            "fill",
+            "none",
+            "scale-down"
+          ]
+        },
+        {
+          "name": "objectPositionX",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "objectPositionY",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "backgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "loading",
+          "type": "select",
+          "options": [
+            "lazy",
+            "eager"
+          ]
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        }
+      ]
+    },
+    "Link": {
+      "acceptsChildren": false,
+      "fields": [
+        {
+          "name": "text",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "href",
+          "type": "url",
+          "required": true
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "fontFamily",
+          "type": "select",
+          "options": [
+            "inherit",
+            "system",
+            "Inter",
+            "Lato",
+            "Lora",
+            "Merriweather",
+            "Montserrat",
+            "Noto Sans",
+            "Nunito",
+            "Open Sans",
+            "Playfair Display",
+            "Poppins",
+            "Roboto",
+            "Source Sans 3"
+          ]
+        }
+      ]
+    },
+    "Section": {
+      "acceptsChildren": true,
+      "fields": [
+        {
+          "name": "background",
+          "type": "color"
+        },
+        {
+          "name": "paddingY",
+          "type": "number"
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        }
+      ]
+    },
+    "Spacer": {
+      "acceptsChildren": false,
+      "fields": [
+        {
+          "name": "height",
+          "type": "number"
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        }
+      ]
+    },
+    "Text": {
+      "acceptsChildren": false,
+      "fields": [
+        {
+          "name": "type",
+          "type": "select",
+          "options": [
+            "paragraph",
+            "heading",
+            "list",
+            "quote",
+            "code",
+            "inline"
+          ]
+        },
+        {
+          "name": "level",
+          "type": "select",
+          "options": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6"
+          ]
+        },
+        {
+          "name": "listType",
+          "type": "select",
+          "options": [
+            "ul",
+            "ol"
+          ]
+        },
+        {
+          "name": "text",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "name": "richText",
+          "type": "richText"
+        },
+        {
+          "name": "color",
+          "type": "color"
+        },
+        {
+          "name": "align",
+          "type": "select",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        {
+          "name": "bold",
+          "type": "checkbox"
+        },
+        {
+          "name": "italic",
+          "type": "checkbox"
+        },
+        {
+          "name": "underline",
+          "type": "checkbox"
+        },
+        {
+          "name": "strike",
+          "type": "checkbox"
+        },
+        {
+          "name": "fontSizeMobile",
+          "type": "number",
+          "min": 8,
+          "max": 120
+        },
+        {
+          "name": "useDesktopFontSize",
+          "type": "checkbox"
+        },
+        {
+          "name": "fontSizeDesktop",
+          "type": "number",
+          "min": 8,
+          "max": 120
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "fontFamily",
+          "type": "select",
+          "options": [
+            "inherit",
+            "system",
+            "Inter",
+            "Lato",
+            "Lora",
+            "Merriweather",
+            "Montserrat",
+            "Noto Sans",
+            "Nunito",
+            "Open Sans",
+            "Playfair Display",
+            "Poppins",
+            "Roboto",
+            "Source Sans 3"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -12,7 +12,7 @@ JavaScript.
 The main architecture is:
 
 -   **Frontend:** Next.js + TypeScript
--   **Backend:** Flask + Python
+-   **Backend:** Next.js Route Handlers + TypeScript (Node.js runtime)
 -   **Database:** MongoDB
 -   **Backend architecture:** MVC, complemented by Services,
     Repositories, Validators, and Middleware
@@ -45,13 +45,13 @@ Editor
   ↓
 Page JSON
   ↓
-Flask API
+Next.js API
   ↓
 Validation
   ↓
 MongoDB
   ↓
-Flask API
+Next.js API
   ↓
 Next.js
   ↓
@@ -101,7 +101,7 @@ The frontend uses **Next.js and TypeScript**.
 Suggested structure:
 
 ``` text
-frontend/
+./
 ├── app/
 │   ├── login/
 │   ├── register/
@@ -290,7 +290,7 @@ components.
 
 # Backend
 
-The backend uses **Flask and MongoDB**.
+The backend uses **Next.js Route Handlers and MongoDB**.
 
 Use MVC as the base architecture, complemented with service and
 repository layers.
@@ -298,19 +298,17 @@ repository layers.
 Suggested structure:
 
 ``` text
-backend/
-├── app/
-│   ├── models/
-│   ├── controllers/
-│   ├── routes/
-│   ├── services/
-│   ├── repositories/
-│   ├── validators/
-│   ├── middleware/
-│   └── config/
-├── tests/
-├── requirements.txt
-└── run.py
+app/api/**/route.ts       # HTTP entry points
+server/
+  controllers/
+  services/
+  repositories/
+  validators/
+  models/
+  auth/
+  middleware/
+  application.ts         # dependency composition
+tests/server.test.ts
 ```
 
 Expected request flow:
@@ -970,9 +968,9 @@ unnecessarily.
 -   Validate data received from APIs at trust boundaries.
 -   Do not assume TypeScript types make runtime data safe.
 
-## Python
+## Server-side TypeScript
 
--   Use type hints where practical.
+-   Use strict TypeScript types and runtime validation.
 -   Keep controllers thin.
 -   Keep MongoDB access inside repositories.
 -   Keep business rules in services.
@@ -1071,10 +1069,10 @@ When implementing the project from scratch, prefer this order:
 5. Build recursive renderer
 6. Test renderer using local JSON
 7. Add basic SEO metadata model
-8. Create Flask/MongoDB backend structure
+8. Create Next.js server layers and MongoDB repositories
 9. Create page model and API
 10. Create recursive backend validator
-11. Integrate Next.js with Flask
+11. Integrate the editor with Next.js Route Handlers
 12. Implement authentication
 13. Implement authorization/ownership
 14. Build dashboard
@@ -1185,3 +1183,11 @@ implementation.
 
 When choosing between exposing a technical configuration and automating
 it safely, prefer **safe automation with a simple interface**.
+
+## Next.js Backend Boundaries
+
+Run npm commands from the repository root. Do not recreate separate frontend or Flask projects.
+Use the Node.js runtime for MongoDB and crypto. Keep route files thin and mark server services and persistence with server-only. Reuse the MongoDB pool; do not connect during static builds.
+Preserve Bearer authentication and existing collection/document formats. Private operations must filter by authenticated ownership. Do not trust forwarded IP headers without an explicitly configured trusted proxy.
+Backend validation remains independent from renderer validation. When schemas change, review and export the contract snapshot with npm run contract:export and verify with npm run contract:check.
+Run npm test, npm run typecheck, npm run lint and npm run build for backend migrations.

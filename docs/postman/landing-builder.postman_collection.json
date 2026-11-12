@@ -1,0 +1,1844 @@
+{
+  "info": {
+    "name": "Landing Builder ? API e seguran?a",
+    "description": "Execute em desenvolvimento, em ordem, uma itera??o. Health gera vari?veis; login captura tokens. Cria duas contas (permanecem), p?ginas (exclu?das ao final) e eventos (TTL). Leia docs/postman.md. N?o inclui credenciais reais.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "runId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "otherEmail",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "password",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "otherAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "pageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "duplicatePageId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "slug",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "visitorId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 ? Prepara??o e autentica??o",
+      "item": [
+        {
+          "name": "Health e preparar nova execu??o",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/health",
+            "description": "Health e preparar nova execu??o. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const id = pm.variables.replaceIn('{{$guid}}').replace(/-/g, '');",
+                  "['accessToken','otherAccessToken','pageId','duplicatePageId'].forEach(k => pm.collectionVariables.unset(k));",
+                  "pm.collectionVariables.set('runId', id);",
+                  "pm.collectionVariables.set('email', 'postman-a-' + id + '@example.com');",
+                  "pm.collectionVariables.set('otherEmail', 'postman-b-' + id + '@example.com');",
+                  "pm.collectionVariables.set('password', 'Teste-Postman-' + id + '!');",
+                  "pm.collectionVariables.set('slug', 'postman-' + id);",
+                  "pm.collectionVariables.set('visitorId', 'visitor-' + id);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Banco dispon?vel', function () { pm.expect(pm.response.json().data.status).to.eql(\"ok\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Cadastrar conta A",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/auth/register",
+            "description": "Cadastrar conta A. Status esperado: 201. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman A\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Login A e capturar token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/auth/login",
+            "description": "Login A e capturar token. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) pm.collectionVariables.set('accessToken', pm.response.json().data.accessToken);",
+                  "pm.test('Token Bearer', function () { pm.expect(pm.response.json().data.tokenType).to.eql(\"Bearer\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Consultar usu?rio A",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/auth/me",
+            "description": "Consultar usu?rio A. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Nome', function () { pm.expect(pm.response.json().data.name).to.eql(\"Postman A\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Cadastrar conta B",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/auth/register",
+            "description": "Cadastrar conta B. Status esperado: 201. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman B\",\n  \"email\": \"{{otherEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Login B e capturar token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/auth/login",
+            "description": "Login B e capturar token. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{otherEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) pm.collectionVariables.set('otherAccessToken', pm.response.json().data.accessToken);"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 ? P?ginas privadas",
+      "item": [
+        {
+          "name": "Sem token n?o lista p?ginas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages",
+            "description": "Sem token n?o lista p?ginas. Status esperado: 401. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', function () { pm.response.to.have.status(401); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('unauthorized'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Criar p?gina e capturar ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages",
+            "description": "Criar p?gina e capturar ID. Status esperado: 201. Consulte docs/api.md para o contrato completo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teste Postman\",\n  \"status\": \"draft\",\n  \"seo\": {\n    \"title\": \"Servi?os locais para pequenos neg?cios\",\n    \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n    \"slug\": \"{{slug}}\",\n    \"robotsIndex\": false,\n    \"robotsFollow\": true\n  },\n  \"components\": [\n    {\n      \"id\": \"hero-title\",\n      \"component\": \"Text\",\n      \"props\": {\n        \"type\": \"heading\",\n        \"level\": \"h1\",\n        \"text\": \"Meu neg?cio\"\n      },\n      \"children\": []\n    },\n    {\n      \"id\": \"contact-button\",\n      \"component\": \"Button\",\n      \"props\": {\n        \"text\": \"Fale conosco\",\n        \"href\": \"https://example.com/contato\"\n      },\n      \"children\": []\n    }\n  ],\n  \"design\": {\n    \"mobileMaxWidth\": 720,\n    \"fonts\": [],\n    \"defaultFont\": \"system\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.collectionVariables.set('pageId', pm.response.json().data.id);",
+                  "pm.test('Estado inicial', function () { pm.expect(pm.response.json().data.status).to.eql(\"draft\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Listar p?ginas de A",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages?limit=20&offset=0",
+            "description": "Listar p?ginas de A. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Uma p?gina', function () { pm.expect(pm.response.json().data.length).to.eql(1); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Ler p?gina",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "Ler p?gina. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Preview privado JSON",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/preview",
+            "description": "Preview privado JSON. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Draft n?o ? p?blico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/public/pages/{{slug}}",
+            "description": "Draft n?o ? p?blico. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Substituir p?gina",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "Substituir p?gina. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"P?gina atualizada pelo Postman\",\n  \"status\": \"draft\",\n  \"seo\": {\n    \"title\": \"Servi?os locais para pequenos neg?cios\",\n    \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n    \"slug\": \"{{slug}}\",\n    \"robotsIndex\": false,\n    \"robotsFollow\": true\n  },\n  \"components\": [\n    {\n      \"id\": \"hero-title\",\n      \"component\": \"Text\",\n      \"props\": {\n        \"type\": \"heading\",\n        \"level\": \"h1\",\n        \"text\": \"Meu neg?cio\"\n      },\n      \"children\": []\n    },\n    {\n      \"id\": \"contact-button\",\n      \"component\": \"Button\",\n      \"props\": {\n        \"text\": \"Fale conosco\",\n        \"href\": \"https://example.com/contato\"\n      },\n      \"children\": []\n    }\n  ],\n  \"design\": {\n    \"mobileMaxWidth\": 720,\n    \"fonts\": [],\n    \"defaultFont\": \"system\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Nome atualizado', function () { pm.expect(pm.response.json().data.name).to.eql(\"P?gina atualizada pelo Postman\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Slug repetido ? rejeitado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages",
+            "description": "Slug repetido ? rejeitado. Status esperado: 409. Teste negativo: esse erro ? o resultado correto.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teste Postman\",\n  \"status\": \"draft\",\n  \"seo\": {\n    \"title\": \"Servi?os locais para pequenos neg?cios\",\n    \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n    \"slug\": \"{{slug}}\",\n    \"robotsIndex\": false,\n    \"robotsFollow\": true\n  },\n  \"components\": [\n    {\n      \"id\": \"hero-title\",\n      \"component\": \"Text\",\n      \"props\": {\n        \"type\": \"heading\",\n        \"level\": \"h1\",\n        \"text\": \"Meu neg?cio\"\n      },\n      \"children\": []\n    },\n    {\n      \"id\": \"contact-button\",\n      \"component\": \"Button\",\n      \"props\": {\n        \"text\": \"Fale conosco\",\n        \"href\": \"https://example.com/contato\"\n      },\n      \"children\": []\n    }\n  ],\n  \"design\": {\n    \"mobileMaxWidth\": 720,\n    \"fonts\": [],\n    \"defaultFont\": \"system\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', function () { pm.response.to.have.status(409); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('slug_unavailable'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 ? Isolamento e valida??o",
+      "item": [
+        {
+          "name": "B n?o lista p?ginas de A",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages",
+            "description": "B n?o lista p?ginas de A. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Lista vazia', function () { pm.expect(pm.response.json().data).to.eql([]); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode GET p?gina",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "B n?o pode GET p?gina. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode PUT p?gina",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "B n?o pode PUT p?gina. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teste Postman\",\n  \"status\": \"draft\",\n  \"seo\": {\n    \"title\": \"Servi?os locais para pequenos neg?cios\",\n    \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n    \"slug\": \"{{slug}}\",\n    \"robotsIndex\": false,\n    \"robotsFollow\": true\n  },\n  \"components\": [\n    {\n      \"id\": \"hero-title\",\n      \"component\": \"Text\",\n      \"props\": {\n        \"type\": \"heading\",\n        \"level\": \"h1\",\n        \"text\": \"Meu neg?cio\"\n      },\n      \"children\": []\n    },\n    {\n      \"id\": \"contact-button\",\n      \"component\": \"Button\",\n      \"props\": {\n        \"text\": \"Fale conosco\",\n        \"href\": \"https://example.com/contato\"\n      },\n      \"children\": []\n    }\n  ],\n  \"design\": {\n    \"mobileMaxWidth\": 720,\n    \"fonts\": [],\n    \"defaultFont\": \"system\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode DELETE p?gina",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "B n?o pode DELETE p?gina. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode GET p?gina/preview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/preview",
+            "description": "B n?o pode GET p?gina/preview. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode POST p?gina/publish",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/publish",
+            "description": "B n?o pode POST p?gina/publish. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode POST p?gina/unpublish",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/unpublish",
+            "description": "B n?o pode POST p?gina/unpublish. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode POST p?gina/duplicate",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/duplicate",
+            "description": "B n?o pode POST p?gina/duplicate. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode PUT p?gina/seo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/seo",
+            "description": "B n?o pode PUT p?gina/seo. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Servi?os locais para pequenos neg?cios\",\n  \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n  \"slug\": \"{{slug}}\",\n  \"robotsIndex\": false,\n  \"robotsFollow\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode GET p?gina/seo/check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/seo/check",
+            "description": "B n?o pode GET p?gina/seo/check. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode GET p?gina/integrations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/integrations",
+            "description": "B n?o pode GET p?gina/integrations. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o pode PUT p?gina/integrations",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/integrations",
+            "description": "B n?o pode PUT p?gina/integrations. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gtm\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "B n?o consulta analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/analytics/pages/{{pageId}}?days=1",
+            "description": "B n?o consulta analytics. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Rejeitar campo administrativo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "Rejeitar campo administrativo. Status esperado: 422. Teste negativo: esse erro ? o resultado correto.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teste Postman\",\n  \"status\": \"draft\",\n  \"seo\": {\n    \"title\": \"Servi?os locais para pequenos neg?cios\",\n    \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n    \"slug\": \"{{slug}}\",\n    \"robotsIndex\": false,\n    \"robotsFollow\": true\n  },\n  \"components\": [\n    {\n      \"id\": \"hero-title\",\n      \"component\": \"Text\",\n      \"props\": {\n        \"type\": \"heading\",\n        \"level\": \"h1\",\n        \"text\": \"Meu neg?cio\"\n      },\n      \"children\": []\n    },\n    {\n      \"id\": \"contact-button\",\n      \"component\": \"Button\",\n      \"props\": {\n        \"text\": \"Fale conosco\",\n        \"href\": \"https://example.com/contato\"\n      },\n      \"children\": []\n    }\n  ],\n  \"design\": {\n    \"mobileMaxWidth\": 720,\n    \"fonts\": [],\n    \"defaultFont\": \"system\"\n  },\n  \"owner_id\": \"forjado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 422', function () { pm.response.to.have.status(422); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('validation_error'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Rejeitar componente desconhecido",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "Rejeitar componente desconhecido. Status esperado: 422. Teste negativo: esse erro ? o resultado correto.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teste Postman\",\n  \"status\": \"draft\",\n  \"seo\": {\n    \"title\": \"Servi?os locais para pequenos neg?cios\",\n    \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n    \"slug\": \"{{slug}}\",\n    \"robotsIndex\": false,\n    \"robotsFollow\": true\n  },\n  \"components\": [\n    {\n      \"id\": \"unsafe\",\n      \"component\": \"Script\",\n      \"props\": {},\n      \"children\": []\n    }\n  ],\n  \"design\": {\n    \"mobileMaxWidth\": 720,\n    \"fonts\": [],\n    \"defaultFont\": \"system\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 422', function () { pm.response.to.have.status(422); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('validation_error'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Rejeitar URL javascript",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "Rejeitar URL javascript. Status esperado: 422. Teste negativo: esse erro ? o resultado correto.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teste Postman\",\n  \"status\": \"draft\",\n  \"seo\": {\n    \"title\": \"Servi?os locais para pequenos neg?cios\",\n    \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n    \"slug\": \"{{slug}}\",\n    \"robotsIndex\": false,\n    \"robotsFollow\": true\n  },\n  \"components\": [\n    {\n      \"id\": \"unsafe\",\n      \"component\": \"Button\",\n      \"props\": {\n        \"text\": \"Teste\",\n        \"href\": \"javascript:alert(1)\"\n      },\n      \"children\": []\n    }\n  ],\n  \"design\": {\n    \"mobileMaxWidth\": 720,\n    \"fonts\": [],\n    \"defaultFont\": \"system\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 422', function () { pm.response.to.have.status(422); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('validation_error'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Rejeitar GTM inv?lido",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/integrations",
+            "description": "Rejeitar GTM inv?lido. Status esperado: 422. Teste negativo: esse erro ? o resultado correto.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gtm\": {\n    \"containerId\": \"INVALIDO\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 422', function () { pm.response.to.have.status(422); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('validation_error'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Rejeitar pagina??o inv?lida",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages?limit=101",
+            "description": "Rejeitar pagina??o inv?lida. Status esperado: 422. Teste negativo: esse erro ? o resultado correto."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 422', function () { pm.response.to.have.status(422); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('validation_error'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 ? SEO, GTM e publica??o",
+      "item": [
+        {
+          "name": "Substituir SEO",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/seo",
+            "description": "Substituir SEO. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Servi?os locais para pequenos neg?cios\",\n  \"description\": \"Conhe?a nossos servi?os e fale com nossa equipe para receber uma proposta personalizada para seu neg?cio.\",\n  \"slug\": \"{{slug}}\",\n  \"robotsIndex\": false,\n  \"robotsFollow\": true,\n  \"canonicalUrl\": \"https://example.com/{{slug}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Indexa??o preservada', function () { pm.expect(pm.response.json().data.seo.robotsIndex).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Ver recomenda??es SEO",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/seo/check",
+            "description": "Ver recomenda??es SEO. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Lista de recomenda??es', function () { pm.expect(Array.isArray(pm.response.json().data.issues)).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Ler integra??es iniciais",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/integrations",
+            "description": "Ler integra??es iniciais. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('GTM ausente', function () { pm.expect(pm.response.json().data.gtm).to.eql(null); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Configurar GTM",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/integrations",
+            "description": "Configurar GTM. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gtm\": {\n    \"containerId\": \"GTM-AB12345\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Publicar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/publish",
+            "description": "Publicar. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Publicada', function () { pm.expect(pm.response.json().data.status).to.eql(\"published\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Consultar JSON p?blico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/public/pages/{{slug}}",
+            "description": "Consultar JSON p?blico. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Publicada', function () { pm.expect(pm.response.json().data.status).to.eql(\"published\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Consultar GTM p?blico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/public/pages/{{slug}}/integrations",
+            "description": "Consultar GTM p?blico. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Container', function () { pm.expect(pm.response.json().data.gtm.containerId).to.eql(\"GTM-AB12345\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Remover GTM",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/integrations",
+            "description": "Remover GTM. Status esperado: 200. Consulte docs/api.md para o contrato completo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"gtm\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('GTM removido', function () { pm.expect(pm.response.json().data.gtm).to.eql(null); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 ? Eventos e analytics",
+      "item": [
+        {
+          "name": "Registrar visualiza??o",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/events",
+            "description": "Registrar visualiza??o. Status esperado: 202. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"page_view\",\n  \"pageId\": \"{{pageId}}\",\n  \"visitorId\": \"{{visitorId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 202', function () { pm.response.to.have.status(202); });",
+                  "pm.test('Sem corpo', function () { pm.expect(pm.response.text()).to.eql(''); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Registrar clique",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/events",
+            "description": "Registrar clique. Status esperado: 202. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"button_click\",\n  \"pageId\": \"{{pageId}}\",\n  \"componentId\": \"contact-button\",\n  \"visitorId\": \"{{visitorId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 202', function () { pm.response.to.have.status(202); });",
+                  "pm.test('Sem corpo', function () { pm.expect(pm.response.text()).to.eql(''); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Rejeitar evento desconhecido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/events",
+            "description": "Rejeitar evento desconhecido. Status esperado: 422. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"custom\",\n  \"pageId\": \"{{pageId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 422', function () { pm.response.to.have.status(422); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('validation_error'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Rejeitar form_submit sem Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/events",
+            "description": "Rejeitar form_submit sem Form. Status esperado: 422. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"form_submit\",\n  \"pageId\": \"{{pageId}}\",\n  \"componentId\": \"contact-button\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 422', function () { pm.response.to.have.status(422); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('validation_error'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Conferir agrega??o",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/analytics/pages/{{pageId}}?days=1",
+            "description": "Conferir agrega??o. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('M?tricas', function () { pm.expect(pm.response.json().data).to.eql({\"days\":1,\"pageViews\":1,\"uniqueVisitors\":1,\"buttonClicks\":1,\"formSubmissions\":0,\"formSubmissionsPerView\":0}); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 ? Duplica??o, retirada e limpeza",
+      "item": [
+        {
+          "name": "Duplicar e capturar ID da c?pia",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/duplicate",
+            "description": "Duplicar e capturar ID da c?pia. Status esperado: 201. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.collectionVariables.set('duplicatePageId', pm.response.json().data.id);",
+                  "pm.test('C?pia draft', function () { pm.expect(pm.response.json().data.status).to.eql(\"draft\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Despublicar original",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}/unpublish",
+            "description": "Despublicar original. Status esperado: 200. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Privada', function () { pm.expect(pm.response.json().data.status).to.eql(\"private\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "P?gina retirada do acesso p?blico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/public/pages/{{slug}}",
+            "description": "P?gina retirada do acesso p?blico. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "GTM retirado do acesso p?blico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/public/pages/{{slug}}/integrations",
+            "description": "GTM retirado do acesso p?blico. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "P?gina privada n?o aceita eventos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/events",
+            "description": "P?gina privada n?o aceita eventos. Status esperado: 404. Teste negativo: esse erro ? o resultado correto.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"page_view\",\n  \"pageId\": \"{{pageId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Excluir c?pia",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{duplicatePageId}}",
+            "description": "Excluir c?pia. Status esperado: 204. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 204', function () { pm.response.to.have.status(204); });",
+                  "pm.test('Sem corpo', function () { pm.expect(pm.response.text()).to.eql(''); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Excluir original",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "Excluir original. Status esperado: 204. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 204', function () { pm.response.to.have.status(204); });",
+                  "pm.test('Sem corpo', function () { pm.expect(pm.response.text()).to.eql(''); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Confirmar exclus?o",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/pages/{{pageId}}",
+            "description": "Confirmar exclus?o. Status esperado: 404. Teste negativo: esse erro ? o resultado correto."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('not_found'); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Revogar sess?o B",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/auth/logout",
+            "description": "Revogar sess?o B. Status esperado: 204. Consulte docs/api.md para o contrato completo.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 204', function () { pm.response.to.have.status(204); });",
+                  "pm.test('Sem corpo', function () { pm.expect(pm.response.text()).to.eql(''); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Revogar sess?o A",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/auth/logout",
+            "description": "Revogar sess?o A. Status esperado: 204. Consulte docs/api.md para o contrato completo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 204', function () { pm.response.to.have.status(204); });",
+                  "pm.test('Sem corpo', function () { pm.expect(pm.response.text()).to.eql(''); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Token revogado e limpar vari?veis sens?veis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/auth/me",
+            "description": "Token revogado e limpar vari?veis sens?veis. Status esperado: 401. Teste negativo: esse erro ? o resultado correto."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', function () { pm.response.to.have.status(401); });",
+                  "pm.test('C?digo do erro', function () { pm.expect(pm.response.json().error.code).to.eql('unauthorized'); });",
+                  "if (pm.response.code === 401) ['accessToken','otherAccessToken','password'].forEach(k => pm.collectionVariables.unset(k));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ]
+}
