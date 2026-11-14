@@ -1,4 +1,4 @@
-import type { LandingPageDocument, PageComponent, PageDesign, SeoConfig } from "@/types/page";
+import type { LandingPageDocument, PageComponent, PageDesign, SeoConfig, SeoGenerateInput, SeoSuggestions } from "@/types/page";
 import { samplePage } from "@/components/editor/samplePage";
 
 export type AuthUser = {
@@ -225,6 +225,22 @@ export const api = {
 
     async getPublic(slug: string): Promise<LandingPageDocument> {
       return request<LandingPageDocument>(`/api/public/pages/${slug}`, { method: "GET" });
+    },
+
+    async generateSeo(id: string, input?: SeoGenerateInput): Promise<SeoSuggestions> {
+      return request<SeoSuggestions>(`/api/pages/${id}/seo/generate`, {
+        method: "POST",
+        body: JSON.stringify(input || {}),
+      });
+    },
+  },
+
+  seo: {
+    async generate(input: SeoGenerateInput): Promise<SeoSuggestions> {
+      return request<SeoSuggestions>("/api/seo/generate", {
+        method: "POST",
+        body: JSON.stringify(input || {}),
+      });
     },
   },
 };
