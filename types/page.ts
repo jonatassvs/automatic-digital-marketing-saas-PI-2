@@ -30,6 +30,25 @@ export type SeoConfig = {
   robotsFollow: boolean;
 };
 
+export type SeoSuggestions = {
+  title: string;
+  description: string;
+  slug: string;
+  ogTitle: string;
+  ogDescription: string;
+  keywords: string[];
+  suggestions: string[];
+};
+
+export type SeoGenerateInput = {
+  businessName?: string;
+  category?: string;
+  location?: string;
+  targetAudience?: string;
+  pageContent?: string;
+  extraNotes?: string;
+};
+
 export type PageDesign = {
   mobileMaxWidth?: number;
   fonts?: string[];
