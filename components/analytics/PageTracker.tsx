@@ -75,9 +75,41 @@ export function PageTracker({ pageId, pageSlug, gtmContainerId }: PageTrackerPro
       }
     }
 
+    function handleSubmit(event: SubmitEvent) {
+      const form = (event.target as HTMLElement | null)?.closest("form.base-whatsapp-form");
+      if (!form) {
+        return;
+      }
+      const componentId = form.id || "whatsapp-form";
+      if (typeof window !== "undefined" && window.dataLayer) {
+        window.dataLayer.push({
+          event: "form_submit",
+          pageId,
+          pageSlug,
+          componentId,
+          timestamp: new Date().toISOString()
+        });
+      }
+      if (form.id) {
+        fetch("/api/events", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "form_submit",
+            pageId,
+            componentId: form.id
+          })
+        }).catch(() => {
+          // Falha silenciosa
+        });
+      }
+    }
+
     document.addEventListener("click", handleClick, { passive: true });
+    document.addEventListener("submit", handleSubmit, { passive: true });
     return () => {
       document.removeEventListener("click", handleClick);
+      document.removeEventListener("submit", handleSubmit);
     };
   }, [pageId, pageSlug]);
 

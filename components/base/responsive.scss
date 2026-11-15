@@ -261,3 +261,131 @@
     }
   }
 }
+
+/* ==========================================================================
+   Base WhatsApp Form Styles (Embeddable Molecule)
+   ========================================================================== */
+
+.base-whatsapp-form {
+  display: grid;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+
+  .whatsapp-form-header {
+    display: grid;
+    gap: 6px;
+  }
+
+  .whatsapp-form-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .whatsapp-form-subtitle {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.82;
+  }
+
+  .whatsapp-form-fields {
+    display: grid;
+    gap: 14px;
+  }
+
+  .whatsapp-form-field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .whatsapp-form-label {
+    align-items: center;
+    display: flex;
+    font-size: 0.86rem;
+    font-weight: 700;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .whatsapp-form-required-mark {
+    color: #dc2626;
+    font-weight: 900;
+  }
+
+  .whatsapp-form-badge {
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 3px 8px;
+  }
+
+  .whatsapp-form-badge-required {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .whatsapp-form-badge-optional {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+
+  .whatsapp-form-input {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #111827;
+    font-family: inherit;
+    font-size: 0.92rem;
+    min-height: 40px;
+    padding: 9px 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+
+    &:focus {
+      border-color: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+      outline: none;
+    }
+  }
+
+  .whatsapp-form-textarea {
+    min-height: 84px;
+    resize: vertical;
+  }
+
+  .whatsapp-form-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #991b1b;
+    font-size: 0.84rem;
+    font-weight: 600;
+    padding: 10px 12px;
+  }
+
+  .whatsapp-form-submit {
+    align-items: center;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: inherit;
+    font-size: 0.96rem;
+    font-weight: 800;
+    gap: 8px;
+    justify-content: center;
+    min-height: 46px;
+    padding: 12px 20px;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+    width: 100%;
+
+    &:hover {
+      opacity: 0.93;
+    }
+  }
+}

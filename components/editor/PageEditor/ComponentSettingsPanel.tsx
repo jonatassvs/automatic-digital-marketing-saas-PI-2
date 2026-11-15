@@ -213,6 +213,183 @@ function FieldControl({ field, value, onUpdateProp }: FieldControlProps) {
     );
   }
 
+  if (field.type === "formFields") {
+    type FormFieldItem = {
+      id?: string;
+      label: string;
+      type: "text" | "tel" | "email" | "textarea" | "number";
+      placeholder?: string;
+      required: boolean;
+    };
+
+    const fieldList: FormFieldItem[] = Array.isArray(value) ? (value as FormFieldItem[]) : [];
+
+    const handleUpdateFields = (updated: FormFieldItem[]) => {
+      onUpdateProp(field.name, updated);
+    };
+
+    const handleAddField = () => {
+      handleUpdateFields([
+        ...fieldList,
+        {
+          id: `field-${Date.now()}-${fieldList.length + 1}`,
+          label: `Campo ${fieldList.length + 1}`,
+          type: "text",
+          placeholder: "Digite aqui...",
+          required: false
+        }
+      ]);
+    };
+
+    const handleUpdateFieldItem = (index: number, patch: Partial<FormFieldItem>) => {
+      const updated = fieldList.map((item, i) => (i === index ? { ...item, ...patch } : item));
+      handleUpdateFields(updated);
+    };
+
+    const handleRemoveField = (index: number) => {
+      if (fieldList.length <= 1) {
+        return;
+      }
+      handleUpdateFields(fieldList.filter((_, i) => i !== index));
+    };
+
+    return (
+      <div className="form-fields-manager" style={{ display: "grid", gap: 10, margin: "6px 0 14px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#374151" }}>
+            {field.label} ({fieldList.length})
+          </span>
+          <button
+            type="button"
+            onClick={handleAddField}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
+              padding: "5px 10px",
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              background: "#f0fdf4",
+              border: "1px solid #bbf7d0",
+              color: "#15803d",
+              borderRadius: 6,
+              cursor: "pointer"
+            }}
+          >
+            <Plus size={13} />
+            <span>Adicionar Campo</span>
+          </button>
+        </div>
+
+        <div style={{ display: "grid", gap: 10 }}>
+          {fieldList.map((item, idx) => {
+            const isRequired = Boolean(item.required);
+            return (
+              <div
+                key={item.id ?? idx}
+                style={{
+                  padding: "10px",
+                  background: "#f9fafb",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 8,
+                  display: "grid",
+                  gap: 8
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4b5563" }}>
+                    Campo #{idx + 1}
+                  </span>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdateFieldItem(idx, { required: !isRequired })}
+                      aria-pressed={isRequired}
+                      title={
+                        isRequired
+                          ? "Clique para tornar este campo opcional"
+                          : "Clique para tornar este campo obrigatório"
+                      }
+                      style={{
+                        padding: "3px 9px",
+                        minHeight: 26,
+                        fontSize: "0.73rem",
+                        fontWeight: 700,
+                        borderRadius: 999,
+                        cursor: "pointer",
+                        border: isRequired ? "1px solid #16a34a" : "1px solid #d1d5db",
+                        background: isRequired ? "#dcfce7" : "#ffffff",
+                        color: isRequired ? "#166534" : "#4b5563"
+                      }}
+                    >
+                      {isRequired ? "Obrigatório ✓" : "Opcional"}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveField(idx)}
+                      disabled={fieldList.length <= 1}
+                      title={fieldList.length <= 1 ? "O formulário precisa de pelo menos 1 campo" : "Remover campo"}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: fieldList.length <= 1 ? "#9ca3af" : "#ef4444",
+                        cursor: fieldList.length <= 1 ? "not-allowed" : "pointer",
+                        padding: 2,
+                        minHeight: 24,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 120px", gap: 6 }}>
+                  <input
+                    type="text"
+                    placeholder="Nome do campo (ex: Seu nome)"
+                    value={item.label || ""}
+                    onChange={(e) => {
+                      const nextLabel = e.target.value;
+                      handleUpdateFieldItem(idx, { label: nextLabel || `Campo ${idx + 1}` });
+                    }}
+                    style={{ fontSize: "0.82rem", minHeight: 32, padding: "4px 8px" }}
+                  />
+                  <select
+                    value={item.type || "text"}
+                    onChange={(e) =>
+                      handleUpdateFieldItem(idx, {
+                        type: e.target.value as FormFieldItem["type"]
+                      })
+                    }
+                    style={{ fontSize: "0.8rem", minHeight: 32, padding: "4px 6px" }}
+                  >
+                    <option value="text">Texto curto</option>
+                    <option value="tel">Telefone</option>
+                    <option value="email">E-mail</option>
+                    <option value="textarea">Mensagem</option>
+                    <option value="number">Número</option>
+                  </select>
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="Texto de exemplo / placeholder (opcional)"
+                  value={item.placeholder ?? ""}
+                  onChange={(e) => handleUpdateFieldItem(idx, { placeholder: e.target.value })}
+                  style={{ fontSize: "0.8rem", minHeight: 30, padding: "4px 8px" }}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <label>
       {field.label}
@@ -290,7 +467,7 @@ export function ComponentSettingsPanel({
           <details className="settings-group" open>
             <summary>Estilos</summary>
             <div className="settings-group-fields">
-              {["Text", "Button", "Link"].includes(selectedComponent.component) ? <FontFamilySelect design={design} value={selectedComponent.props.fontFamily} onChange={font => onUpdateProp("fontFamily", font)} /> : null}
+              {["Text", "Button", "Link", "Navbar", "Form"].includes(selectedComponent.component) ? <FontFamilySelect design={design} value={selectedComponent.props.fontFamily} onChange={font => onUpdateProp("fontFamily", font)} /> : null}
               <label>
                 Tela
                 <select value={device} onChange={event => setDevice(event.target.value as "mobile" | "desktop")}>

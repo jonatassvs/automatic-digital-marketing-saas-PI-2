@@ -193,3 +193,47 @@ assert.match(modalMarkup, /Átomos/);
 assert.match(modalMarkup, /Moléculas/);
 assert.match(modalMarkup, /Organismos/);
 console.log('Atomic design catalog and scrollable modal checks passed.');
+
+const { FormBlock, buildWhatsappUrl } = require('../components/base/FormBlock/FormBlock.tsx');
+const formProps = normalizeProps(componentSchemas.Form, {
+  phoneNumber: '+55 (11) 98765-4321',
+  title: 'Orçamento via WhatsApp',
+  subtitle: 'Envie seus dados para atendimento imediato.',
+  introMessage: 'Olá! Gostaria de solicitar um orçamento:',
+  buttonText: 'Chamar no WhatsApp',
+  customFields: [
+    { id: 'f1', label: 'Nome completo', type: 'text', placeholder: 'Ex: Ana', required: true },
+    { id: 'f2', label: 'E-mail', type: 'email', placeholder: 'ana@email.com', required: false },
+    { id: 'f3', label: 'Detalhes', type: 'textarea', placeholder: 'Sua necessidade', required: true }
+  ]
+});
+assert.equal(componentSchemas.Form.category, 'molecule');
+assert.equal(componentSchemas.Form.acceptsChildren, false);
+const formMarkup = render(FormBlock, formProps);
+assert.match(formMarkup, /base-whatsapp-form/);
+assert.match(formMarkup, /Orçamento via WhatsApp/);
+assert.match(formMarkup, /Nome completo/);
+assert.match(formMarkup, /Obrigatório/);
+assert.match(formMarkup, /Opcional/);
+assert.match(formMarkup, /Chamar no WhatsApp/);
+assert.equal(validateComponentTree([{ id: 'wa-form-1', component: 'Form', props: formProps }]).valid, true);
+assert.equal(
+  validateComponentTree([
+    {
+      id: 'wa-form-invalid',
+      component: 'Form',
+      props: { ...formProps, customFields: [{ label: '', type: 'invalid', required: 'yes' }] }
+    }
+  ]).valid,
+  false
+);
+const waUrl = buildWhatsappUrl(
+  formProps.phoneNumber,
+  formProps.introMessage,
+  formProps.customFields,
+  { 0: 'Ana Silva', 2: 'Preciso de uma landing page' }
+);
+assert.ok(waUrl.startsWith('https://wa.me/5511987654321?text='));
+assert.match(decodeURIComponent(waUrl), /\*Nome completo:\* Ana Silva/);
+assert.match(decodeURIComponent(waUrl), /\*Detalhes:\* Preciso de uma landing page/);
+console.log('WhatsApp form rendering, custom fields, required toggle and URL builder checks passed.');

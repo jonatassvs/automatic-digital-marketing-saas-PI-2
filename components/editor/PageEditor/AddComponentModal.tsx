@@ -10,6 +10,7 @@ import {
   LayoutPanelTop,
   LayoutTemplate,
   Link2,
+  MessageSquare,
   MousePointerClick,
   MoveVertical,
   Search,
@@ -56,6 +57,8 @@ function getComponentIcon(item: CatalogItem) {
       return <Columns3 size={18} />;
     case "Grid":
       return <Grid3x3 size={18} />;
+    case "Form":
+      return <MessageSquare size={18} />;
     case "Navbar":
       return <Compass size={18} />;
     case "Section":

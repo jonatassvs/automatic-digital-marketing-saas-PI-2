@@ -962,6 +962,315 @@
         }
       ]
     },
+    "Form": {
+      "acceptsChildren": false,
+      "fields": [
+        {
+          "name": "phoneNumber",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "text"
+        },
+        {
+          "name": "subtitle",
+          "type": "text"
+        },
+        {
+          "name": "introMessage",
+          "type": "text"
+        },
+        {
+          "name": "customFields",
+          "type": "formFields"
+        },
+        {
+          "name": "buttonText",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "backgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "borderColor",
+          "type": "color"
+        },
+        {
+          "name": "textColor",
+          "type": "color"
+        },
+        {
+          "name": "buttonColor",
+          "type": "color"
+        },
+        {
+          "name": "buttonTextColor",
+          "type": "color"
+        },
+        {
+          "name": "borderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 64
+        },
+        {
+          "name": "padding",
+          "type": "number",
+          "min": 0,
+          "max": 80
+        },
+        {
+          "name": "mobilePaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobilePaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "mobileBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "mobileBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "mobileBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "mobileBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "mobileOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "mobileWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "mobileGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingTop",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginTop",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingRight",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginRight",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingBottom",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginBottom",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopPaddingLeft",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopMarginLeft",
+          "type": "number",
+          "min": -1000,
+          "max": 1000
+        },
+        {
+          "name": "desktopBackgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderColor",
+          "type": "color"
+        },
+        {
+          "name": "desktopBorderWidth",
+          "type": "number",
+          "min": 0,
+          "max": 30
+        },
+        {
+          "name": "desktopBorderRadius",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "desktopBorderStyle",
+          "type": "select",
+          "options": [
+            "none",
+            "solid",
+            "dashed",
+            "dotted",
+            "double"
+          ]
+        },
+        {
+          "name": "desktopOpacity",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "name": "desktopWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopHeight",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopMaxWidth",
+          "type": "number",
+          "min": 0,
+          "max": 3840
+        },
+        {
+          "name": "desktopGap",
+          "type": "number",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "name": "fontFamily",
+          "type": "select",
+          "options": [
+            "inherit",
+            "system",
+            "Inter",
+            "Lato",
+            "Lora",
+            "Merriweather",
+            "Montserrat",
+            "Noto Sans",
+            "Nunito",
+            "Open Sans",
+            "Playfair Display",
+            "Poppins",
+            "Roboto",
+            "Source Sans 3"
+          ]
+        }
+      ]
+    },
     "Grid": {
       "acceptsChildren": true,
       "fields": [

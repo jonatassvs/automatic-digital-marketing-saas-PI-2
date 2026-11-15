@@ -10,6 +10,7 @@ import { SectionBlock } from "@/components/base/SectionBlock";
 import { SpacerBlock } from "@/components/base/SpacerBlock";
 import { TextBlock } from "@/components/base/TextBlock";
 import { NavbarBlock } from "@/components/base/NavbarBlock";
+import { FormBlock } from "@/components/base/FormBlock";
 
 export type BaseComponentProps = PropsWithChildren<Record<string, unknown>>;
 type BaseComponent = ComponentType<BaseComponentProps>;
@@ -19,6 +20,7 @@ export const componentRegistry: Record<PageComponent["component"], BaseComponent
   Button: ButtonBlock as BaseComponent,
   Container: ContainerBlock as BaseComponent,
   Flex: FlexBlock as BaseComponent,
+  Form: FormBlock as BaseComponent,
   Grid: GridBlock as BaseComponent,
   Image: ImageBlock as BaseComponent,
   Link: LinkBlock as BaseComponent,

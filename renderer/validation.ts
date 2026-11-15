@@ -32,6 +32,24 @@ export function isValidFieldValue(field: SchemaField, value: unknown): boolean {
     if (!Array.isArray(value) || value.length > 50) return false;
     return value.every(item => typeof item === "object" && item !== null && typeof (item as Record<string, unknown>).text === "string" && isSafeUrl((item as Record<string, unknown>).url));
   }
+  if (field.type === "formFields") {
+    if (!Array.isArray(value) || value.length > 30) return false;
+    const validTypes = new Set(["text", "tel", "email", "textarea", "number"]);
+    return value.every(item => {
+      if (typeof item !== "object" || item === null) return false;
+      const record = item as Record<string, unknown>;
+      return (
+        typeof record.label === "string" &&
+        record.label.trim().length > 0 &&
+        record.label.length <= 120 &&
+        typeof record.type === "string" &&
+        validTypes.has(record.type) &&
+        typeof record.required === "boolean" &&
+        (record.placeholder === undefined || (typeof record.placeholder === "string" && record.placeholder.length <= 200)) &&
+        (record.id === undefined || (typeof record.id === "string" && record.id.length <= 100))
+      );
+    });
+  }
   if (typeof value !== "string") return false;
   if (field.type === "color") return /^#[0-9a-f]{6}$/i.test(value);
   if (field.type === "url") return isSafeUrl(value);

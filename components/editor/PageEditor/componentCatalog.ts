@@ -89,7 +89,7 @@ const baseCatalogItems: CatalogItem[] = creatableComponents.map((schema) => {
     category,
     componentName: schema.component,
     isPreset: false,
-    badge: category === "atom" ? "Base" : "Layout",
+    badge: schema.component === "Form" ? "WhatsApp" : category === "atom" ? "Base" : "Layout",
     createNode: () => createNodeWithProps(schema.component)
   };
 });
