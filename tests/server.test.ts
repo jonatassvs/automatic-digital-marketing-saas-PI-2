@@ -166,6 +166,42 @@ test("authentication rejects invalid input and never persists raw passwords or t
   assert.ok(session); assert.notEqual(session._id, login.body.data.accessToken);
 });
 
+test("auth endpoints block direct bot attacks (honeypot, bot User-Agents, malformed recaptcha) while allowing normal users", async () => {
+  await db.collection("rate_limits").deleteMany({});
+  const normalUser = {
+    name: "Cliente Real",
+    email: "cliente.real@example.com",
+    password: "uma senha segura de 16 chars",
+    recaptchaToken: "03AFcWeA5_valid_token_format_from_recaptcha_widget_123456",
+    website: "",
+  };
+
+  for (const botAgent of ["curl/8.4.0", "python-requests/2.31.0", "HeadlessChrome/120.0", "sqlmap/1.7"]) {
+    const botRes = await call("POST", "/api/auth/login", { email: normalUser.email, password: normalUser.password }, undefined, { "User-Agent": botAgent });
+    assert.equal(botRes.status, 403);
+    assert.equal(botRes.body.error.code, "bot_detected");
+  }
+
+  const honeypotRes = await call("POST", "/api/auth/register", { ...normalUser, website: "https://spam-bot.example" });
+  assert.equal(honeypotRes.status, 422);
+  assert.equal(honeypotRes.body.error.code, "bot_detected");
+
+  const badCaptchaRes = await call("POST", "/api/auth/register", { ...normalUser, recaptchaToken: "short" });
+  assert.equal(badCaptchaRes.status, 422);
+  assert.equal(badCaptchaRes.body.error.code, "captcha_invalid");
+
+  const registerOk = await call("POST", "/api/auth/register", normalUser);
+  assert.equal(registerOk.status, 201);
+
+  const loginOk = await call("POST", "/api/auth/login", {
+    email: normalUser.email,
+    password: normalUser.password,
+    recaptchaToken: normalUser.recaptchaToken,
+    website: "",
+  });
+  assert.equal(loginOk.status, 200);
+});
+
 test("bounded streaming JSON and content type errors", async () => {
   const { readJson } = await import("../server/controllers/http");
   for (const [body, contentType, status] of [["{broken", "application/json", 400], ["{}", "text/plain", 415], [" ".repeat(3000), "application/json", 413]] as const) {

@@ -309,3 +309,52 @@ assert.match(sampleMarkup, /base-navbar/);
 assert.match(sampleMarkup, /base-whatsapp-form/);
 assert.match(sampleMarkup, /base-footer/);
 console.log('Complete default samplePage template (Navbar, Hero, Benefits, Contact WhatsApp, Footer) checks passed.');
+
+const { validateAuth, verifyBotHeaders } = require('../server/validators/auth.validator.ts');
+const { RecaptchaWidget } = require('../components/auth/RecaptchaWidget.tsx');
+
+// Verify RecaptchaWidget renders container cleanly
+const recaptchaMarkup = render(RecaptchaWidget, { onVerify: () => {} });
+assert.match(recaptchaMarkup, /auth-recaptcha-wrapper/);
+
+// Verify bot User-Agent detection
+for (const ua of ['curl/8.4.0', 'python-requests/2.31', 'HeadlessChrome/120.0', 'sqlmap/1.7', 'wget/1.21']) {
+  const req = new Request('http://localhost:3000/api/auth/login', { headers: { 'user-agent': ua } });
+  assert.throws(() => verifyBotHeaders(req), (err) => err.status === 403 && err.code === 'bot_detected');
+}
+// Normal browser User-Agent passes
+const browserReq = new Request('http://localhost:3000/api/auth/login', {
+  headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36' }
+});
+verifyBotHeaders(browserReq);
+
+// Verify honeypot rejection
+assert.throws(
+  () => validateAuth({ email: 'user@example.com', password: 'validpassword123', website: 'http://spambot.example' }, false),
+  (err) => err.status === 422 && err.code === 'bot_detected'
+);
+
+// Verify malformed recaptchaToken rejection
+assert.throws(
+  () => validateAuth({ email: 'user@example.com', password: 'validpassword123', recaptchaToken: 'short' }, false),
+  (err) => err.status === 422 && err.code === 'captcha_invalid'
+);
+
+// Verify valid normal user payload passes
+const validAuth = validateAuth({
+  name: 'Maria Silva',
+  email: 'Maria@Example.com',
+  password: 'validpassword123',
+  recaptchaToken: '03AFcWeA5_valid_token_format_from_recaptcha_widget_123456',
+  website: ''
+}, true);
+assert.equal(validAuth.email, 'maria@example.com');
+assert.equal(validAuth.name, 'Maria Silva');
+assert.equal(validAuth.recaptchaToken, '03AFcWeA5_valid_token_format_from_recaptcha_widget_123456');
+console.log('Anti-bot headers, honeypot, and reCAPTCHA validation checks passed.');
+
+const responsiveScss = fs.readFileSync(path.join(__dirname, '..', 'components', 'base', 'responsive.scss'), 'utf8');
+for (const selector of ['.page-renderer', '.base-grid', '.base-flex', '.base-button', '.base-link', '.editor-root-component-slot']) {
+  assert.ok(responsiveScss.includes(selector), `Global responsive.scss must include ${selector} so published pages match the editor`);
+}
+console.log('Published page and editor shared global stylesheet checks passed.');

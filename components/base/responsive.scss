@@ -394,3 +394,140 @@
   box-sizing: border-box;
   width: 100%;
 }
+
+/* ==========================================================================
+   Shared PageRenderer & Base Component Styles (Editor, Preview & Published)
+   ========================================================================== */
+
+.page-renderer {
+  background: #ffffff;
+  color: #17202a;
+  width: 100%;
+}
+
+.editor-root-component-slot {
+  display: contents;
+}
+
+.base-flex {
+  display: flex;
+}
+
+.base-grid {
+  display: grid;
+}
+
+.base-image {
+  max-width: 100%;
+}
+
+.base-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  background: var(--button-background);
+  color: var(--button-color);
+  border-color: var(--button-border);
+  transition:
+    background-color var(--button-transition),
+    color var(--button-transition),
+    border-color var(--button-transition),
+    transform var(--button-transition);
+}
+
+.base-button:hover,
+.base-button:focus-visible {
+  background: var(--button-hover-background);
+  color: var(--button-hover-color);
+  border-color: var(--button-hover-border);
+  transform: var(--button-hover-transform);
+}
+
+.base-button:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .base-button {
+    transition: none;
+  }
+
+  .base-button:hover,
+  .base-button:focus-visible {
+    transform: none;
+  }
+}
+
+.base-link {
+  color: #2563eb;
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+.base-text-inline {
+  display: inline;
+}
+
+.renderer-warning {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 12px;
+}
+
+.page-renderer h1,
+.page-renderer h2,
+.page-renderer h3,
+.page-renderer h4,
+.page-renderer h5,
+.page-renderer h6,
+.page-renderer p {
+  margin-block: 0;
+}
+
+.page-renderer h1 {
+  font-size: 3rem;
+  line-height: 1.05;
+}
+
+.page-renderer h2 {
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.page-renderer h3 {
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.page-renderer p {
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.page-renderer .base-text {
+  font-size: var(--text-font-size-desktop, inherit);
+}
+
+.page-renderer :not(.base-flex):not(.base-grid):not(.editor-root-component-slot) > .responsive-component + .responsive-component {
+  margin-top: var(--r-marginTop, 8px);
+}
+
+@media (max-width: 720px) {
+  .page-renderer .base-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-renderer h1 {
+    font-size: 2.2rem;
+  }
+
+  .page-renderer .base-text {
+    font-size: var(--text-font-size-mobile, var(--text-font-size-desktop, inherit));
+  }
+}
+
