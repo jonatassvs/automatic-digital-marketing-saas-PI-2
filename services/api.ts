@@ -144,7 +144,8 @@ export const api = {
                     id: "text-title",
                     component: "Text",
                     props: {
-                      tag: "h1",
+                      type: "heading",
+                      level: "h1",
                       text: input.name,
                       fontSizeMobile: 32,
                       fontSizeDesktop: 48,
@@ -157,7 +158,7 @@ export const api = {
                     id: "text-subtitle",
                     component: "Text",
                     props: {
-                      tag: "p",
+                      type: "paragraph",
                       text: input.description || "Descricao da sua nova pagina.",
                       fontSizeMobile: 18,
                       fontSizeDesktop: 20,
@@ -171,10 +172,9 @@ export const api = {
                     component: "Button",
                     props: {
                       text: "Fale Conosco",
-                      align: "center",
-                      size: "large",
+                      href: "#contato",
+                      alignment: "center",
                       variant: "primary",
-                      fullWidth: false,
                     },
                   },
                 ],

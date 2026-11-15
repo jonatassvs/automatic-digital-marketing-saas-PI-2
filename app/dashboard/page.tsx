@@ -411,15 +411,9 @@ export default function DashboardPage() {
                   id="page-template"
                   value={newPageTemplate}
                   onChange={(e) => setNewPageTemplate(e.target.value as "sample" | "blank")}
-                  style={{
-                    padding: "10px 14px",
-                    borderRadius: "8px",
-                    border: "1px solid #cbd5e1",
-                    background: "#ffffff"
-                  }}
                 >
-                  <option value="sample">Modelo Pronto (Hero, Benefícios e Chamada)</option>
-                  <option value="blank">Página em Branco</option>
+                  <option value="sample">Modelo Completo (Navbar, Hero, Diferenciais, Contato e Footer)</option>
+                  <option value="blank">Página Simples (Inicial em Branco)</option>
                 </select>
               </div>
 

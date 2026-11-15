@@ -297,3 +297,15 @@ assert.match(contactMarkup, /repeat\(2, minmax\(0, 1fr\)\)/);
 assert.match(contactMarkup, /base-whatsapp-form/);
 assert.ok(contactMarkup.indexOf('<img') < contactMarkup.indexOf('<form'), 'Image must appear before Form (left on desktop, top on mobile)');
 console.log('Lean composable Contact (Section -> Container -> Centered Title/Description + Grid [Image + WhatsApp Form]) checks passed.');
+
+const { samplePage } = require('../components/editor/samplePage.ts');
+assert.equal(validateComponentTree(samplePage.components).valid, true);
+assert.deepEqual(
+  samplePage.components.map(c => c.component),
+  ['Navbar', 'Section', 'Section', 'Contact', 'Footer']
+);
+const sampleMarkup = render(PageRenderer, { components: samplePage.components, design: samplePage.design });
+assert.match(sampleMarkup, /base-navbar/);
+assert.match(sampleMarkup, /base-whatsapp-form/);
+assert.match(sampleMarkup, /base-footer/);
+console.log('Complete default samplePage template (Navbar, Hero, Benefits, Contact WhatsApp, Footer) checks passed.');
