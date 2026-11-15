@@ -1,4 +1,12 @@
-import type { LandingPageDocument, PageComponent, PageDesign, SeoConfig, SeoGenerateInput, SeoSuggestions } from "@/types/page";
+import type {
+  IntegrationsConfig,
+  LandingPageDocument,
+  PageComponent,
+  PageDesign,
+  SeoConfig,
+  SeoGenerateInput,
+  SeoSuggestions
+} from "@/types/page";
 import { samplePage } from "@/components/editor/samplePage";
 
 export type AuthUser = {
@@ -136,7 +144,8 @@ export const api = {
                     id: "text-title",
                     component: "Text",
                     props: {
-                      tag: "h1",
+                      type: "heading",
+                      level: "h1",
                       text: input.name,
                       fontSizeMobile: 32,
                       fontSizeDesktop: 48,
@@ -149,7 +158,7 @@ export const api = {
                     id: "text-subtitle",
                     component: "Text",
                     props: {
-                      tag: "p",
+                      type: "paragraph",
                       text: input.description || "Descricao da sua nova pagina.",
                       fontSizeMobile: 18,
                       fontSizeDesktop: 20,
@@ -163,10 +172,9 @@ export const api = {
                     component: "Button",
                     props: {
                       text: "Fale Conosco",
-                      align: "center",
-                      size: "large",
+                      href: "#contato",
+                      alignment: "center",
                       variant: "primary",
-                      fullWidth: false,
                     },
                   },
                 ],
@@ -241,6 +249,23 @@ export const api = {
         method: "POST",
         body: JSON.stringify(input || {}),
       });
+    },
+  },
+
+  integrations: {
+    async get(pageId: string): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/pages/${pageId}/integrations`, { method: "GET" });
+    },
+
+    async update(pageId: string, payload: { gtm: { containerId: string } | null }): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/pages/${pageId}/integrations`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+    },
+
+    async getPublic(slug: string): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/public/pages/${slug}/integrations`, { method: "GET" });
     },
   },
 };

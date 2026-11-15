@@ -3,6 +3,8 @@ import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
 export const buttonSchema: ComponentSchema = {
   component: "Button",
   label: "Botao",
+  category: "atom",
+  description: "Botão de chamada para ação (CTA) com link seguro.",
   acceptsChildren: false,
   fields: [
     { name: "linkTarget", label: "Abrir link", type: "select", group: "content", options: [{ label: "Na mesma aba", value: "_self" }, { label: "Em outra aba", value: "_blank" }] },

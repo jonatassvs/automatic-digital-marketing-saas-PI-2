@@ -115,3 +115,197 @@ assert.match(pageResponsiveCss(config), /page-renderer.page-breakpoint-980/);
 assert.match(pageResponsiveCss(config), /--r-paddingTop:var\(--r-desktop-paddingTop\)/);
 assert.equal(fontStack('url(evil)'), fontStack('system'));
 console.log('Page design, fonts and server rendering checks passed.');
+
+const { NavbarBlock } = require('../components/base/NavbarBlock/NavbarBlock.tsx');
+const navProps = normalizeProps(componentSchemas.Navbar, {
+  logoText: 'Empresa Alpha',
+  logoHref: '/',
+  link1Text: 'Home',
+  link1Url: '/',
+  link2Text: 'Portfólio',
+  link2Url: '#portfolio',
+  ctaText: 'Contato Rápido',
+  ctaUrl: '#contato',
+  linkColor: '#ff0000',
+  ctaBackgroundColor: '#00ff00',
+  ctaTextColor: '#0000ff'
+});
+const navbarMarkup = render(NavbarBlock, navProps);
+assert.match(navbarMarkup, /base-navbar/);
+assert.match(navbarMarkup, /Empresa Alpha/);
+assert.match(navbarMarkup, /Home/);
+assert.match(navbarMarkup, /Portfólio/);
+assert.match(navbarMarkup, /Contato Rápido/);
+assert.match(navbarMarkup, /navbar-toggle mobile-only/);
+assert.match(navbarMarkup, /color:#ff0000/);
+assert.match(navbarMarkup, /background-color:#00ff00/);
+assert.equal(validateComponentTree([{ id: 'nav-1', component: 'Navbar', props: navProps }]).valid, true);
+assert.equal(validateComponentTree([{ id: 'nav-1', component: 'Navbar', props: { ...navProps, link1Url: 'javascript:alert(1)' } }]).valid, false);
+
+// Teste de N links dinâmicos e cor de fundo personalizada
+const navDynamicProps = normalizeProps(componentSchemas.Navbar, {
+  logoText: 'Empresa Beta',
+  backgroundColor: '#112233',
+  links: [
+    { text: 'Link Um', url: '#1' },
+    { text: 'Link Dois', url: '#2' },
+    { text: 'Link Tres', url: '#3' },
+    { text: 'Link Quatro', url: '#4' },
+    { text: 'Link Cinco', url: '#5' },
+    { text: 'Link Seis', url: '#6' },
+    { text: 'Link Sete', url: '#7' }
+  ]
+});
+const dynamicMarkup = render(NavbarBlock, navDynamicProps);
+assert.match(dynamicMarkup, /background-color:#112233/);
+assert.match(dynamicMarkup, /Link Um/);
+assert.match(dynamicMarkup, /Link Sete/);
+assert.equal(validateComponentTree([{ id: 'nav-dynamic', component: 'Navbar', props: navDynamicProps }]).valid, true);
+
+console.log('Navbar rendering, links and sandwich menu checks passed.');
+
+const { ATOMIC_CATEGORIES, componentCatalog, getCatalogByCategory } = require('../components/editor/PageEditor/componentCatalog.ts');
+const { AddComponentModal } = require('../components/editor/PageEditor/AddComponentModal.tsx');
+
+assert.deepEqual(ATOMIC_CATEGORIES.map(c => c.id), ['atom', 'molecule', 'organism']);
+for (const [name, schema] of Object.entries(componentSchemas)) {
+  assert.ok(['atom', 'molecule', 'organism'].includes(schema.category), `${name} must have a valid atomic category`);
+  assert.ok(typeof schema.description === 'string' && schema.description.length > 0, `${name} must have a description`);
+}
+for (const category of ['atom', 'molecule', 'organism']) {
+  const items = getCatalogByCategory(category);
+  assert.ok(items.length >= 2, `Category ${category} should have at least 2 items`);
+}
+for (const item of componentCatalog) {
+  const node = item.createNode();
+  const validation = validateComponentTree([node]);
+  assert.equal(validation.valid, true, `Catalog item ${item.id} failed validation: ${validation.errors.join(', ')}`);
+}
+const modalMarkup = render(AddComponentModal, {
+  canAddChild: true,
+  isOpen: true,
+  target: { kind: 'root' },
+  onClose: () => {},
+  onSelect: () => {}
+});
+assert.match(modalMarkup, /add-component-modal-body/);
+assert.match(modalMarkup, /Átomos/);
+assert.match(modalMarkup, /Moléculas/);
+assert.match(modalMarkup, /Organismos/);
+console.log('Atomic design catalog and scrollable modal checks passed.');
+
+const { FormBlock, buildWhatsappUrl } = require('../components/base/FormBlock/FormBlock.tsx');
+const formProps = normalizeProps(componentSchemas.Form, {
+  phoneNumber: '+55 (11) 98765-4321',
+  title: 'Orçamento via WhatsApp',
+  subtitle: 'Envie seus dados para atendimento imediato.',
+  introMessage: 'Olá! Gostaria de solicitar um orçamento:',
+  buttonText: 'Chamar no WhatsApp',
+  customFields: [
+    { id: 'f1', label: 'Nome completo', type: 'text', placeholder: 'Ex: Ana', required: true },
+    { id: 'f2', label: 'E-mail', type: 'email', placeholder: 'ana@email.com', required: false },
+    { id: 'f3', label: 'Detalhes', type: 'textarea', placeholder: 'Sua necessidade', required: true }
+  ]
+});
+assert.equal(componentSchemas.Form.category, 'molecule');
+assert.equal(componentSchemas.Form.acceptsChildren, false);
+const formMarkup = render(FormBlock, formProps);
+assert.match(formMarkup, /base-whatsapp-form/);
+assert.match(formMarkup, /Orçamento via WhatsApp/);
+assert.match(formMarkup, /Nome completo/);
+assert.match(formMarkup, /Obrigatório/);
+assert.match(formMarkup, /Opcional/);
+assert.match(formMarkup, /Chamar no WhatsApp/);
+assert.equal(validateComponentTree([{ id: 'wa-form-1', component: 'Form', props: formProps }]).valid, true);
+assert.equal(
+  validateComponentTree([
+    {
+      id: 'wa-form-invalid',
+      component: 'Form',
+      props: { ...formProps, customFields: [{ label: '', type: 'invalid', required: 'yes' }] }
+    }
+  ]).valid,
+  false
+);
+const waUrl = buildWhatsappUrl(
+  formProps.phoneNumber,
+  formProps.introMessage,
+  formProps.customFields,
+  { 0: 'Ana Silva', 2: 'Preciso de uma landing page' }
+);
+assert.ok(waUrl.startsWith('https://wa.me/5511987654321?text='));
+assert.match(decodeURIComponent(waUrl), /\*Nome completo:\* Ana Silva/);
+assert.match(decodeURIComponent(waUrl), /\*Detalhes:\* Preciso de uma landing page/);
+console.log('WhatsApp form rendering, custom fields, required toggle and URL builder checks passed.');
+
+const { FooterBlock } = require('../components/base/FooterBlock/FooterBlock.tsx');
+const { createEditorComponent, flattenComponents } = require('../components/editor/PageEditor/pageTree.ts');
+assert.equal(componentSchemas.Footer.category, 'organism');
+assert.equal(componentSchemas.Footer.acceptsChildren, true);
+const composedFooter = createEditorComponent('Footer');
+assert.equal(validateComponentTree([composedFooter]).valid, true);
+const footerNodes = flattenComponents([composedFooter]);
+assert.ok(footerNodes.some(node => node.component === 'Container'));
+assert.ok(footerNodes.some(node => node.component === 'Grid'));
+assert.ok(footerNodes.some(node => node.component === 'Flex'));
+assert.ok(footerNodes.some(node => node.component === 'Text'));
+assert.ok(footerNodes.some(node => node.component === 'Link'));
+assert.ok(footerNodes.some(node => node.component === 'Spacer'));
+// Verify the contact column is a Flex container holding N Text items that can be freely extended
+const contactCol = footerNodes.find(node => node.id.startsWith('footer-contact-col'));
+assert.ok(contactCol && contactCol.component === 'Flex');
+assert.ok(contactCol.children.length >= 4 && contactCol.children.every(child => child.component === 'Text'));
+const footerMarkup = render(PageRenderer, { components: [composedFooter] });
+assert.match(footerMarkup, /<footer class="base-footer responsive-component"/);
+assert.match(footerMarkup, /base-grid/);
+assert.match(footerMarkup, /base-flex/);
+assert.match(footerMarkup, /base-text/);
+assert.match(footerMarkup, /Minha Marca/);
+assert.match(footerMarkup, /Contato/);
+assert.match(footerMarkup, /WhatsApp: \(11\) 99999-9999/);
+assert.equal(RenderFooterDirect(), true);
+function RenderFooterDirect() {
+  const direct = render(FooterBlock, normalizeProps(componentSchemas.Footer, { background: '#111827', paddingY: 48 }));
+  assert.match(direct, /background:#111827/);
+  return true;
+}
+console.log('Lean composable Footer (built from Container, Grid, Flex, Text, Link, Spacer) checks passed.');
+
+const composedContact = createEditorComponent('Contact');
+assert.equal(componentSchemas.Contact.category, 'organism');
+assert.equal(componentSchemas.Contact.acceptsChildren, true);
+assert.equal(validateComponentTree([composedContact]).valid, true);
+assert.equal(composedContact.children.length, 1);
+const contactContainer = composedContact.children[0];
+assert.equal(contactContainer.component, 'Container');
+assert.equal(contactContainer.children.length, 4);
+assert.equal(contactContainer.children[0].component, 'Text');
+assert.equal(contactContainer.children[0].props.align, 'center');
+assert.equal(contactContainer.children[1].component, 'Text');
+assert.equal(contactContainer.children[1].props.align, 'center');
+assert.equal(contactContainer.children[2].component, 'Spacer');
+const contactGrid = contactContainer.children[3];
+assert.equal(contactGrid.component, 'Grid');
+assert.equal(contactGrid.children.length, 2);
+assert.equal(contactGrid.children[0].component, 'Image');
+assert.equal(contactGrid.children[1].component, 'Form');
+const contactMarkup = render(PageRenderer, { components: [composedContact] });
+assert.match(contactMarkup, /<section class="responsive-component"/);
+assert.match(contactMarkup, /Entre em contato conosco/);
+assert.match(contactMarkup, /base-grid/);
+assert.match(contactMarkup, /repeat\(2, minmax\(0, 1fr\)\)/);
+assert.match(contactMarkup, /base-whatsapp-form/);
+assert.ok(contactMarkup.indexOf('<img') < contactMarkup.indexOf('<form'), 'Image must appear before Form (left on desktop, top on mobile)');
+console.log('Lean composable Contact (Section -> Container -> Centered Title/Description + Grid [Image + WhatsApp Form]) checks passed.');
+
+const { samplePage } = require('../components/editor/samplePage.ts');
+assert.equal(validateComponentTree(samplePage.components).valid, true);
+assert.deepEqual(
+  samplePage.components.map(c => c.component),
+  ['Navbar', 'Section', 'Section', 'Contact', 'Footer']
+);
+const sampleMarkup = render(PageRenderer, { components: samplePage.components, design: samplePage.design });
+assert.match(sampleMarkup, /base-navbar/);
+assert.match(sampleMarkup, /base-whatsapp-form/);
+assert.match(sampleMarkup, /base-footer/);
+console.log('Complete default samplePage template (Navbar, Hero, Benefits, Contact WhatsApp, Footer) checks passed.');

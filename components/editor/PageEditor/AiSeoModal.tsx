@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { Sparkles, Check, Loader2, AlertCircle, X, Lightbulb, Tag } from "lucide-react";
 import { api } from "@/services/api";
 import type { LandingPageDocument, SeoSuggestions } from "@/types/page";
@@ -12,7 +13,10 @@ type AiSeoModalProps = {
   onApply: (suggestions: SeoSuggestions) => void;
 };
 
+const emptySubscribe = () => () => {};
+
 export function AiSeoModal({ isOpen, page, onClose, onApply }: AiSeoModalProps) {
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
   const [targetAudience, setTargetAudience] = useState("");
@@ -22,7 +26,7 @@ export function AiSeoModal({ isOpen, page, onClose, onApply }: AiSeoModalProps) 
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<SeoSuggestions | null>(null);
 
-  if (!isOpen) return null;
+  if (!isOpen || !isMounted) return null;
 
   const handleGenerate = async () => {
     setIsLoading(true);
@@ -52,15 +56,20 @@ export function AiSeoModal({ isOpen, page, onClose, onApply }: AiSeoModalProps) 
     onClose();
   };
 
-  return (
-    <div className="modal-backdrop" role="presentation" onClick={onClose}>
+  const modalNode = (
+    <div
+      className="modal-backdrop ai-seo-modal-backdrop"
+      role="presentation"
+      onClick={onClose}
+      style={{ zIndex: 1000 }}
+    >
       <section
         aria-labelledby="ai-seo-title"
         aria-modal="true"
         className="add-component-modal ai-seo-modal"
         role="dialog"
         onClick={(event) => event.stopPropagation()}
-        style={{ maxWidth: 640 }}
+        style={{ maxWidth: 640, position: "relative", zIndex: 1001 }}
       >
         <header className="modal-header">
           <div>
@@ -322,5 +331,7 @@ export function AiSeoModal({ isOpen, page, onClose, onApply }: AiSeoModalProps) 
       </section>
     </div>
   );
+
+  return createPortal(modalNode, document.body);
 }
 

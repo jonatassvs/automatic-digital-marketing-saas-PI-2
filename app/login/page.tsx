@@ -50,7 +50,7 @@ export default function LoginPage() {
             <Layers size={24} />
           </div>
           <h1 className="auth-title">Acessar sua conta</h1>
-          <p className="auth-subtitle">Entre para gerenciar e editar suas landing pages</p>
+          <p className="auth-subtitle">Entre no Landra para gerenciar e editar suas landing pages</p>
         </div>
 
         {error && (

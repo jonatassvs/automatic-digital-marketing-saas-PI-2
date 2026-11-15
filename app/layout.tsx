@@ -4,8 +4,8 @@ import "@/components/base/responsive.scss";
 import { AuthProvider } from "@/components/auth/AuthContext";
 
 export const metadata: Metadata = {
-  title: "Landing Page Builder",
-  description: "Editor de landing pages de alta conversão sem código."
+  title: "Landra - Construtor de Landing Pages",
+  description: "Landra: Editor de landing pages de alta conversão sem código."
 };
 
 export default function RootLayout({

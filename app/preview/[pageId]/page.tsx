@@ -36,8 +36,11 @@ export default function PreviewPageRoute({ params }: PreviewPageProps) {
       if (!user) return;
       setIsLoading(true);
       try {
-        const data = await api.pages.get(pageId);
-        if (isMounted) setPage(data);
+        const [data, integrationsData] = await Promise.all([
+          api.pages.get(pageId),
+          api.integrations.get(pageId).catch(() => ({ gtm: null }))
+        ]);
+        if (isMounted) setPage({ ...data, integrations: integrationsData });
       } catch (err: unknown) {
         if (isMounted) {
           setError(err instanceof Error ? err.message : "Erro ao carregar preview.");

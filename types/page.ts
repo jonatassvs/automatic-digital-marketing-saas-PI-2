@@ -7,7 +7,11 @@ export type ComponentName =
   | "Image"
   | "Button"
   | "Link"
-  | "Spacer";
+  | "Spacer"
+  | "Navbar"
+  | "Form"
+  | "Footer"
+  | "Contact";
 
 export type ComponentProps = Record<string, unknown>;
 
@@ -55,6 +59,10 @@ export type PageDesign = {
   defaultFont?: string;
 };
 
+export type IntegrationsConfig = {
+  gtm: { containerId: string } | null;
+};
+
 export type LandingPageDocument = {
   design?: PageDesign;
   id: string;
@@ -62,4 +70,5 @@ export type LandingPageDocument = {
   status: "draft" | "private" | "published";
   seo: SeoConfig;
   components: PageComponent[];
+  integrations?: IntegrationsConfig;
 };

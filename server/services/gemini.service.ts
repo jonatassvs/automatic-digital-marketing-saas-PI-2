@@ -10,7 +10,7 @@ export class GeminiService {
 
   constructor(
     private apiKey: string,
-    private model: string = "gemini-2.5-flash",
+    private model: string = "gemini-3.5-flash",
     private fetcher: GeminiFetcher = fetch
   ) {}
 
@@ -91,9 +91,17 @@ export class GeminiService {
       "</untrusted_business_data>"
     ].join("\n");
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
-      this.model
-    )}:generateContent?key=${encodeURIComponent(this.apiKey)}`;
+    const candidateModels = Array.from(
+      new Set(
+        [
+          this.model,
+          "gemini-3.5-flash",
+          "gemini-3.6-flash",
+          "gemini-3.1-flash-lite",
+          "gemini-flash-latest"
+        ].filter(Boolean)
+      )
+    );
 
     const requestBody = {
       system_instruction: {
@@ -138,51 +146,116 @@ export class GeminiService {
       ]
     };
 
-    let response: Response;
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+    let lastError: Error | null = null;
+    let payload: Record<string, unknown> | null = null;
+
+    for (const modelToTry of candidateModels) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+        modelToTry
+      )}:generateContent?key=${encodeURIComponent(this.apiKey)}`;
+
+      let response: Response;
       try {
-        response = await this.fetcher(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(requestBody),
-          signal: controller.signal
-        });
-      } finally {
-        clearTimeout(timeoutId);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 35000);
+        try {
+          response = await this.fetcher(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestBody),
+            signal: controller.signal
+          });
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      } catch (err: unknown) {
+        const isAbort = err instanceof Error && err.name === "AbortError";
+        lastError = new ApiError(
+          isAbort ? "Tempo limite excedido ao consultar o Gemini." : "Falha ao conectar com o servico Gemini.",
+          504,
+          "gemini_timeout"
+        );
+        continue;
       }
-    } catch (err: unknown) {
-      const isAbort = err instanceof Error && err.name === "AbortError";
-      throw new ApiError(
-        isAbort ? "Tempo limite excedido ao consultar o Gemini." : "Falha ao conectar com o servico Gemini.",
-        504,
-        "gemini_timeout"
-      );
+
+      if (!response.ok) {
+        let errorDetails = "";
+        try {
+          const errorJson = (await response.json()) as { error?: { message?: string } };
+          errorDetails = errorJson?.error?.message || "";
+        } catch {
+          errorDetails = await response.text().catch(() => "");
+        }
+
+        console.error("Gemini API Error", {
+          model: modelToTry,
+          status: response.status,
+          message: errorDetails.slice(0, 150)
+        });
+
+        // Se a chave de API em si for inválida, nenhum modelo funcionará
+        if (response.status === 400 && errorDetails.toLowerCase().includes("api key not valid")) {
+          throw new ApiError(
+            "Chave de API do Gemini inválida. Verifique o valor de GEMINI_API_KEY no arquivo .env.",
+            400,
+            "gemini_invalid_api_key"
+          );
+        }
+
+        // Se cota da conta estiver esgotada
+        if (response.status === 429) {
+          throw new ApiError(
+            "Limite de cota da API do Gemini excedido. Tente novamente em instantes.",
+            429,
+            "gemini_quota_exceeded"
+          );
+        }
+
+        // Se o modelo for 404 (descontinuado) ou 503 (sobrecarregado), tenta o próximo modelo
+        if (response.status === 404 || response.status === 503) {
+          lastError = new ApiError(
+            `Modelo '${modelToTry}' temporariamente indisponível (${response.status}).`,
+            response.status === 503 ? 503 : 404,
+            "gemini_model_unavailable"
+          );
+          continue;
+        }
+
+        lastError = new ApiError(
+          errorDetails
+            ? `Erro na API do Gemini (${response.status}): ${errorDetails.slice(0, 120)}`
+            : "Nao foi possivel gerar os dados de SEO com o Gemini.",
+          response.status >= 500 ? 502 : 400,
+          "gemini_generation_failed"
+        );
+        continue;
+      }
+
+      payload = (await response.json()) as Record<string, unknown>;
+      break;
     }
 
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => "");
-      console.error("Gemini API Error", { status: response.status, body: errorText.slice(0, 200) });
-      throw new ApiError(
-        "Nao foi possivel gerar os dados de SEO com o Gemini.",
-        response.status >= 500 ? 502 : 400,
-        "gemini_generation_failed"
-      );
+    if (!payload) {
+      throw lastError || new ApiError("Nao foi possivel gerar os dados de SEO com o Gemini.", 502, "gemini_generation_failed");
     }
 
-    const payload = await response.json();
+    const candidate = (payload as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> }; text?: string; finishReason?: string }> })?.candidates?.[0];
     const candidateText =
-      payload?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      payload?.candidates?.[0]?.text;
+      candidate?.content?.parts?.[0]?.text ||
+      candidate?.text;
 
     if (!candidateText) {
+      const finishReason = candidate?.finishReason;
+      if (finishReason === "SAFETY") {
+        throw new ApiError("Conteúdo bloqueado pelos filtros de segurança do Gemini.", 422, "gemini_safety_block");
+      }
       throw new ApiError("Resposta vazia retornada pelo modelo de IA.", 502, "gemini_empty_response");
     }
 
     let parsed: Record<string, unknown>;
     try {
-      parsed = JSON.parse(candidateText);
+      const cleaned = candidateText.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
+      parsed = JSON.parse(cleaned);
     } catch {
       throw new ApiError("Formato de resposta invalido retornado pela IA.", 502, "gemini_parse_error");
     }
