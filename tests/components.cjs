@@ -237,3 +237,36 @@ assert.ok(waUrl.startsWith('https://wa.me/5511987654321?text='));
 assert.match(decodeURIComponent(waUrl), /\*Nome completo:\* Ana Silva/);
 assert.match(decodeURIComponent(waUrl), /\*Detalhes:\* Preciso de uma landing page/);
 console.log('WhatsApp form rendering, custom fields, required toggle and URL builder checks passed.');
+
+const { FooterBlock } = require('../components/base/FooterBlock/FooterBlock.tsx');
+const { createEditorComponent, flattenComponents } = require('../components/editor/PageEditor/pageTree.ts');
+assert.equal(componentSchemas.Footer.category, 'organism');
+assert.equal(componentSchemas.Footer.acceptsChildren, true);
+const composedFooter = createEditorComponent('Footer');
+assert.equal(validateComponentTree([composedFooter]).valid, true);
+const footerNodes = flattenComponents([composedFooter]);
+assert.ok(footerNodes.some(node => node.component === 'Container'));
+assert.ok(footerNodes.some(node => node.component === 'Grid'));
+assert.ok(footerNodes.some(node => node.component === 'Flex'));
+assert.ok(footerNodes.some(node => node.component === 'Text'));
+assert.ok(footerNodes.some(node => node.component === 'Link'));
+assert.ok(footerNodes.some(node => node.component === 'Spacer'));
+// Verify the contact column is a Flex container holding N Text items that can be freely extended
+const contactCol = footerNodes.find(node => node.id.startsWith('footer-contact-col'));
+assert.ok(contactCol && contactCol.component === 'Flex');
+assert.ok(contactCol.children.length >= 4 && contactCol.children.every(child => child.component === 'Text'));
+const footerMarkup = render(PageRenderer, { components: [composedFooter] });
+assert.match(footerMarkup, /<footer class="base-footer responsive-component"/);
+assert.match(footerMarkup, /base-grid/);
+assert.match(footerMarkup, /base-flex/);
+assert.match(footerMarkup, /base-text/);
+assert.match(footerMarkup, /Minha Marca/);
+assert.match(footerMarkup, /Contato/);
+assert.match(footerMarkup, /WhatsApp: \(11\) 99999-9999/);
+assert.equal(RenderFooterDirect(), true);
+function RenderFooterDirect() {
+  const direct = render(FooterBlock, normalizeProps(componentSchemas.Footer, { background: '#111827', paddingY: 48 }));
+  assert.match(direct, /background:#111827/);
+  return true;
+}
+console.log('Lean composable Footer (built from Container, Grid, Flex, Text, Link, Spacer) checks passed.');

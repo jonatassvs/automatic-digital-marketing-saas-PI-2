@@ -10,6 +10,7 @@ import { spacerSchema } from "@/components/base/SpacerBlock/schema";
 import { textSchema } from "@/components/base/TextBlock/schema";
 import { navbarSchema } from "@/components/base/NavbarBlock/schema";
 import { formSchema } from "@/components/base/FormBlock/schema";
+import { footerSchema } from "@/components/base/FooterBlock/schema";
 import type { ComponentSchema, SchemaField } from "@/renderer/schemas/schemaTypes";
 
 import { GOOGLE_FONTS } from "@/renderer/pageDesign";
@@ -21,6 +22,7 @@ const baseSchemas: Record<ComponentName, ComponentSchema> = {
   Button: buttonSchema,
   Container: containerSchema,
   Flex: flexSchema,
+  Footer: footerSchema,
   Form: formSchema,
   Grid: gridSchema,
   Image: imageSchema,

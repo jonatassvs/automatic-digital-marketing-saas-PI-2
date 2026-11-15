@@ -18,6 +18,7 @@ type ComponentSettingsPanelProps = {
 type FieldControlProps = {
   field: SchemaField;
   value: unknown;
+  syncLegacyLinks?: boolean;
   onUpdateProp: (fieldName: string, value: unknown) => void;
 };
 
@@ -25,7 +26,7 @@ function getFieldValue(selectedComponent: PageComponent, field: SchemaField) {
   return selectedComponent.props[field.name] ?? field.defaultValue ?? "";
 }
 
-function FieldControl({ field, value, onUpdateProp }: FieldControlProps) {
+function FieldControl({ field, value, syncLegacyLinks = false, onUpdateProp }: FieldControlProps) {
   if (field.type === "richText") {
     return null;
   }
@@ -103,10 +104,12 @@ function FieldControl({ field, value, onUpdateProp }: FieldControlProps) {
 
     const handleUpdateLinks = (updated: Array<{ text: string; url: string }>) => {
       onUpdateProp(field.name, updated);
-      for (let i = 1; i <= 6; i++) {
-        const item = updated[i - 1];
-        onUpdateProp(`link${i}Text`, item?.text ?? "");
-        onUpdateProp(`link${i}Url`, item?.url ?? "");
+      if (syncLegacyLinks) {
+        for (let i = 1; i <= 6; i++) {
+          const item = updated[i - 1];
+          onUpdateProp(`link${i}Text`, item?.text ?? "");
+          onUpdateProp(`link${i}Url`, item?.url ?? "");
+        }
       }
     };
 
@@ -456,6 +459,7 @@ export function ComponentSettingsPanel({
                   <FieldControl
                     field={field}
                     key={field.name}
+                    syncLegacyLinks={selectedComponent.component === "Navbar"}
                     value={field.name === "linkTarget" ? selectedComponent.props.linkTarget ?? (selectedComponent.props.newTab ? "_blank" : "_self") : getFieldValue(selectedComponent, field)}
                     onUpdateProp={onUpdateProp}
                   />

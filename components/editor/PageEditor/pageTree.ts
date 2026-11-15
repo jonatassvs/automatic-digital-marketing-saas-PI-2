@@ -170,12 +170,183 @@ export function duplicateComponent(
   }));
 }
 
+let editorNodeCounter = 0;
+
+function buildSubNode(
+  component: ComponentName,
+  customProps: Record<string, unknown> = {},
+  children?: PageComponent[],
+  prefix?: string
+): PageComponent {
+  editorNodeCounter += 1;
+  return {
+    id: `${(prefix ?? component).toLowerCase()}-${Date.now()}-${editorNodeCounter}`,
+    component,
+    props: {
+      ...createDefaultProps(component),
+      ...customProps
+    },
+    children: componentSchemas[component].acceptsChildren ? (children ?? []) : undefined
+  };
+}
+
+// Composes the default Footer organism out of existing Container, Grid, Flex, Text, Link and Spacer blocks.
+export function createDefaultFooterChildren(): PageComponent[] {
+  return [
+    buildSubNode(
+      "Container",
+      { maxWidth: 1120, align: "left" },
+      [
+        buildSubNode(
+          "Grid",
+          { columns: 3, gap: 32 },
+          [
+            buildSubNode(
+              "Flex",
+              { direction: "column", gap: 10, align: "flex-start" },
+              [
+                buildSubNode(
+                  "Text",
+                  {
+                    type: "heading",
+                    level: "h3",
+                    text: "Minha Marca",
+                    color: "#ffffff",
+                    fontSizeMobile: 22,
+                    fontSizeDesktop: 24,
+                    useDesktopFontSize: true
+                  },
+                  undefined,
+                  "footer-brand-title"
+                ),
+                buildSubNode(
+                  "Text",
+                  {
+                    type: "paragraph",
+                    text: "Soluções pensadas para gerar resultados reais para o seu negócio.",
+                    color: "#94a3b8",
+                    fontSizeMobile: 15,
+                    fontSizeDesktop: 15
+                  },
+                  undefined,
+                  "footer-brand-desc"
+                )
+              ],
+              "footer-brand-col"
+            ),
+            buildSubNode(
+              "Flex",
+              { direction: "column", gap: 8, align: "flex-start" },
+              [
+                buildSubNode(
+                  "Text",
+                  {
+                    type: "heading",
+                    level: "h4",
+                    text: "Navegação",
+                    color: "#ffffff",
+                    fontSizeMobile: 17,
+                    fontSizeDesktop: 18
+                  },
+                  undefined,
+                  "footer-nav-title"
+                ),
+                buildSubNode("Link", { text: "Início", href: "#" }, undefined, "footer-link-1"),
+                buildSubNode("Link", { text: "Serviços", href: "#servicos" }, undefined, "footer-link-2"),
+                buildSubNode("Link", { text: "Sobre", href: "#sobre" }, undefined, "footer-link-3")
+              ],
+              "footer-nav-col"
+            ),
+            buildSubNode(
+              "Flex",
+              { direction: "column", gap: 8, align: "flex-start" },
+              [
+                buildSubNode(
+                  "Text",
+                  {
+                    type: "heading",
+                    level: "h4",
+                    text: "Contato",
+                    color: "#ffffff",
+                    fontSizeMobile: 17,
+                    fontSizeDesktop: 18
+                  },
+                  undefined,
+                  "footer-contact-title"
+                ),
+                buildSubNode(
+                  "Text",
+                  {
+                    type: "paragraph",
+                    text: "WhatsApp: (11) 99999-9999",
+                    color: "#cbd5e1",
+                    fontSizeMobile: 15,
+                    fontSizeDesktop: 15
+                  },
+                  undefined,
+                  "footer-contact-1"
+                ),
+                buildSubNode(
+                  "Text",
+                  {
+                    type: "paragraph",
+                    text: "E-mail: contato@minhamarca.com.br",
+                    color: "#cbd5e1",
+                    fontSizeMobile: 15,
+                    fontSizeDesktop: 15
+                  },
+                  undefined,
+                  "footer-contact-2"
+                ),
+                buildSubNode(
+                  "Text",
+                  {
+                    type: "paragraph",
+                    text: "Atendimento: Seg a Sex, 09h às 18h",
+                    color: "#cbd5e1",
+                    fontSizeMobile: 15,
+                    fontSizeDesktop: 15
+                  },
+                  undefined,
+                  "footer-contact-3"
+                )
+              ],
+              "footer-contact-col"
+            )
+          ],
+          "footer-grid"
+        ),
+        buildSubNode("Spacer", { height: 28 }, undefined, "footer-spacer"),
+        buildSubNode(
+          "Text",
+          {
+            type: "paragraph",
+            text: "© 2026 Minha Marca. Todos os direitos reservados.",
+            color: "#64748b",
+            align: "center",
+            fontSizeMobile: 14,
+            fontSizeDesktop: 14
+          },
+          undefined,
+          "footer-copyright"
+        )
+      ],
+      "footer-container"
+    )
+  ];
+}
+
 // Builds a new schema-compliant component for the local editor session.
 export function createEditorComponent(component: ComponentName): PageComponent {
+  editorNodeCounter += 1;
   return {
-    id: `${component.toLowerCase()}-${Date.now()}`,
+    id: `${component.toLowerCase()}-${Date.now()}-${editorNodeCounter}`,
     component,
     props: createDefaultProps(component),
-    children: componentSchemas[component].acceptsChildren ? [] : undefined
+    children: componentSchemas[component].acceptsChildren
+      ? component === "Footer"
+        ? createDefaultFooterChildren()
+        : []
+      : undefined
   };
 }

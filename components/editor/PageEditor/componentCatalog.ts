@@ -2,6 +2,7 @@ import type { ComponentName, PageComponent } from "@/types/page";
 import type { ComponentCategory, ComponentSchema } from "@/renderer/schemas/schemaTypes";
 import { componentSchemas, creatableComponents } from "@/renderer/schemas/componentSchemas";
 import { createDefaultProps } from "@/renderer/validation";
+import { createEditorComponent } from "./pageTree";
 
 export type AtomicCategoryInfo = {
   id: ComponentCategory;
@@ -90,7 +91,7 @@ const baseCatalogItems: CatalogItem[] = creatableComponents.map((schema) => {
     componentName: schema.component,
     isPreset: false,
     badge: schema.component === "Form" ? "WhatsApp" : category === "atom" ? "Base" : "Layout",
-    createNode: () => createNodeWithProps(schema.component)
+    createNode: () => createEditorComponent(schema.component)
   };
 });
 

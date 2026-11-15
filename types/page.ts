@@ -9,7 +9,8 @@ export type ComponentName =
   | "Link"
   | "Spacer"
   | "Navbar"
-  | "Form";
+  | "Form"
+  | "Footer";
 
 export type ComponentProps = Record<string, unknown>;
 

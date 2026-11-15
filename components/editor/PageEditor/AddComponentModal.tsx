@@ -13,6 +13,7 @@ import {
   MessageSquare,
   MousePointerClick,
   MoveVertical,
+  PanelBottom,
   Search,
   Sparkles,
   Square,
@@ -61,6 +62,8 @@ function getComponentIcon(item: CatalogItem) {
       return <MessageSquare size={18} />;
     case "Navbar":
       return <Compass size={18} />;
+    case "Footer":
+      return <PanelBottom size={18} />;
     case "Section":
       return <LayoutPanelTop size={18} />;
     default:
