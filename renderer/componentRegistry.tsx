@@ -12,6 +12,7 @@ import { TextBlock } from "@/components/base/TextBlock";
 import { NavbarBlock } from "@/components/base/NavbarBlock";
 import { FormBlock } from "@/components/base/FormBlock";
 import { FooterBlock } from "@/components/base/FooterBlock";
+import { ContactBlock } from "@/components/base/ContactBlock";
 
 export type BaseComponentProps = PropsWithChildren<Record<string, unknown>>;
 type BaseComponent = ComponentType<BaseComponentProps>;
@@ -19,6 +20,7 @@ type BaseComponent = ComponentType<BaseComponentProps>;
 export const componentRegistry: Record<PageComponent["component"], BaseComponent> = {
   // The renderer normalizes props from schemas before crossing this controlled registry boundary.
   Button: ButtonBlock as BaseComponent,
+  Contact: ContactBlock as BaseComponent,
   Container: ContainerBlock as BaseComponent,
   Flex: FlexBlock as BaseComponent,
   Footer: FooterBlock as BaseComponent,

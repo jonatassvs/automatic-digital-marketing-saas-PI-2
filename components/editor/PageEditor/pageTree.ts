@@ -336,6 +336,67 @@ export function createDefaultFooterChildren(): PageComponent[] {
   ];
 }
 
+// Composes the default Contact organism: Section -> Container -> centered Title + centered Description + Spacer + Grid (Image + WhatsApp Form).
+export function createDefaultContactChildren(): PageComponent[] {
+  return [
+    buildSubNode(
+      "Container",
+      { maxWidth: 1120, align: "center" },
+      [
+        buildSubNode(
+          "Text",
+          {
+            type: "heading",
+            level: "h2",
+            text: "Entre em contato conosco",
+            color: "#111827",
+            align: "center",
+            useDesktopFontSize: true,
+            fontSizeMobile: 28,
+            fontSizeDesktop: 36
+          },
+          undefined,
+          "contact-heading"
+        ),
+        buildSubNode(
+          "Text",
+          {
+            type: "paragraph",
+            text: "Tire suas dúvidas ou solicite um orçamento rápido diretamente pelo nosso WhatsApp.",
+            color: "#4b5563",
+            align: "center",
+            fontSizeMobile: 16,
+            fontSizeDesktop: 18
+          },
+          undefined,
+          "contact-description"
+        ),
+        buildSubNode("Spacer", { height: 28 }, undefined, "contact-spacer"),
+        buildSubNode(
+          "Grid",
+          { columns: 2, gap: 32 },
+          [
+            buildSubNode(
+              "Image",
+              {
+                src: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80",
+                alt: "Equipe pronta para atender pelo WhatsApp",
+                aspectRatio: "4 / 3",
+                borderRadius: 12
+              },
+              undefined,
+              "contact-image"
+            ),
+            buildSubNode("Form", {}, undefined, "contact-whatsapp-form")
+          ],
+          "contact-grid"
+        )
+      ],
+      "contact-container"
+    )
+  ];
+}
+
 // Builds a new schema-compliant component for the local editor session.
 export function createEditorComponent(component: ComponentName): PageComponent {
   editorNodeCounter += 1;
@@ -346,7 +407,9 @@ export function createEditorComponent(component: ComponentName): PageComponent {
     children: componentSchemas[component].acceptsChildren
       ? component === "Footer"
         ? createDefaultFooterChildren()
-        : []
+        : component === "Contact"
+          ? createDefaultContactChildren()
+          : []
       : undefined
   };
 }

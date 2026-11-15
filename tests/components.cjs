@@ -270,3 +270,30 @@ function RenderFooterDirect() {
   return true;
 }
 console.log('Lean composable Footer (built from Container, Grid, Flex, Text, Link, Spacer) checks passed.');
+
+const composedContact = createEditorComponent('Contact');
+assert.equal(componentSchemas.Contact.category, 'organism');
+assert.equal(componentSchemas.Contact.acceptsChildren, true);
+assert.equal(validateComponentTree([composedContact]).valid, true);
+assert.equal(composedContact.children.length, 1);
+const contactContainer = composedContact.children[0];
+assert.equal(contactContainer.component, 'Container');
+assert.equal(contactContainer.children.length, 4);
+assert.equal(contactContainer.children[0].component, 'Text');
+assert.equal(contactContainer.children[0].props.align, 'center');
+assert.equal(contactContainer.children[1].component, 'Text');
+assert.equal(contactContainer.children[1].props.align, 'center');
+assert.equal(contactContainer.children[2].component, 'Spacer');
+const contactGrid = contactContainer.children[3];
+assert.equal(contactGrid.component, 'Grid');
+assert.equal(contactGrid.children.length, 2);
+assert.equal(contactGrid.children[0].component, 'Image');
+assert.equal(contactGrid.children[1].component, 'Form');
+const contactMarkup = render(PageRenderer, { components: [composedContact] });
+assert.match(contactMarkup, /<section class="responsive-component"/);
+assert.match(contactMarkup, /Entre em contato conosco/);
+assert.match(contactMarkup, /base-grid/);
+assert.match(contactMarkup, /repeat\(2, minmax\(0, 1fr\)\)/);
+assert.match(contactMarkup, /base-whatsapp-form/);
+assert.ok(contactMarkup.indexOf('<img') < contactMarkup.indexOf('<form'), 'Image must appear before Form (left on desktop, top on mobile)');
+console.log('Lean composable Contact (Section -> Container -> Centered Title/Description + Grid [Image + WhatsApp Form]) checks passed.');

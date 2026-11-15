@@ -14,6 +14,7 @@ import {
   MousePointerClick,
   MoveVertical,
   PanelBottom,
+  PhoneCall,
   Search,
   Sparkles,
   Square,
@@ -64,6 +65,8 @@ function getComponentIcon(item: CatalogItem) {
       return <Compass size={18} />;
     case "Footer":
       return <PanelBottom size={18} />;
+    case "Contact":
+      return <PhoneCall size={18} />;
     case "Section":
       return <LayoutPanelTop size={18} />;
     default:

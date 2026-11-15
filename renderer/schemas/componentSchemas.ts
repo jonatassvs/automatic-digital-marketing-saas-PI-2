@@ -11,6 +11,7 @@ import { textSchema } from "@/components/base/TextBlock/schema";
 import { navbarSchema } from "@/components/base/NavbarBlock/schema";
 import { formSchema } from "@/components/base/FormBlock/schema";
 import { footerSchema } from "@/components/base/FooterBlock/schema";
+import { contactSchema } from "@/components/base/ContactBlock/schema";
 import type { ComponentSchema, SchemaField } from "@/renderer/schemas/schemaTypes";
 
 import { GOOGLE_FONTS } from "@/renderer/pageDesign";
@@ -20,6 +21,7 @@ export type { ComponentSchema, SchemaField };
 
 const baseSchemas: Record<ComponentName, ComponentSchema> = {
   Button: buttonSchema,
+  Contact: contactSchema,
   Container: containerSchema,
   Flex: flexSchema,
   Footer: footerSchema,
