@@ -60,8 +60,8 @@ export default function RegisterPage() {
           <div className="auth-badge">
             <Layers size={24} />
           </div>
-          <h1 className="auth-title">Criar sua conta</h1>
-          <p className="auth-subtitle">Crie landing pages profissionais em minutos</p>
+          <h1 className="auth-title">Criar sua conta no Landra</h1>
+          <p className="auth-subtitle">Crie landing pages profissionais em minutos sem código</p>
         </div>
 
         {error && (

@@ -182,7 +182,7 @@ export default function DashboardPage() {
           <div className="brand-icon">
             <Layers size={20} />
           </div>
-          <span className="brand-name">Landing Builder</span>
+          <span className="brand-name">Landra</span>
         </Link>
 
         <div className="nav-user">

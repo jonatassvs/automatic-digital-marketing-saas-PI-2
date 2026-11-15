@@ -17,7 +17,7 @@ export function settings(env: Record<string, string | undefined> = process.env) 
   const clientIpHeader = env.TRUSTED_CLIENT_IP_HEADER?.toLowerCase();
   if (clientIpHeader && !/^[a-z0-9-]+$/.test(clientIpHeader)) throw new Error("Invalid trusted IP header");
   const geminiApiKey = env.GEMINI_API_KEY?.trim() || "";
-  const geminiModel = env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+  const geminiModel = env.GEMINI_MODEL?.trim() || "gemini-3.5-flash";
   return {
     uri,
     database,

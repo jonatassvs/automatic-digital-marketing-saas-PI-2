@@ -1,6 +1,6 @@
-# Construtor de landing pages
+# Landra - Construtor de Landing Pages
 
-Projeto em **Next.js + TypeScript**, com editor React, API em Route Handlers e MongoDB. As páginas são árvores JSON de componentes conhecidos, sem código executável fornecido pelo usuário.
+**Landra** é uma plataforma SaaS desenvolvida em **Next.js + TypeScript**, com editor React, API em Route Handlers e MongoDB. As páginas são árvores JSON de componentes conhecidos, sem código executável fornecido pelo usuário.
 
 **Estado atual:** o editor funciona em memória e ainda não chama a API. O backend oferece autenticação, persistência, publicação em JSON, SEO, analytics e configuração de GTM. O botão “Salvo localmente” ainda não salva; recarregar descarta as alterações. Publicação HTML, metadata das páginas e carregamento de GTM ainda não estão integrados.
 

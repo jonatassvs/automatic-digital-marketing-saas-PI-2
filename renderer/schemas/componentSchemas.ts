@@ -8,6 +8,7 @@ import { linkSchema } from "@/components/base/LinkBlock/schema";
 import { sectionSchema } from "@/components/base/SectionBlock/schema";
 import { spacerSchema } from "@/components/base/SpacerBlock/schema";
 import { textSchema } from "@/components/base/TextBlock/schema";
+import { navbarSchema } from "@/components/base/NavbarBlock/schema";
 import type { ComponentSchema, SchemaField } from "@/renderer/schemas/schemaTypes";
 
 import { GOOGLE_FONTS } from "@/renderer/pageDesign";
@@ -22,6 +23,7 @@ const baseSchemas: Record<ComponentName, ComponentSchema> = {
   Grid: gridSchema,
   Image: imageSchema,
   Link: linkSchema,
+  Navbar: navbarSchema,
   Section: sectionSchema,
   Spacer: spacerSchema,
   Text: textSchema
@@ -29,7 +31,7 @@ const baseSchemas: Record<ComponentName, ComponentSchema> = {
 
 export const componentSchemas = Object.fromEntries(
   Object.entries(baseSchemas).map(([name, schema]) => [name, { ...schema, fields: [...schema.fields, ...responsiveStyleFields,
-    ...(["Text", "Button", "Link"].includes(name) ? [{ name: "fontFamily", label: "Fonte", type: "select", group: "style", defaultValue: "inherit", options: [
+    ...(["Text", "Button", "Link", "Navbar"].includes(name) ? [{ name: "fontFamily", label: "Fonte", type: "select", group: "style", defaultValue: "inherit", options: [
       { label: "Fonte da página", value: "inherit" }, { label: "Fonte do sistema", value: "system" }, ...GOOGLE_FONTS.map(font => ({ label: font, value: font }))
     ] }] : [])] }])
 ) as Record<ComponentName, ComponentSchema>;

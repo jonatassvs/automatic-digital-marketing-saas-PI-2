@@ -115,3 +115,30 @@ assert.match(pageResponsiveCss(config), /page-renderer.page-breakpoint-980/);
 assert.match(pageResponsiveCss(config), /--r-paddingTop:var\(--r-desktop-paddingTop\)/);
 assert.equal(fontStack('url(evil)'), fontStack('system'));
 console.log('Page design, fonts and server rendering checks passed.');
+
+const { NavbarBlock } = require('../components/base/NavbarBlock/NavbarBlock.tsx');
+const navProps = normalizeProps(componentSchemas.Navbar, {
+  logoText: 'Empresa Alpha',
+  logoHref: '/',
+  link1Text: 'Home',
+  link1Url: '/',
+  link2Text: 'Portfólio',
+  link2Url: '#portfolio',
+  ctaText: 'Contato Rápido',
+  ctaUrl: '#contato',
+  linkColor: '#ff0000',
+  ctaBackgroundColor: '#00ff00',
+  ctaTextColor: '#0000ff'
+});
+const navbarMarkup = render(NavbarBlock, navProps);
+assert.match(navbarMarkup, /base-navbar/);
+assert.match(navbarMarkup, /Empresa Alpha/);
+assert.match(navbarMarkup, /Home/);
+assert.match(navbarMarkup, /Portfólio/);
+assert.match(navbarMarkup, /Contato Rápido/);
+assert.match(navbarMarkup, /navbar-toggle mobile-only/);
+assert.match(navbarMarkup, /color:#ff0000/);
+assert.match(navbarMarkup, /background-color:#00ff00/);
+assert.equal(validateComponentTree([{ id: 'nav-1', component: 'Navbar', props: navProps }]).valid, true);
+assert.equal(validateComponentTree([{ id: 'nav-1', component: 'Navbar', props: { ...navProps, link1Url: 'javascript:alert(1)' } }]).valid, false);
+console.log('Navbar rendering, links and sandwich menu checks passed.');

@@ -1,4 +1,12 @@
-import type { LandingPageDocument, PageComponent, PageDesign, SeoConfig, SeoGenerateInput, SeoSuggestions } from "@/types/page";
+import type {
+  IntegrationsConfig,
+  LandingPageDocument,
+  PageComponent,
+  PageDesign,
+  SeoConfig,
+  SeoGenerateInput,
+  SeoSuggestions
+} from "@/types/page";
 import { samplePage } from "@/components/editor/samplePage";
 
 export type AuthUser = {
@@ -241,6 +249,23 @@ export const api = {
         method: "POST",
         body: JSON.stringify(input || {}),
       });
+    },
+  },
+
+  integrations: {
+    async get(pageId: string): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/pages/${pageId}/integrations`, { method: "GET" });
+    },
+
+    async update(pageId: string, payload: { gtm: { containerId: string } | null }): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/pages/${pageId}/integrations`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+    },
+
+    async getPublic(slug: string): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/public/pages/${slug}/integrations`, { method: "GET" });
     },
   },
 };

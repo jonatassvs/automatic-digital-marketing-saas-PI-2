@@ -42,9 +42,15 @@ export default function EditorPageRoute({ params }: EditorPageProps) {
       setLoadError(null);
 
       try {
-        const data = await api.pages.get(pageId);
+        const [data, integrationsData] = await Promise.all([
+          api.pages.get(pageId),
+          api.integrations.get(pageId).catch(() => ({ gtm: null }))
+        ]);
         if (isMounted) {
-          setPage(data);
+          setPage({
+            ...data,
+            integrations: integrationsData
+          });
         }
       } catch (err: unknown) {
         if (isMounted) {
@@ -77,7 +83,20 @@ export default function EditorPageRoute({ params }: EditorPageProps) {
         design: updatedPage.design,
         components: updatedPage.components
       });
-      setPage(saved);
+
+      let savedIntegrations = updatedPage.integrations;
+      if (updatedPage.integrations !== undefined) {
+        try {
+          savedIntegrations = await api.integrations.update(pageId, updatedPage.integrations);
+        } catch (err: unknown) {
+          console.error("Falha ao salvar integrações:", err);
+        }
+      }
+
+      setPage({
+        ...saved,
+        integrations: savedIntegrations
+      });
       setSaveMessage("Salvo no banco com sucesso!");
       setTimeout(() => setSaveMessage(null), 4000);
     } catch (err: unknown) {
