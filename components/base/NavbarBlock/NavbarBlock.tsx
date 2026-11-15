@@ -7,11 +7,13 @@ import { responsiveStyle, type ResponsiveProps } from "@/components/base/respons
 type NavbarBlockProps = ResponsiveProps & {
   id?: string;
   fontFamily?: string;
+  backgroundColor?: string;
   logoText?: string;
   logoImage?: string;
   logoAlt?: string;
   logoHref?: string;
   logoWidth?: number;
+  links?: Array<{ text: string; url: string; newTab?: boolean }>;
   link1Text?: string;
   link1Url?: string;
   link2Text?: string;
@@ -36,11 +38,13 @@ type NavbarBlockProps = ResponsiveProps & {
 export function NavbarBlock({
   id,
   fontFamily,
+  backgroundColor = "#ffffff",
   logoText = "Minha Marca",
   logoImage = "",
   logoAlt = "Logo",
   logoHref = "#",
   logoWidth = 140,
+  links,
   link1Text = "Início",
   link1Url = "#",
   link2Text = "Serviços",
@@ -64,17 +68,24 @@ export function NavbarBlock({
 }: NavbarBlockProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const links = [
-    { text: link1Text, url: link1Url },
-    { text: link2Text, url: link2Url },
-    { text: link3Text, url: link3Url },
-    { text: link4Text, url: link4Url },
-    { text: link5Text, url: link5Url },
-    { text: link6Text, url: link6Url }
-  ].filter((item) => Boolean(item.text && item.text.trim()));
+  let navItems: Array<{ text: string; url: string; newTab?: boolean }> = [];
+  if (Array.isArray(links) && links.length > 0) {
+    navItems = links;
+  } else {
+    navItems = [
+      { text: link1Text, url: link1Url },
+      { text: link2Text, url: link2Url },
+      { text: link3Text, url: link3Url },
+      { text: link4Text, url: link4Url },
+      { text: link5Text, url: link5Url },
+      { text: link6Text, url: link6Url }
+    ];
+  }
+
+  const cleanLinks = navItems.filter((item) => Boolean(item && item.text && item.text.trim()));
 
   const baseStyle: CSSProperties = {
-    backgroundColor: "#ffffff",
+    backgroundColor: backgroundColor || "#ffffff",
     color: "#1f2937",
     fontFamily,
     position: sticky ? "sticky" : "relative",
@@ -109,7 +120,7 @@ export function NavbarBlock({
         {/* Desktop Navigation Links on the right */}
         <nav className="navbar-nav desktop-only" aria-label="Navegação principal">
           <ul className="navbar-links">
-            {links.map((link, idx) => (
+            {cleanLinks.map((link, idx) => (
               <li key={idx}>
                 <a href={link.url || "#"} className="navbar-link" style={{ color: linkColor }}>
                   {link.text}
@@ -144,9 +155,13 @@ export function NavbarBlock({
 
       {/* Mobile Sandwich Drawer */}
       {isMobileMenuOpen && (
-        <nav className="navbar-mobile-drawer mobile-only" aria-label="Menu móvel">
+        <nav
+          className="navbar-mobile-drawer mobile-only"
+          aria-label="Menu móvel"
+          style={{ backgroundColor: backgroundColor || "#ffffff" }}
+        >
           <ul className="navbar-mobile-links">
-            {links.map((link, idx) => (
+            {cleanLinks.map((link, idx) => (
               <li key={idx}>
                 <a
                   href={link.url || "#"}

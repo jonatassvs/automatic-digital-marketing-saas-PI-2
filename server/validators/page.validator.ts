@@ -50,6 +50,16 @@ export class ComponentValidator {
         }
         requireValid(length <= 10000, "Texto muito longo."); break;
       }
+      case "links": {
+        requireValid(Array.isArray(value) && value.length <= 50, "Lista de links invalida.");
+        for (const raw of value) {
+          const item = object(raw, ["text", "url", "newTab"], ["text"]);
+          text(item.text, 100);
+          if (Object.hasOwn(item, "url")) url(item.url, false, false);
+          if (Object.hasOwn(item, "newTab")) boolean(item.newTab);
+        }
+        break;
+      }
       default: text(value);
     }
   }

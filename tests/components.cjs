@@ -141,4 +141,25 @@ assert.match(navbarMarkup, /color:#ff0000/);
 assert.match(navbarMarkup, /background-color:#00ff00/);
 assert.equal(validateComponentTree([{ id: 'nav-1', component: 'Navbar', props: navProps }]).valid, true);
 assert.equal(validateComponentTree([{ id: 'nav-1', component: 'Navbar', props: { ...navProps, link1Url: 'javascript:alert(1)' } }]).valid, false);
+
+// Teste de N links dinâmicos e cor de fundo personalizada
+const navDynamicProps = normalizeProps(componentSchemas.Navbar, {
+  logoText: 'Empresa Beta',
+  backgroundColor: '#112233',
+  links: [
+    { text: 'Link Um', url: '#1' },
+    { text: 'Link Dois', url: '#2' },
+    { text: 'Link Tres', url: '#3' },
+    { text: 'Link Quatro', url: '#4' },
+    { text: 'Link Cinco', url: '#5' },
+    { text: 'Link Seis', url: '#6' },
+    { text: 'Link Sete', url: '#7' }
+  ]
+});
+const dynamicMarkup = render(NavbarBlock, navDynamicProps);
+assert.match(dynamicMarkup, /background-color:#112233/);
+assert.match(dynamicMarkup, /Link Um/);
+assert.match(dynamicMarkup, /Link Sete/);
+assert.equal(validateComponentTree([{ id: 'nav-dynamic', component: 'Navbar', props: navDynamicProps }]).valid, true);
+
 console.log('Navbar rendering, links and sandwich menu checks passed.');

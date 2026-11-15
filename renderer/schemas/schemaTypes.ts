@@ -9,7 +9,7 @@ export type SchemaField = {
   name: string;
   label: string;
   responsive?: boolean;
-  type: "checkbox" | "color" | "number" | "richText" | "select" | "text" | "textarea" | "url";
+  type: "checkbox" | "color" | "number" | "richText" | "select" | "text" | "textarea" | "url" | "links";
   required?: boolean;
   defaultValue?: boolean | string | number | unknown[];
   options?: Array<{ label: string; value: string | number }>;

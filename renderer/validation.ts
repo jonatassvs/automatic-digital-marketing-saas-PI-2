@@ -28,6 +28,10 @@ export function isValidFieldValue(field: SchemaField, value: unknown): boolean {
   if (field.type === "checkbox") return typeof value === "boolean";
   if (field.type === "select") return Boolean(field.options?.some(option => option.value === value));
   if (field.type === "richText") return Array.isArray(value);
+  if (field.type === "links") {
+    if (!Array.isArray(value) || value.length > 50) return false;
+    return value.every(item => typeof item === "object" && item !== null && typeof (item as Record<string, unknown>).text === "string" && isSafeUrl((item as Record<string, unknown>).url));
+  }
   if (typeof value !== "string") return false;
   if (field.type === "color") return /^#[0-9a-f]{6}$/i.test(value);
   if (field.type === "url") return isSafeUrl(value);

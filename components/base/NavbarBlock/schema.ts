@@ -10,6 +10,13 @@ export const navbarSchema: ComponentSchema = {
     { name: "logoAlt", label: "Texto alternativo do Logo", type: "text", group: "content", defaultValue: "Logo" },
     { name: "logoHref", label: "Link do Logo", type: "url", group: "content", defaultValue: "#" },
     { name: "logoWidth", label: "Largura max. do Logo (px)", type: "number", min: 20, max: 400, group: "style", defaultValue: 140 },
+    { name: "backgroundColor", label: "Cor de Fundo da Barra", type: "color", group: "style", defaultValue: "#ffffff" },
+    {
+      name: "links",
+      label: "Links de Navegação",
+      type: "links",
+      group: "content"
+    },
     { name: "link1Text", label: "Link 1 - Texto", type: "text", group: "content", defaultValue: "Início" },
     { name: "link1Url", label: "Link 1 - URL", type: "url", group: "content", defaultValue: "#" },
     { name: "link2Text", label: "Link 2 - Texto", type: "text", group: "content", defaultValue: "Serviços" },

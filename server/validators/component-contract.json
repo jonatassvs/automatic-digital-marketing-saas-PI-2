@@ -1870,6 +1870,14 @@
           "max": 400
         },
         {
+          "name": "backgroundColor",
+          "type": "color"
+        },
+        {
+          "name": "links",
+          "type": "links"
+        },
+        {
           "name": "link1Text",
           "type": "text"
         },
