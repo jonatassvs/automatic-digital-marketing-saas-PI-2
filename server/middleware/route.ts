@@ -16,9 +16,12 @@ export function route(action: Action, publicAccess = false, provider: () => Prom
     let allowedOrigin = false;
     try {
       application = await provider();
-      const path = new URL(request.url).pathname;
+      const requestUrl = new URL(request.url);
+      const path = requestUrl.pathname;
       const publicCors = path.startsWith("/api/public/") || path === "/api/events";
-      allowedOrigin = Boolean(origin && (publicCors || application.config.origins.includes(origin)));
+      allowedOrigin = Boolean(
+        origin && (publicCors || origin === requestUrl.origin || application.config.origins.includes(origin))
+      );
       if (origin && !allowedOrigin) throw new ApiError("Origem nao permitida.", 403, "origin_denied");
       if (request.method === "OPTIONS") response = new Response(null, { status: 200 });
       else {

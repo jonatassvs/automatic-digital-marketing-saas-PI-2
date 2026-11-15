@@ -5,6 +5,7 @@ const ts = require('typescript');
 const Module = require('node:module');
 const originalResolve = Module._resolveFilename;
 Module._resolveFilename = function (name, ...args) {
+  if (name === 'server-only') return path.join(__dirname, '..', 'types', 'page.ts');
   return originalResolve.call(this, name.startsWith('@/') ? path.join(__dirname, '..', name.slice(2)) : name, ...args);
 };
 for (const extension of ['.ts', '.tsx']) {
@@ -358,3 +359,21 @@ for (const selector of ['.page-renderer', '.base-grid', '.base-flex', '.base-but
   assert.ok(responsiveScss.includes(selector), `Global responsive.scss must include ${selector} so published pages match the editor`);
 }
 console.log('Published page and editor shared global stylesheet checks passed.');
+
+const { settings } = require('../server/config.ts');
+const vercelConfig = settings({
+  NODE_ENV: 'production',
+  MONGODB_URI: '"mongodb+srv://user:pass@cluster0.example.mongodb.net"',
+  MONGODB_DATABASE: 'landing_builder_shared',
+  CORS_ORIGINS: 'http://localhost:3000, https://meu-dominio.vercel.app/',
+  VERCEL_URL: 'meu-preview-123.vercel.app',
+  SESSION_TTL_HOURS: '',
+  EVENT_RETENTION_DAYS: '90',
+  TRUSTED_CLIENT_IP_HEADER: ''
+});
+assert.equal(vercelConfig.uri, 'mongodb+srv://user:pass@cluster0.example.mongodb.net');
+assert.ok(vercelConfig.origins.includes('http://localhost:3000'));
+assert.ok(vercelConfig.origins.includes('https://meu-dominio.vercel.app'));
+assert.ok(vercelConfig.origins.includes('https://meu-preview-123.vercel.app'));
+assert.equal(vercelConfig.sessionHours, 12);
+console.log('Vercel production environment settings normalization checks passed.');
