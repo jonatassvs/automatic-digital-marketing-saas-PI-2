@@ -19,10 +19,11 @@ import { IntegrationController } from "./controllers/integration.controller";
 import { SeoController } from "./controllers/seo.controller";
 import { data } from "./controllers/http";
 export function createApplication(db: Db, config: Settings, geminiService?: GeminiService) {
-  const auth = new AuthService(new UserRepository(db), config.sessionHours);
+  const rateLimits = new RateLimitRepository(db);
+  const auth = new AuthService(new UserRepository(db), config.sessionHours, config.recaptchaSecretKey, rateLimits);
   const pages = new PageService(new PageRepository(db));
   const gemini = geminiService ?? new GeminiService(config.geminiApiKey, config.geminiModel);
-  return { config, auth, gemini, rateLimits: new RateLimitRepository(db), controllers: {
+  return { config, auth, gemini, rateLimits, controllers: {
     auth: new AuthController(auth),
     pages: new PageController(pages, new SeoService(), gemini),
     seo: new SeoController(gemini),

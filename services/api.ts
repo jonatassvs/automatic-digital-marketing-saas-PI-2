@@ -67,17 +67,39 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
 export const api = {
   auth: {
-    async register(name: string, email: string, password: string): Promise<AuthUser> {
+    async register(
+      name: string,
+      email: string,
+      password: string,
+      recaptchaToken?: string,
+      website?: string
+    ): Promise<AuthUser> {
       return request<AuthUser>("/api/auth/register", {
         method: "POST",
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          ...(recaptchaToken ? { recaptchaToken } : {}),
+          ...(website !== undefined ? { website } : {}),
+        }),
       });
     },
 
-    async login(email: string, password: string): Promise<LoginResponse> {
+    async login(
+      email: string,
+      password: string,
+      recaptchaToken?: string,
+      website?: string
+    ): Promise<LoginResponse> {
       const data = await request<LoginResponse>("/api/auth/login", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+          ...(recaptchaToken ? { recaptchaToken } : {}),
+          ...(website !== undefined ? { website } : {}),
+        }),
       });
       setToken(data.accessToken);
       return data;
