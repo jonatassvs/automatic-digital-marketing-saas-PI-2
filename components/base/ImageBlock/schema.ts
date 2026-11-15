@@ -3,6 +3,8 @@ import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
 export const imageSchema: ComponentSchema = {
   component: "Image",
   label: "Imagem",
+  category: "atom",
+  description: "Foto, ilustração ou banner com texto alternativo.",
   acceptsChildren: false,
   fields: [
     {

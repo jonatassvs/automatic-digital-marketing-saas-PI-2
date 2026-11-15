@@ -3,6 +3,8 @@ import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
 export const textSchema: ComponentSchema = {
   component: "Text",
   label: "Texto",
+  category: "atom",
+  description: "Títulos, parágrafos, listas ou citações editáveis.",
   acceptsChildren: false,
   fields: [
     {

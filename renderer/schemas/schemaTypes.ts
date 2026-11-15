@@ -15,9 +15,13 @@ export type SchemaField = {
   options?: Array<{ label: string; value: string | number }>;
 };
 
+export type ComponentCategory = "atom" | "molecule" | "organism";
+
 export type ComponentSchema = {
   component: ComponentName;
   label: string;
+  category?: ComponentCategory;
+  description?: string;
   acceptsChildren: boolean;
   fields: SchemaField[];
 };

@@ -655,20 +655,26 @@ button:disabled {
 .add-component-modal {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
-  display: grid;
-  gap: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   max-height: min(760px, calc(100vh - 40px));
-  max-width: 720px;
-  overflow: auto;
+  max-width: 780px;
+  overflow: hidden;
   padding: 20px;
   width: 100%;
+}
+
+.add-component-modal.ai-seo-modal {
+  overflow-y: auto;
 }
 
 .modal-header {
   align-items: flex-start;
   display: flex;
+  flex-shrink: 0;
   gap: 16px;
   justify-content: space-between;
 }
@@ -679,51 +685,316 @@ button:disabled {
   margin: 4px 0 0;
 }
 
-.component-card-grid {
+.modal-subtitle {
+  color: #6b7280;
+  font-size: 0.84rem;
+  margin: 4px 0 0;
+}
+
+.add-component-modal-controls {
+  display: grid;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.add-component-search {
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+.add-component-search-icon {
+  color: #9ca3af;
+  left: 12px;
+  pointer-events: none;
+  position: absolute;
+}
+
+.add-component-search input {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  padding-left: 36px;
+}
+
+.add-component-search input:focus {
+  background: #ffffff;
+}
+
+.atomic-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.atomic-tab {
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  color: #374151;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 700;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 12px;
+  transition: all 0.15s ease;
+}
+
+.atomic-tab:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.atomic-tab.active {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #1d4ed8;
+}
+
+.atomic-tab-atom.active {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #1d4ed8;
+}
+
+.atomic-tab-molecule.active {
+  background: #f0fdf4;
+  border-color: #16a34a;
+  color: #15803d;
+}
+
+.atomic-tab-organism.active {
+  background: #faf5ff;
+  border-color: #9333ea;
+  color: #7e22ce;
+}
+
+.atomic-tab-count {
+  background: rgba(15, 23, 42, 0.07);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  line-height: 1;
+  padding: 3px 7px;
+}
+
+.atomic-tab.active .atomic-tab-count {
+  background: rgba(37, 99, 235, 0.14);
+}
+
+.atomic-tab-molecule.active .atomic-tab-count {
+  background: rgba(22, 163, 74, 0.14);
+}
+
+.atomic-tab-organism.active .atomic-tab-count {
+  background: rgba(147, 51, 234, 0.14);
+}
+
+.add-component-modal-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.add-component-modal-body::-webkit-scrollbar {
+  width: 7px;
+}
+
+.add-component-modal-body::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 999px;
+}
+
+.add-component-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+.add-component-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.atomic-category-section {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
   display: grid;
   gap: 12px;
+  padding: 14px;
+}
+
+.atomic-category-header {
+  display: grid;
+  gap: 4px;
+}
+
+.atomic-category-title {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.atomic-category-badge {
+  align-items: center;
+  border-radius: 6px;
+  display: inline-flex;
+  font-size: 0.85rem;
+  gap: 6px;
+  padding: 4px 10px;
+}
+
+.atomic-badge-atom {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.atomic-badge-molecule {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.atomic-badge-organism {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+.atomic-category-count {
+  color: #6b7280;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.atomic-category-description {
+  color: #4b5563;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.add-component-empty {
+  align-items: center;
+  color: #6b7280;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.add-component-empty p {
+  margin: 0;
+}
+
+.component-card-grid {
+  display: grid;
+  gap: 10px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .component-card {
-  align-items: center;
+  align-items: flex-start;
   background: #ffffff;
   border: 1px solid #e5e7eb;
+  border-radius: 8px;
   color: #111827;
+  cursor: pointer;
   display: grid;
   gap: 12px;
   grid-template-columns: auto minmax(0, 1fr);
   justify-items: start;
   min-height: 76px;
-  padding: 14px;
+  padding: 12px 14px;
   text-align: left;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
 }
 
 .component-card:hover {
   border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
 }
 
-.component-card span:last-child {
+.component-card-molecule:hover {
+  border-color: #86efac;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08);
+}
+
+.component-card-organism:hover {
+  border-color: #d8b4fe;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.08);
+}
+
+.component-card-content {
   display: grid;
-  gap: 3px;
+  gap: 4px;
+  width: 100%;
+}
+
+.component-card-title-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: space-between;
+}
+
+.component-card-pill {
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  text-transform: uppercase;
+}
+
+.component-card-pill.base-pill {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.component-card-pill.preset-pill {
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .component-card small {
   color: #6b7280;
   font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .component-card-icon {
   align-items: center;
   background: #eff6ff;
   border: 1px solid #bfdbfe;
-  border-radius: 6px;
+  border-radius: 8px;
   color: #2563eb;
   display: inline-flex;
   height: 38px;
   justify-content: center;
+  margin-top: 2px;
   width: 38px;
+}
+
+.component-icon-molecule {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+
+.component-icon-organism {
+  background: #faf5ff;
+  border-color: #e9d5ff;
+  color: #9333ea;
 }
 
 .base-flex {

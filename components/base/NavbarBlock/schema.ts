@@ -3,6 +3,8 @@ import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
 export const navbarSchema: ComponentSchema = {
   component: "Navbar",
   label: "Barra de Navegacao (Navbar)",
+  category: "organism",
+  description: "Cabeçalho completo com logo, links e botão de ação.",
   acceptsChildren: true,
   fields: [
     { name: "logoText", label: "Texto do Logo", type: "text", group: "content", defaultValue: "Minha Marca" },

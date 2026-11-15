@@ -3,6 +3,8 @@ import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
 export const containerSchema: ComponentSchema = {
   component: "Container",
   label: "Container",
+  category: "molecule",
+  description: "Caixa que centraliza e limita a largura do conteúdo.",
   acceptsChildren: true,
   fields: [
     { name: "maxWidth", label: "Largura maxima", type: "number", group: "style", defaultValue: 1120 },

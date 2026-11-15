@@ -163,3 +163,33 @@ assert.match(dynamicMarkup, /Link Sete/);
 assert.equal(validateComponentTree([{ id: 'nav-dynamic', component: 'Navbar', props: navDynamicProps }]).valid, true);
 
 console.log('Navbar rendering, links and sandwich menu checks passed.');
+
+const { ATOMIC_CATEGORIES, componentCatalog, getCatalogByCategory } = require('../components/editor/PageEditor/componentCatalog.ts');
+const { AddComponentModal } = require('../components/editor/PageEditor/AddComponentModal.tsx');
+
+assert.deepEqual(ATOMIC_CATEGORIES.map(c => c.id), ['atom', 'molecule', 'organism']);
+for (const [name, schema] of Object.entries(componentSchemas)) {
+  assert.ok(['atom', 'molecule', 'organism'].includes(schema.category), `${name} must have a valid atomic category`);
+  assert.ok(typeof schema.description === 'string' && schema.description.length > 0, `${name} must have a description`);
+}
+for (const category of ['atom', 'molecule', 'organism']) {
+  const items = getCatalogByCategory(category);
+  assert.ok(items.length >= 2, `Category ${category} should have at least 2 items`);
+}
+for (const item of componentCatalog) {
+  const node = item.createNode();
+  const validation = validateComponentTree([node]);
+  assert.equal(validation.valid, true, `Catalog item ${item.id} failed validation: ${validation.errors.join(', ')}`);
+}
+const modalMarkup = render(AddComponentModal, {
+  canAddChild: true,
+  isOpen: true,
+  target: { kind: 'root' },
+  onClose: () => {},
+  onSelect: () => {}
+});
+assert.match(modalMarkup, /add-component-modal-body/);
+assert.match(modalMarkup, /Átomos/);
+assert.match(modalMarkup, /Moléculas/);
+assert.match(modalMarkup, /Organismos/);
+console.log('Atomic design catalog and scrollable modal checks passed.');
