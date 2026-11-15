@@ -16,10 +16,24 @@ export async function createIndexes(db: Db) {
 const globalDatabase = globalThis as typeof globalThis & { landingDatabase?: Promise<Db> };
 export function getDatabase(config: Settings): Promise<Db> {
   if (!globalDatabase.landingDatabase) {
-    const client = new MongoClient(config.uri, { serverSelectionTimeoutMS: 5000, connectTimeoutMS: 5000, socketTimeoutMS: 10000, appName: "landing-builder", maxPoolSize: 10 });
+    const client = new MongoClient(config.uri, {
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+      socketTimeoutMS: 15000,
+      appName: "landing-builder",
+      maxPoolSize: 10,
+    });
     globalDatabase.landingDatabase = (async () => {
-      try { await client.connect(); const db = client.db(config.database); await createIndexes(db); return db; }
-      catch (error) { globalDatabase.landingDatabase = undefined; await client.close(); throw error; }
+      try {
+        await client.connect();
+        const db = client.db(config.database);
+        await createIndexes(db);
+        return db;
+      } catch (error) {
+        globalDatabase.landingDatabase = undefined;
+        await client.close().catch(() => {});
+        throw error;
+      }
     })();
   }
   return globalDatabase.landingDatabase;
