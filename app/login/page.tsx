@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogIn, AlertCircle, ArrowRight, Layers } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthContext";
+import { RecaptchaWidget } from "@/components/auth/RecaptchaWidget";
 import "@/components/auth/auth.scss";
 
 export default function LoginPage() {
@@ -12,6 +13,8 @@ export default function LoginPage() {
   const { user, login, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [website, setWebsite] = useState("");
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -30,9 +33,14 @@ export default function LoginPage() {
       return;
     }
 
+    if (!recaptchaToken) {
+      setError("Por favor, confirme que você não é um robô (reCAPTCHA).");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      await login(email, password);
+      await login(email, password, recaptchaToken, website);
       router.push("/dashboard");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Falha ao realizar login.";
@@ -50,7 +58,7 @@ export default function LoginPage() {
             <Layers size={24} />
           </div>
           <h1 className="auth-title">Acessar sua conta</h1>
-          <p className="auth-subtitle">Entre para gerenciar e editar suas landing pages</p>
+          <p className="auth-subtitle">Entre no Landra para gerenciar e editar suas landing pages</p>
         </div>
 
         {error && (
@@ -86,6 +94,21 @@ export default function LoginPage() {
               required
             />
           </div>
+
+          <div className="auth-honeypot" aria-hidden="true">
+            <label htmlFor="website-login">Website</label>
+            <input
+              id="website-login"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+          </div>
+
+          <RecaptchaWidget onVerify={setRecaptchaToken} />
 
           <button type="submit" className="auth-submit" disabled={isSubmitting}>
             {isSubmitting ? (

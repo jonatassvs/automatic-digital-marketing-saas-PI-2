@@ -80,3 +80,454 @@
     --r-gap: var(--r-desktop-gap);
   }
 }
+
+/* ==========================================================================
+   Base Navbar Styles & Responsive Sandwich Menu
+   ========================================================================== */
+
+.base-navbar {
+  box-sizing: border-box;
+  width: 100%;
+  position: relative;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+
+  .navbar-container {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+    padding: 12px 24px;
+    min-height: 64px;
+  }
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-logo-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .navbar-logo-text {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .navbar-logo-img {
+    display: block;
+    height: auto;
+    max-height: 48px;
+    object-fit: contain;
+  }
+
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar-link {
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+
+  .navbar-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+    white-space: nowrap;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .navbar-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .desktop-only {
+    display: flex;
+  }
+
+  .mobile-only {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .desktop-only {
+      display: none !important;
+    }
+
+    .mobile-only {
+      display: flex !important;
+    }
+
+    .navbar-container {
+      padding: 10px 16px;
+    }
+
+    .navbar-mobile-drawer {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      width: 100%;
+      box-sizing: border-box;
+      flex-direction: column;
+      padding: 16px 20px 24px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      background-color: inherit;
+      z-index: 99;
+      gap: 12px;
+    }
+
+    .navbar-mobile-links {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .navbar-mobile-link {
+      display: block;
+      padding: 10px 4px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: opacity 0.15s ease;
+
+      &:hover {
+        opacity: 0.75;
+      }
+    }
+
+    .navbar-mobile-children {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    .navbar-cta-btn.mobile-cta {
+      display: flex;
+      width: 100%;
+      text-align: center;
+      padding: 12px 16px;
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+  }
+}
+
+/* ==========================================================================
+   Base WhatsApp Form Styles (Embeddable Molecule)
+   ========================================================================== */
+
+.base-whatsapp-form {
+  display: grid;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+
+  .whatsapp-form-header {
+    display: grid;
+    gap: 6px;
+  }
+
+  .whatsapp-form-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .whatsapp-form-subtitle {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.82;
+  }
+
+  .whatsapp-form-fields {
+    display: grid;
+    gap: 14px;
+  }
+
+  .whatsapp-form-field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .whatsapp-form-label {
+    align-items: center;
+    display: flex;
+    font-size: 0.86rem;
+    font-weight: 700;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .whatsapp-form-required-mark {
+    color: #dc2626;
+    font-weight: 900;
+  }
+
+  .whatsapp-form-badge {
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 3px 8px;
+  }
+
+  .whatsapp-form-badge-required {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .whatsapp-form-badge-optional {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+
+  .whatsapp-form-input {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #111827;
+    font-family: inherit;
+    font-size: 0.92rem;
+    min-height: 40px;
+    padding: 9px 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+
+    &:focus {
+      border-color: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+      outline: none;
+    }
+  }
+
+  .whatsapp-form-textarea {
+    min-height: 84px;
+    resize: vertical;
+  }
+
+  .whatsapp-form-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #991b1b;
+    font-size: 0.84rem;
+    font-weight: 600;
+    padding: 10px 12px;
+  }
+
+  .whatsapp-form-submit {
+    align-items: center;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: inherit;
+    font-size: 0.96rem;
+    font-weight: 800;
+    gap: 8px;
+    justify-content: center;
+    min-height: 46px;
+    padding: 12px 20px;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+    width: 100%;
+
+    &:hover {
+      opacity: 0.93;
+    }
+  }
+}
+
+.base-footer {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Shared PageRenderer & Base Component Styles (Editor, Preview & Published)
+   ========================================================================== */
+
+.page-renderer {
+  background: #ffffff;
+  color: #17202a;
+  width: 100%;
+}
+
+.editor-root-component-slot {
+  display: contents;
+}
+
+.base-flex {
+  display: flex;
+}
+
+.base-grid {
+  display: grid;
+}
+
+.base-image {
+  max-width: 100%;
+}
+
+.base-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  background: var(--button-background);
+  color: var(--button-color);
+  border-color: var(--button-border);
+  transition:
+    background-color var(--button-transition),
+    color var(--button-transition),
+    border-color var(--button-transition),
+    transform var(--button-transition);
+}
+
+.base-button:hover,
+.base-button:focus-visible {
+  background: var(--button-hover-background);
+  color: var(--button-hover-color);
+  border-color: var(--button-hover-border);
+  transform: var(--button-hover-transform);
+}
+
+.base-button:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .base-button {
+    transition: none;
+  }
+
+  .base-button:hover,
+  .base-button:focus-visible {
+    transform: none;
+  }
+}
+
+.base-link {
+  color: #2563eb;
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+.base-text-inline {
+  display: inline;
+}
+
+.renderer-warning {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 12px;
+}
+
+.page-renderer h1,
+.page-renderer h2,
+.page-renderer h3,
+.page-renderer h4,
+.page-renderer h5,
+.page-renderer h6,
+.page-renderer p {
+  margin-block: 0;
+}
+
+.page-renderer h1 {
+  font-size: 3rem;
+  line-height: 1.05;
+}
+
+.page-renderer h2 {
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.page-renderer h3 {
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.page-renderer p {
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.page-renderer .base-text {
+  font-size: var(--text-font-size-desktop, inherit);
+}
+
+.page-renderer :not(.base-flex):not(.base-grid):not(.editor-root-component-slot) > .responsive-component + .responsive-component {
+  margin-top: var(--r-marginTop, 8px);
+}
+
+@media (max-width: 720px) {
+  .page-renderer .base-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-renderer h1 {
+    font-size: 2.2rem;
+  }
+
+  .page-renderer .base-text {
+    font-size: var(--text-font-size-mobile, var(--text-font-size-desktop, inherit));
+  }
+}
+

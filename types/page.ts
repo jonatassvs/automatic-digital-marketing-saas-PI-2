@@ -7,7 +7,11 @@ export type ComponentName =
   | "Image"
   | "Button"
   | "Link"
-  | "Spacer";
+  | "Spacer"
+  | "Navbar"
+  | "Form"
+  | "Footer"
+  | "Contact";
 
 export type ComponentProps = Record<string, unknown>;
 
@@ -30,10 +34,33 @@ export type SeoConfig = {
   robotsFollow: boolean;
 };
 
+export type SeoSuggestions = {
+  title: string;
+  description: string;
+  slug: string;
+  ogTitle: string;
+  ogDescription: string;
+  keywords: string[];
+  suggestions: string[];
+};
+
+export type SeoGenerateInput = {
+  businessName?: string;
+  category?: string;
+  location?: string;
+  targetAudience?: string;
+  pageContent?: string;
+  extraNotes?: string;
+};
+
 export type PageDesign = {
   mobileMaxWidth?: number;
   fonts?: string[];
   defaultFont?: string;
+};
+
+export type IntegrationsConfig = {
+  gtm: { containerId: string } | null;
 };
 
 export type LandingPageDocument = {
@@ -43,4 +70,5 @@ export type LandingPageDocument = {
   status: "draft" | "private" | "published";
   seo: SeoConfig;
   components: PageComponent[];
+  integrations?: IntegrationsConfig;
 };

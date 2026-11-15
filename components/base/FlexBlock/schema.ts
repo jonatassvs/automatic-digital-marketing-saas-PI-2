@@ -3,6 +3,8 @@ import type { ComponentSchema } from "@/renderer/schemas/schemaTypes";
 export const flexSchema: ComponentSchema = {
   component: "Flex",
   label: "Flex",
+  category: "molecule",
+  description: "Agrupa e alinha elementos em linha ou coluna flexível.",
   acceptsChildren: true,
   fields: [
     {

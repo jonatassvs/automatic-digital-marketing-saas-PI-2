@@ -22,8 +22,14 @@ export function route(action: Action, publicAccess = false, provider: () => Prom
       if (origin && !allowedOrigin) throw new ApiError("Origem nao permitida.", 403, "origin_denied");
       if (request.method === "OPTIONS") response = new Response(null, { status: 200 });
       else {
-        const bucket = path.startsWith("/api/auth/") && request.method === "POST" ? "auth" : path === "/api/events" ? "events" : "api";
-        const maximum = { auth: 10, events: 120, api: 300 }[bucket];
+        const bucket = path.includes("/seo/generate")
+          ? "ai"
+          : path.startsWith("/api/auth/") && request.method === "POST"
+          ? "auth"
+          : path === "/api/events"
+          ? "events"
+          : "api";
+        const maximum = { auth: 10, events: 120, api: 300, ai: 10 }[bucket];
         // Only use a header when deployment guarantees its proxy overwrites it.
         const candidate = application.config.clientIpHeader ? request.headers.get(application.config.clientIpHeader) : null;
         const identity = candidate && isIP(candidate) ? candidate : "shared";

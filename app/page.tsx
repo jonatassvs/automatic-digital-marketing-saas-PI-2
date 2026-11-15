@@ -59,7 +59,7 @@ export default function HomePage() {
             <Layers size={20} color="#ffffff" />
           </div>
           <span style={{ fontWeight: 700, fontSize: "1.2rem", letterSpacing: "-0.02em" }}>
-            Landing Builder
+            Landra
           </span>
         </div>
 

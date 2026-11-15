@@ -35,6 +35,10 @@ export function normalizeProps(schema: ComponentSchema, props: ComponentProps): 
         return [field.name, Array.isArray(value) ? value : field.defaultValue];
       }
 
+      if (field.type === "links" || field.type === "formFields") {
+        return [field.name, Array.isArray(value) ? value : (field.defaultValue ?? [])];
+      }
+
       return [field.name, typeof value === "string" ? value : field.defaultValue];
     })
   );

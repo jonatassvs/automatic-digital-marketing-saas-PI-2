@@ -7,8 +7,14 @@ type AuthContextType = {
   user: AuthUser | null;
   token: string | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, recaptchaToken?: string, website?: string) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    recaptchaToken?: string,
+    website?: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
 };
@@ -79,16 +85,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function login(email: string, password: string) {
-    const res = await api.auth.login(email, password);
+  async function login(email: string, password: string, recaptchaToken?: string, website?: string) {
+    const res = await api.auth.login(email, password, recaptchaToken, website);
     setUser(res.user);
     setTokenState(res.accessToken);
   }
 
-  async function register(name: string, email: string, password: string) {
-    await api.auth.register(name, email, password);
+  async function register(
+    name: string,
+    email: string,
+    password: string,
+    recaptchaToken?: string,
+    website?: string
+  ) {
+    await api.auth.register(name, email, password, recaptchaToken, website);
     // After successful registration, log the user in immediately
-    await login(email, password);
+    await login(email, password, recaptchaToken, website);
   }
 
   async function logout() {

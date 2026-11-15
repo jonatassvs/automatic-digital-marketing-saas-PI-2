@@ -1,5 +1,5 @@
 {
-  "name": "landing-page-builder",
+  "name": "landra",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "npm run test:components && npm run test:server && npm run contract:check",
     "test:components": "node tests/components.cjs",
-    "test:server": "node --conditions=react-server --import tsx --test tests/server.test.ts",
+    "test:server": "node --conditions=react-server --import tsx --test tests/server.test.ts tests/seo-gemini.test.ts",
     "check-db": "node --conditions=react-server --import tsx scripts/check-db.ts",
     "contract:export": "node scripts/export-contract.cjs",
     "contract:check": "node scripts/export-contract.cjs --check"

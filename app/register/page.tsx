@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserPlus, AlertCircle, ArrowRight, Layers } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthContext";
+import { RecaptchaWidget } from "@/components/auth/RecaptchaWidget";
 import "@/components/auth/auth.scss";
 
 export default function RegisterPage() {
@@ -13,6 +14,8 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [website, setWebsite] = useState("");
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,9 +44,14 @@ export default function RegisterPage() {
       return;
     }
 
+    if (!recaptchaToken) {
+      setError("Por favor, confirme que você não é um robô (reCAPTCHA).");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      await register(name.trim(), email.trim(), password);
+      await register(name.trim(), email.trim(), password, recaptchaToken, website);
       router.push("/dashboard");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Falha ao criar conta.";
@@ -60,8 +68,8 @@ export default function RegisterPage() {
           <div className="auth-badge">
             <Layers size={24} />
           </div>
-          <h1 className="auth-title">Criar sua conta</h1>
-          <p className="auth-subtitle">Crie landing pages profissionais em minutos</p>
+          <h1 className="auth-title">Criar sua conta no Landra</h1>
+          <p className="auth-subtitle">Crie landing pages profissionais em minutos sem código</p>
         </div>
 
         {error && (
@@ -111,6 +119,21 @@ export default function RegisterPage() {
             />
             <span className="auth-hint">A senha precisa ter pelo menos 12 caracteres.</span>
           </div>
+
+          <div className="auth-honeypot" aria-hidden="true">
+            <label htmlFor="website-register">Website</label>
+            <input
+              id="website-register"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+          </div>
+
+          <RecaptchaWidget onVerify={setRecaptchaToken} />
 
           <button type="submit" className="auth-submit" disabled={isSubmitting}>
             {isSubmitting ? (

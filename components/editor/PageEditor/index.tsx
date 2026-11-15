@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { ComponentName, LandingPageDocument } from "@/types/page";
+import type { ComponentName, LandingPageDocument, PageComponent } from "@/types/page";
 import { AddComponentModal } from "./AddComponentModal";
 import { EditorCanvas } from "./EditorCanvas";
 import { EditorTopbar } from "./EditorTopbar";
@@ -41,11 +41,11 @@ export function PageEditor({
     setAddModalOpen(true);
   }
 
-  function addComponentFromModal(componentName: ComponentName) {
+  function addComponentFromModal(componentOrNode: ComponentName | PageComponent) {
     if (addTarget.kind === "child") {
-      editorState.addChildComponent(componentName, addTarget.parentId, addTarget.childIndex);
+      editorState.addChildComponent(componentOrNode, addTarget.parentId, addTarget.childIndex);
     } else {
-      editorState.addRootComponent(componentName, addTarget.insertIndex);
+      editorState.addRootComponent(componentOrNode, addTarget.insertIndex);
     }
 
     setAddModalOpen(false);

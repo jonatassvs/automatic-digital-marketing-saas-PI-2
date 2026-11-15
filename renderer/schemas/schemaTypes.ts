@@ -9,15 +9,19 @@ export type SchemaField = {
   name: string;
   label: string;
   responsive?: boolean;
-  type: "checkbox" | "color" | "number" | "richText" | "select" | "text" | "textarea" | "url";
+  type: "checkbox" | "color" | "number" | "richText" | "select" | "text" | "textarea" | "url" | "links" | "formFields";
   required?: boolean;
   defaultValue?: boolean | string | number | unknown[];
   options?: Array<{ label: string; value: string | number }>;
 };
 
+export type ComponentCategory = "atom" | "molecule" | "organism";
+
 export type ComponentSchema = {
   component: ComponentName;
   label: string;
+  category?: ComponentCategory;
+  description?: string;
   acceptsChildren: boolean;
   fields: SchemaField[];
 };

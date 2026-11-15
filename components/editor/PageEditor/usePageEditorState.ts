@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import type { ComponentName, LandingPageDocument } from "@/types/page";
+import type { ComponentName, LandingPageDocument, PageComponent } from "@/types/page";
 import { componentSchemas } from "@/renderer/schemas/componentSchemas";
 import { validatePageDesign } from "@/renderer/pageDesign";
 import { validateComponentTree } from "@/renderer/validation";
@@ -59,8 +59,9 @@ export function usePageEditorState(initialPage?: LandingPageDocument) {
     updateComponentProp(selectedComponent.id, fieldName, value);
   }
 
-  function addRootComponent(componentName: ComponentName, insertIndex?: number) {
-    const component = createEditorComponent(componentName);
+  function addRootComponent(componentOrNode: ComponentName | PageComponent, insertIndex?: number) {
+    const component =
+      typeof componentOrNode === "string" ? createEditorComponent(componentOrNode) : componentOrNode;
 
     setPage((current) => ({
       ...current,
@@ -69,14 +70,19 @@ export function usePageEditorState(initialPage?: LandingPageDocument) {
     setSelectedId(component.id);
   }
 
-  function addChildComponent(componentName: ComponentName, parentId = selectedId, childIndex?: number) {
+  function addChildComponent(
+    componentOrNode: ComponentName | PageComponent,
+    parentId = selectedId,
+    childIndex?: number
+  ) {
     const parentComponent = flatComponents.find((component) => component.id === parentId);
 
     if (!parentComponent || !componentSchemas[parentComponent.component].acceptsChildren) {
       return;
     }
 
-    const component = createEditorComponent(componentName);
+    const component =
+      typeof componentOrNode === "string" ? createEditorComponent(componentOrNode) : componentOrNode;
 
     setPage((current) => ({
       ...current,

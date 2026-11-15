@@ -16,6 +16,21 @@ export function settings(env: Record<string, string | undefined> = process.env) 
   }
   const clientIpHeader = env.TRUSTED_CLIENT_IP_HEADER?.toLowerCase();
   if (clientIpHeader && !/^[a-z0-9-]+$/.test(clientIpHeader)) throw new Error("Invalid trusted IP header");
-  return { uri, database, origins, clientIpHeader, sessionHours: integer("SESSION_TTL_HOURS", 12, 168), retentionDays: integer("EVENT_RETENTION_DAYS", 90, 365) };
+  const geminiApiKey = env.GEMINI_API_KEY?.trim() || "";
+  const geminiModel = env.GEMINI_MODEL?.trim() || "gemini-3.5-flash";
+  const recaptchaSecretKey = env.RECAPTCHA_SECRET_KEY?.trim() || "";
+  const recaptchaSiteKey = env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() || "";
+  return {
+    uri,
+    database,
+    origins,
+    clientIpHeader,
+    geminiApiKey,
+    geminiModel,
+    recaptchaSecretKey,
+    recaptchaSiteKey,
+    sessionHours: integer("SESSION_TTL_HOURS", 12, 168),
+    retentionDays: integer("EVENT_RETENTION_DAYS", 90, 365),
+  };
 }
 export type Settings = ReturnType<typeof settings>;

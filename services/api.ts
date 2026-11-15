@@ -1,4 +1,12 @@
-import type { LandingPageDocument, PageComponent, PageDesign, SeoConfig } from "@/types/page";
+import type {
+  IntegrationsConfig,
+  LandingPageDocument,
+  PageComponent,
+  PageDesign,
+  SeoConfig,
+  SeoGenerateInput,
+  SeoSuggestions
+} from "@/types/page";
 import { samplePage } from "@/components/editor/samplePage";
 
 export type AuthUser = {
@@ -59,17 +67,39 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
 export const api = {
   auth: {
-    async register(name: string, email: string, password: string): Promise<AuthUser> {
+    async register(
+      name: string,
+      email: string,
+      password: string,
+      recaptchaToken?: string,
+      website?: string
+    ): Promise<AuthUser> {
       return request<AuthUser>("/api/auth/register", {
         method: "POST",
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          ...(recaptchaToken ? { recaptchaToken } : {}),
+          ...(website !== undefined ? { website } : {}),
+        }),
       });
     },
 
-    async login(email: string, password: string): Promise<LoginResponse> {
+    async login(
+      email: string,
+      password: string,
+      recaptchaToken?: string,
+      website?: string
+    ): Promise<LoginResponse> {
       const data = await request<LoginResponse>("/api/auth/login", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+          ...(recaptchaToken ? { recaptchaToken } : {}),
+          ...(website !== undefined ? { website } : {}),
+        }),
       });
       setToken(data.accessToken);
       return data;
@@ -136,7 +166,8 @@ export const api = {
                     id: "text-title",
                     component: "Text",
                     props: {
-                      tag: "h1",
+                      type: "heading",
+                      level: "h1",
                       text: input.name,
                       fontSizeMobile: 32,
                       fontSizeDesktop: 48,
@@ -149,7 +180,7 @@ export const api = {
                     id: "text-subtitle",
                     component: "Text",
                     props: {
-                      tag: "p",
+                      type: "paragraph",
                       text: input.description || "Descricao da sua nova pagina.",
                       fontSizeMobile: 18,
                       fontSizeDesktop: 20,
@@ -163,10 +194,9 @@ export const api = {
                     component: "Button",
                     props: {
                       text: "Fale Conosco",
-                      align: "center",
-                      size: "large",
+                      href: "#contato",
+                      alignment: "center",
                       variant: "primary",
-                      fullWidth: false,
                     },
                   },
                 ],
@@ -225,6 +255,39 @@ export const api = {
 
     async getPublic(slug: string): Promise<LandingPageDocument> {
       return request<LandingPageDocument>(`/api/public/pages/${slug}`, { method: "GET" });
+    },
+
+    async generateSeo(id: string, input?: SeoGenerateInput): Promise<SeoSuggestions> {
+      return request<SeoSuggestions>(`/api/pages/${id}/seo/generate`, {
+        method: "POST",
+        body: JSON.stringify(input || {}),
+      });
+    },
+  },
+
+  seo: {
+    async generate(input: SeoGenerateInput): Promise<SeoSuggestions> {
+      return request<SeoSuggestions>("/api/seo/generate", {
+        method: "POST",
+        body: JSON.stringify(input || {}),
+      });
+    },
+  },
+
+  integrations: {
+    async get(pageId: string): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/pages/${pageId}/integrations`, { method: "GET" });
+    },
+
+    async update(pageId: string, payload: { gtm: { containerId: string } | null }): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/pages/${pageId}/integrations`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+    },
+
+    async getPublic(slug: string): Promise<IntegrationsConfig> {
+      return request<IntegrationsConfig>(`/api/public/pages/${slug}/integrations`, { method: "GET" });
     },
   },
 };
